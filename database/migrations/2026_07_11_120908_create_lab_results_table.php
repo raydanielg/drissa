@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('lab_results', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('lab_order_item_id')->constrained()->cascadeOnDelete();
+            $table->string('parameter');
+            $table->string('value');
+            $table->string('unit')->nullable();
+            $table->string('reference_range')->nullable();
+            $table->enum('flag', ['normal', 'high', 'low', 'critical'])->default('normal');
             $table->timestamps();
         });
     }

@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number')->unique();
+            $table->foreignId('visit_id')->constrained();
+            $table->foreignId('patient_id')->constrained();
+            $table->decimal('total', 12, 2)->default(0);
+            $table->decimal('paid', 12, 2)->default(0);
+            $table->enum('status', ['unpaid', 'partial', 'paid'])->default('unpaid');
             $table->timestamps();
         });
     }

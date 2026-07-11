@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('lab_order_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('lab_order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('lab_test_id')->constrained();
             $table->timestamps();
         });
     }

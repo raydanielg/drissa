@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('prescription_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('prescription_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('medication_id')->constrained();
+            $table->integer('quantity');
+            $table->string('dosage');
+            $table->string('frequency');
+            $table->string('duration');
+            $table->text('instructions')->nullable();
             $table->timestamps();
         });
     }

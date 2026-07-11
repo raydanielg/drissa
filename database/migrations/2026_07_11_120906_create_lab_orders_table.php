@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('lab_orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('visit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('ordered_by')->constrained('users');
+            $table->foreignId('processed_by')->nullable()->constrained('users');
+            $table->string('status')->default('pending');
+            $table->text('clinical_notes')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

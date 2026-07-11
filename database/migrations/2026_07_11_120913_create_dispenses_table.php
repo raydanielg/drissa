@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('dispenses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('prescription_id')->constrained();
+            $table->foreignId('medication_id')->constrained();
+            $table->integer('quantity');
+            $table->foreignId('dispensed_by')->constrained('users');
             $table->timestamps();
         });
     }

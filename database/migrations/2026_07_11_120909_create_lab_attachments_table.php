@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('lab_attachments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('lab_order_id')->constrained()->cascadeOnDelete();
+            $table->string('file_name');
+            $table->string('file_path');
+            $table->string('mime_type')->nullable();
+            $table->unsignedBigInteger('file_size')->nullable();
+            $table->foreignId('uploaded_by')->constrained('users');
             $table->timestamps();
         });
     }
