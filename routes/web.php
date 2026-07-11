@@ -22,6 +22,10 @@ Route::post('/', [LoginController::class, 'login']);
 
 Auth::routes(['login' => false, 'register' => false]);
 
+Route::get('/home', function () {
+    return redirect()->route('dashboard');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
