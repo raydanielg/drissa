@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,19 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::latest()->paginate(20);
-        $lowStock = Product::whereColumn('quantity', '<=', 'reorder_level')->count();
-        return view('products.index', compact('products', 'lowStock'));
+        $lowStock = Product::whereColumn('quantity', '<=', 'reorder_level')->where('quantity', '>', 0)->count();
+        $outOfStock = Product::where('quantity', 0)->count();
+        $totalValue = Product::sum(\DB::raw('quantity * cost_price'));
+        $totalProducts = Product::count();
+        $categories = Category::where('is_active', true)->orderBy('name')->pluck('name');
+        return view('products.index', compact('products', 'lowStock', 'outOfStock', 'totalValue', 'totalProducts', 'categories'));
     }
 
     public function create()
     {
+        if (request()->wantsJson()) {
+            return response()->json(['categories' => Category::where('is_active', true)->orderBy('name')->pluck('name')]);
+        }
         return view('products.create');
     }
 
@@ -40,13 +48,20 @@ class ProductController extends Controller
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
-        Product::create($data);
+        $product = Product::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Product added.', 'product' => $product]);
+        }
 
         return redirect()->route('products.index')->with('status', 'Product added.');
     }
 
     public function edit(Product $product)
     {
+        if (request()->wantsJson()) {
+            return response()->json(['product' => $product]);
+        }
         return view('products.edit', compact('product'));
     }
 
@@ -67,6 +82,10 @@ class ProductController extends Controller
 
         $data['is_active'] = $request->boolean('is_active', true);
         $product->update($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Product updated.', 'product' => $product]);
+        }
 
         return redirect()->route('products.index')->with('status', 'Product updated.');
     }

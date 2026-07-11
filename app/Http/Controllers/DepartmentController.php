@@ -15,11 +15,25 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::latest()->paginate(20);
-        return view('departments.index', compact('departments'));
+
+        $stats = [
+            'total' => Department::count(),
+            'active' => Department::where('is_active', true)->count(),
+            'inactive' => Department::where('is_active', false)->count(),
+        ];
+
+        if (request()->wantsJson()) {
+            return response()->json(['departments' => $departments]);
+        }
+
+        return view('departments.index', compact('departments', 'stats'));
     }
 
     public function create()
     {
+        if (request()->wantsJson()) {
+            return response()->json([]);
+        }
         return view('departments.create');
     }
 
@@ -33,13 +47,20 @@ class DepartmentController extends Controller
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
-        Department::create($data);
+        $department = Department::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Department created.', 'department' => $department]);
+        }
 
         return redirect()->route('departments.index')->with('status', 'Department created.');
     }
 
     public function edit(Department $department)
     {
+        if (request()->wantsJson()) {
+            return response()->json(['department' => $department]);
+        }
         return view('departments.edit', compact('department'));
     }
 
@@ -54,6 +75,10 @@ class DepartmentController extends Controller
 
         $data['is_active'] = $request->boolean('is_active', true);
         $department->update($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Department updated.', 'department' => $department]);
+        }
 
         return redirect()->route('departments.index')->with('status', 'Department updated.');
     }

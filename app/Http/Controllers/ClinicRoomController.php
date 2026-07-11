@@ -16,12 +16,23 @@ class ClinicRoomController extends Controller
     public function index()
     {
         $rooms = ClinicRoom::with('department')->latest()->paginate(20);
-        return view('clinic_rooms.index', compact('rooms'));
+
+        $stats = [
+            'total' => ClinicRoom::count(),
+            'available' => ClinicRoom::where('status', 'available')->count(),
+            'occupied' => ClinicRoom::where('status', 'occupied')->count(),
+            'maintenance' => ClinicRoom::where('status', 'maintenance')->count(),
+        ];
+
+        return view('clinic_rooms.index', compact('rooms', 'stats'));
     }
 
     public function create()
     {
         $departments = Department::where('is_active', true)->get();
+        if (request()->wantsJson()) {
+            return response()->json(['departments' => $departments]);
+        }
         return view('clinic_rooms.create', compact('departments'));
     }
 
@@ -37,7 +48,12 @@ class ClinicRoomController extends Controller
             'capacity' => 'required|integer|min:1',
         ]);
 
-        ClinicRoom::create($data);
+        $room = ClinicRoom::create($data);
+        $room->load('department');
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Room created.', 'room' => $room]);
+        }
 
         return redirect()->route('clinic-rooms.index')->with('status', 'Room created.');
     }
@@ -45,6 +61,9 @@ class ClinicRoomController extends Controller
     public function edit(ClinicRoom $clinicRoom)
     {
         $departments = Department::where('is_active', true)->get();
+        if (request()->wantsJson()) {
+            return response()->json(['room' => $clinicRoom, 'departments' => $departments]);
+        }
         return view('clinic_rooms.edit', compact('clinicRoom', 'departments'));
     }
 
@@ -61,6 +80,11 @@ class ClinicRoomController extends Controller
         ]);
 
         $clinicRoom->update($data);
+        $clinicRoom->load('department');
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Room updated.', 'room' => $clinicRoom]);
+        }
 
         return redirect()->route('clinic-rooms.index')->with('status', 'Room updated.');
     }

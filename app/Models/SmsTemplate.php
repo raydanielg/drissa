@@ -9,5 +9,9 @@ class SmsTemplate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'body', 'is_active'];
+    protected $fillable = ['name', 'subject', 'body', 'type', 'is_active'];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

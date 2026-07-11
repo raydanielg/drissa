@@ -36,13 +36,20 @@ class LabTestController extends Controller
         ]);
 
         $data['is_active'] = $request->boolean('is_active', true);
-        LabTest::create($data);
+        $test = LabTest::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Test type created.', 'test' => $test]);
+        }
 
         return redirect()->route('lab-tests.index')->with('status', 'Test type created.');
     }
 
     public function edit(LabTest $labTest)
     {
+        if (request()->wantsJson()) {
+            return response()->json(['test' => $labTest]);
+        }
         return view('lab_tests.edit', compact('labTest'));
     }
 
@@ -60,6 +67,10 @@ class LabTestController extends Controller
 
         $data['is_active'] = $request->boolean('is_active', true);
         $labTest->update($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Test type updated.', 'test' => $labTest]);
+        }
 
         return redirect()->route('lab-tests.index')->with('status', 'Test type updated.');
     }

@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AdminDoctorController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ClinicalRecordController;
 use App\Http\Controllers\ClinicRoomController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
@@ -12,12 +16,17 @@ use App\Http\Controllers\LabController;
 use App\Http\Controllers\LabEquipmentController;
 use App\Http\Controllers\LabTestController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PatientDocumentController;
+use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SmsController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -39,16 +48,19 @@ Route::get('/home', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats');
 
-    Route::prefix('reception')->name('reception.')->middleware('role:reception,admin')->group(function () {
+    Route::prefix('reception')->name('reception.')->middleware('role:reception|admin')->group(function () {
         Route::get('/', [ReceptionController::class, 'dashboard'])->name('dashboard');
+        Route::get('/stats', [ReceptionController::class, 'stats'])->name('stats');
         Route::post('patients', [ReceptionController::class, 'storePatient'])->name('patients.store');
         Route::post('visits', [ReceptionController::class, 'storeVisit'])->name('visits.store');
         Route::post('visits/{visit}/assign', [ReceptionController::class, 'assignDoctor'])->name('visits.assign');
+        Route::post('visits/{visit}/change-doctor', [ReceptionController::class, 'changeDoctor'])->name('visits.change-doctor');
         Route::post('visits/{visit}/pay', [ReceptionController::class, 'storePayment'])->name('visits.pay');
     });
 
-    Route::prefix('doctor')->name('doctor.')->middleware('role:doctor,admin')->group(function () {
+    Route::prefix('doctor')->name('doctor.')->middleware('role:doctor|admin')->group(function () {
         Route::get('/', [DoctorController::class, 'queue'])->name('queue');
         Route::post('visits/{visit}/call', [DoctorController::class, 'callNext'])->name('visits.call');
         Route::post('visits/{visit}/consult', [DoctorController::class, 'saveConsultation'])->name('visits.consult');
@@ -57,8 +69,9 @@ Route::middleware('auth')->group(function () {
         Route::post('visits/{visit}/payment', [DoctorController::class, 'sendToPayment'])->name('visits.payment');
     });
 
-    Route::middleware('role:lab,admin')->group(function () {
+    Route::middleware('role:lab|admin')->group(function () {
         Route::resource('lab-equipment', LabEquipmentController::class);
+        Route::patch('lab-equipment/{labEquipment}/status', [LabEquipmentController::class, 'updateStatus'])->name('lab-equipment.status.update');
         Route::resource('lab-tests', LabTestController::class);
 
         Route::prefix('lab')->name('lab.')->group(function () {
@@ -68,20 +81,67 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('pharmacy')->name('pharmacy.')->middleware('role:pharmacy,admin')->group(function () {
+    Route::prefix('pharmacy')->name('pharmacy.')->middleware('role:pharmacy|admin')->group(function () {
         Route::get('/', [PharmacyController::class, 'queue'])->name('queue');
         Route::post('prescriptions/{prescription}/dispense', [PharmacyController::class, 'dispense'])->name('prescriptions.dispense');
     });
 
+    // Patient Registry, Documents & History
+    Route::get('patients', [PatientController::class, 'index'])->name('patients.index');
+    Route::get('patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
+    Route::get('patients/{patient}/edit', [PatientController::class, 'edit'])->name('patients.edit');
+    Route::put('patients/{patient}', [PatientController::class, 'update'])->name('patients.update');
+    Route::delete('patients/{patient}', [PatientController::class, 'destroy'])->name('patients.destroy');
+    Route::get('patients/{patient}/documents', [PatientDocumentController::class, 'index'])->name('patients.documents.index');
+    Route::post('patients/{patient}/documents', [PatientDocumentController::class, 'store'])->name('patients.documents.store');
+    Route::get('patient-documents/{document}/download', [PatientDocumentController::class, 'download'])->name('patients.documents.download');
+    Route::delete('patient-documents/{document}', [PatientDocumentController::class, 'destroy'])->name('patients.documents.destroy');
+    Route::get('patients/{patient}/history', [PatientHistoryController::class, 'show'])->name('patients.history');
+
+    // Team Chat
+    Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('chat/{conversation}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('chat/{conversation}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('chat/{conversation}/poll', [ChatController::class, 'poll'])->name('chat.poll');
+    Route::get('chat/unread-count', [ChatController::class, 'unreadCount'])->name('chat.unread-count');
+
+    // Clinical Records
+    Route::resource('clinical-records', ClinicalRecordController::class);
+    Route::get('visits/{visit}/clinical-record', [ClinicalRecordController::class, 'createFromVisit'])->name('clinical-records.from-visit');
+    Route::get('appointments/{appointment}/clinical-record', [ClinicalRecordController::class, 'createFromAppointment'])->name('clinical-records.from-appointment');
+
+    // SMS
+    Route::get('sms', [SmsController::class, 'index'])->name('sms.index');
+    Route::post('sms', [SmsController::class, 'store'])->name('sms.store');
+    Route::get('sms/logs', [SmsController::class, 'logs'])->name('sms.logs');
+    Route::get('sms/templates', [SmsController::class, 'templates'])->name('sms.templates');
+    Route::post('sms/templates', [SmsController::class, 'storeTemplate'])->name('sms.templates.store');
+    Route::put('sms/templates/{template}', [SmsController::class, 'updateTemplate'])->name('sms.templates.update');
+    Route::delete('sms/templates/{template}', [SmsController::class, 'destroyTemplate'])->name('sms.templates.destroy');
+
     Route::middleware('role:admin')->group(function () {
+        // Doctors Management (Admin)
+        Route::get('admin/doctors', [AdminDoctorController::class, 'index'])->name('admin.doctors.index');
+        Route::post('admin/doctors', [AdminDoctorController::class, 'store'])->name('admin.doctors.store');
+        Route::get('admin/doctors/{doctor}', [AdminDoctorController::class, 'show'])->name('admin.doctors.show');
+        Route::put('admin/doctors/{doctor}', [AdminDoctorController::class, 'update'])->name('admin.doctors.update');
+        Route::delete('admin/doctors/{doctor}', [AdminDoctorController::class, 'destroy'])->name('admin.doctors.delete');
+        Route::put('admin/doctors/{doctor}/reset-password', [AdminDoctorController::class, 'resetPassword'])->name('admin.doctors.reset-password');
+        Route::patch('admin/doctors/{doctor}/toggle', [AdminDoctorController::class, 'toggleActive'])->name('admin.doctors.toggle');
         Route::resource('users', UserController::class);
+        Route::post('users/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulk-delete');
+        Route::post('users/bulk-deactivate', [UserController::class, 'bulkDeactivate'])->name('users.bulk-deactivate');
+        Route::post('users/bulk-activate', [UserController::class, 'bulkActivate'])->name('users.bulk-activate');
         Route::resource('appointments', AppointmentController::class);
         Route::resource('posts', PostController::class);
         Route::resource('products', ProductController::class);
+        Route::resource('categories', CategoryController::class);
         Route::resource('departments', DepartmentController::class);
         Route::resource('clinic-rooms', ClinicRoomController::class);
         Route::resource('suppliers', SupplierController::class);
         Route::resource('shifts', ShiftController::class);
+        Route::resource('services', ServiceController::class);
 
         Route::prefix('invoices')->name('invoices.')->group(function () {
             Route::get('/', [InvoiceController::class, 'index'])->name('index');

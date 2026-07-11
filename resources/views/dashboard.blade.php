@@ -67,39 +67,39 @@
 
 {{-- Charts & Performance Row --}}
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    {{-- Weekly Revenue Bar Chart --}}
+    {{-- Revenue Line Chart --}}
     <div class="lg:col-span-2 bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h3 class="text-sm font-semibold text-gray-900">Weekly Revenue</h3>
-                <p class="text-xs text-gray-400">Last 7 days</p>
+                <h3 class="text-sm font-semibold text-gray-900">Revenue Trend</h3>
+                <p class="text-xs text-gray-400">Live financial overview</p>
             </div>
-            <div class="text-right">
-                <div class="text-lg font-semibold text-gray-900">{{ $fmt($stats['revenue_this_week']) }}</div>
-                <div class="text-xs text-emerald-600 font-medium">+12.5%</div>
+            <div class="flex items-center gap-3">
+                <div class="text-right">
+                    <div class="text-lg font-semibold text-gray-900">{{ $fmt($stats['revenue_this_week']) }}</div>
+                    <div class="text-xs text-emerald-600 font-medium">This Week</div>
+                </div>
+                <div class="flex bg-gray-100 rounded-lg p-0.5">
+                    <button type="button" onclick="switchRevenue('weekly')" id="revWeeklyBtn" class="px-3 py-1 text-xs font-medium rounded-md bg-white text-emerald-700 shadow-sm">7 Days</button>
+                    <button type="button" onclick="switchRevenue('monthly')" id="revMonthlyBtn" class="px-3 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-gray-700">30 Days</button>
+                </div>
             </div>
         </div>
-        @php $maxRev = $revenueDays->max() ?: 1; @endphp
-        <div class="flex items-end gap-[6px] h-52">
-            @foreach($revenueDays as $i => $rev)
-            @php $pct = min(100, ($rev / $maxRev) * 100); $isToday = $i === count($revenueDays) - 1; @endphp
-            <div class="flex-1 flex flex-col items-center gap-1.5 group cursor-pointer" title="{{ $dayLabels[$i] }}: {{ $fmt($rev) }}">
-                <div class="w-full bg-gray-50 rounded-t-md relative h-44 overflow-hidden">
-                    <div class="absolute bottom-0 left-0 right-0 rounded-t-md transition-all duration-300 {{ $isToday ? 'bg-emerald-500' : 'bg-emerald-300 group-hover:bg-emerald-400' }}" style="height: {{ max($pct, 4) }}%"></div>
-                </div>
-                <span class="text-[10px] text-gray-400 font-medium">{{ $dayLabels[$i] }}</span>
-            </div>
-            @endforeach
+        <div class="relative h-64">
+            <canvas id="revenueChart"></canvas>
         </div>
     </div>
 
     {{-- Performance Rings --}}
     <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm space-y-6">
-        <h3 class="text-sm font-semibold text-gray-900">Performance</h3>
+        <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-gray-900">Performance</h3>
+            <span class="text-[10px] text-gray-400">Live</span>
+        </div>
         @php
             $circles = [
                 ['label' => 'Success Rate', 'value' => $successRate, 'color' => '#10b981'],
-                ['label' => 'Clinic Occupancy', 'value' => $occupancyRate, 'color' => '#f59e0b'],
+                ['label' => 'Occupancy', 'value' => $occupancyRate, 'color' => '#f59e0b'],
                 ['label' => 'Monthly Target', 'value' => $treatmentTargetPct, 'color' => '#8b5cf6'],
             ];
         @endphp
@@ -114,6 +114,52 @@
                 </svg>
             </div>
             @endforeach
+        </div>
+
+        <div class="border-t border-gray-100 pt-4 space-y-3">
+            <h4 class="text-xs font-semibold text-gray-700">Top Doctors</h4>
+            @foreach($topDoctors as $doc)
+                <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[10px] font-bold">{{ strtoupper(substr($doc->name,0,1)) }}</div>
+                        <span class="text-xs text-gray-700 truncate max-w-[120px]">{{ $doc->name }}</span>
+                    </div>
+                    <span class="text-xs font-medium text-emerald-600">{{ $doc->completed_visits }} visits</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+{{-- Performance Analytics Row --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    {{-- Visit Trend Line Chart --}}
+    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-900">Visit Trend</h3>
+                <p class="text-xs text-gray-400">Patient flow over 7 days</p>
+            </div>
+            <div class="text-right">
+                <div class="text-lg font-semibold text-gray-900">{{ $stats['visits_today'] }}</div>
+                <div class="text-xs text-gray-400">Today</div>
+            </div>
+        </div>
+        <div class="relative h-56">
+            <canvas id="visitTrendChart"></canvas>
+        </div>
+    </div>
+
+    {{-- Department Performance --}}
+    <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-900">Department Performance</h3>
+                <p class="text-xs text-gray-400">Visits by department this month</p>
+            </div>
+        </div>
+        <div class="relative h-56">
+            <canvas id="departmentChart"></canvas>
         </div>
     </div>
 </div>
@@ -158,6 +204,34 @@
             <h3 class="text-sm font-semibold text-gray-900">Today's Appointments</h3>
             <a href="{{ route('appointments.index') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">View All</a>
         </div>
+        <div class="p-5">
+            @php
+                $apptStats = [
+                    'scheduled' => $todayAppointments->where('status', 'scheduled')->count(),
+                    'confirmed' => $todayAppointments->where('status', 'confirmed')->count(),
+                    'completed' => $todayAppointments->where('status', 'completed')->count(),
+                    'cancelled' => $todayAppointments->where('status', 'cancelled')->count(),
+                ];
+            @endphp
+            <div class="grid grid-cols-4 gap-3 mb-4">
+                <div class="text-center p-2 bg-amber-50 rounded-lg">
+                    <div class="text-lg font-bold text-amber-600">{{ $apptStats['scheduled'] }}</div>
+                    <div class="text-[10px] text-amber-700">Scheduled</div>
+                </div>
+                <div class="text-center p-2 bg-blue-50 rounded-lg">
+                    <div class="text-lg font-bold text-blue-600">{{ $apptStats['confirmed'] }}</div>
+                    <div class="text-[10px] text-blue-700">Confirmed</div>
+                </div>
+                <div class="text-center p-2 bg-emerald-50 rounded-lg">
+                    <div class="text-lg font-bold text-emerald-600">{{ $apptStats['completed'] }}</div>
+                    <div class="text-[10px] text-emerald-700">Completed</div>
+                </div>
+                <div class="text-center p-2 bg-red-50 rounded-lg">
+                    <div class="text-lg font-bold text-red-600">{{ $apptStats['cancelled'] }}</div>
+                    <div class="text-[10px] text-red-700">Cancelled</div>
+                </div>
+            </div>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead><tr class="text-left text-xs text-gray-500 bg-gray-50/50">
@@ -169,12 +243,12 @@
                 <tbody>
                     @forelse($todayAppointments as $appt)
                     <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
-                        <td class="px-5 py-2.5 text-xs text-gray-600 font-medium">{{ optional($appt->start_time)?->format('H:i') }}</td>
+                        <td class="px-5 py-2.5 text-xs text-gray-600 font-medium">{{ $appt->startTime() }}</td>
                         <td class="px-5 py-2.5 text-xs text-gray-900">{{ $appt->patient?->name ?? '-' }}</td>
                         <td class="px-5 py-2.5 text-xs text-gray-600">{{ $appt->doctor?->name ?? '-' }}</td>
                         <td class="px-5 py-2.5">
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium capitalize
-                                {{ $appt->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($appt->status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-gold-100 text-gold-700') }}">{{ str_replace('_', ' ', $appt->status) }}</span>
+                                {{ $appt->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($appt->status === 'cancelled' ? 'bg-red-100 text-red-700' : ($appt->status === 'confirmed' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700')) }}">{{ str_replace('_', ' ', $appt->status) }}</span>
                         </td>
                     </tr>
                     @empty
@@ -188,19 +262,22 @@
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <h3 class="text-sm font-semibold text-gray-900">Recent Patients</h3>
-            <a href="{{ route('reception.dashboard') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">View All</a>
+            <a href="{{ route('patients.index') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">View All</a>
         </div>
         <div class="p-5 space-y-3">
             @forelse($recentPatients as $p)
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs">
+            <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" onclick="window.location.href='{{ route('patients.show', $p) }}'">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm shadow-sm">
                     {{ strtoupper(substr($p->name, 0, 1)) }}
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900 truncate">{{ $p->name }}</p>
-                    <p class="text-xs text-gray-500">{{ $p->phone ?? $p->mrn }}</p>
+                    <p class="text-xs text-gray-500">{{ $p->mrn }} • {{ $p->phone ?? 'No phone' }}</p>
                 </div>
-                <span class="text-[10px] text-gray-400 shrink-0">{{ $p->created_at->diffForHumans() }}</span>
+                <div class="text-right">
+                    <span class="text-[10px] text-gray-400">{{ $p->created_at->diffForHumans() }}</span>
+                    <div class="text-[10px] text-emerald-600 font-medium">{{ $p->visits_count ?? 0 }} visits</div>
+                </div>
             </div>
             @empty
             <p class="text-sm text-gray-400 text-center py-4">No patients yet</p>
@@ -214,6 +291,14 @@
 <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
         <h3 class="text-sm font-semibold text-gray-900">Recent Visits</h3>
+        <div class="flex items-center gap-2">
+            <select id="doctorFilter" onchange="filterVisitsByDoctor()" class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white">
+                <option value="">All Doctors</option>
+                @foreach($doctorsList as $d)
+                    <option value="{{ $d->id }}">{{ $d->name }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full text-sm text-left">
@@ -221,28 +306,84 @@
                 <tr>
                     <th class="px-6 py-3">Visit #</th>
                     <th class="px-6 py-3">Patient</th>
+                    <th class="px-6 py-3">Doctor</th>
                     <th class="px-6 py-3">Status</th>
                     <th class="px-6 py-3">Date</th>
+                    <th class="px-6 py-3 text-right">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="visitsTableBody">
                 @forelse ($recentVisits as $visit)
-                    <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
+                    <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors visit-row" data-doctor-id="{{ $visit->doctor_id ?? '' }}">
                         <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                        <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                                    {{ strtoupper(substr($visit->patient->name, 0, 1)) }}
+                                </div>
+                                <span>{{ $visit->patient->fullName() }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-3">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs text-gray-700">{{ $visit->doctor?->name ?? 'Unassigned' }}</span>
+                                @if($visit->status !== 'completed')
+                                    <button type="button" onclick="openChangeDoctorModal({{ $visit->id }}, '{{ $visit->doctor_id ?? '' }}')" class="text-emerald-600 hover:text-emerald-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                    </button>
+                                @endif
+                            </div>
+                        </td>
                         <td class="px-6 py-3">
                             <span class="px-2 py-0.5 rounded-full text-[10px] font-medium capitalize
-                                {{ $visit->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-gold-100 text-gold-700' }}">
+                                {{ $visit->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($visit->status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700') }}">
                                 {{ str_replace('_', ' ', $visit->status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 text-gray-500">{{ $visit->registered_at->format('d M Y H:i') }}</td>
+                        <td class="px-6 py-3 text-gray-500 text-xs">{{ $visit->registered_at->format('d M Y H:i') }}</td>
+                        <td class="px-6 py-3 text-right">
+                            <a href="{{ route('visits.show', $visit) }}" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">View</a>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4" class="px-6 py-6 text-center text-gray-400">No visits yet</td></tr>
+                    <tr><td colspan="6" class="px-6 py-6 text-center text-gray-400">No visits yet</td></tr>
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+
+{{-- Change Doctor Modal --}}
+<div id="changeDoctorModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="closeChangeDoctorModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all scale-95 opacity-0" id="changeDoctorPanel">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-900">Change Doctor</h3>
+                <button onclick="closeChangeDoctorModal()" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="changeDoctorForm" method="POST" action="">
+                    @csrf
+                    <input type="hidden" name="visit_id" id="changeDoctorVisitId">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Select Doctor</label>
+                        <select name="doctor_id" id="changeDoctorSelect" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white" required>
+                            <option value="">Select doctor...</option>
+                            @foreach($doctorsList as $d)
+                            <option value="{{ $d->id }}">{{ $d->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-4">
+                        <button type="button" onclick="closeChangeDoctorModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700">Change Doctor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -360,7 +501,114 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
+const fmt = (n) => 'TSh ' + n.toLocaleString();
+
+const weeklyData = {{ $revenueDays->values() }};
+const weeklyLabels = @json($dayLabels);
+const monthlyData = {{ $monthlyDays->values() }};
+const monthlyLabels = @json($monthLabels);
+const visitData = {{ $visitTrend->values() }};
+const visitLabels = @json($visitLabels);
+const deptLabels = @json($departmentPerformance->pluck('name'));
+const deptData = {{ $departmentPerformance->pluck('visits') }};
+
+let revenueChart, visitChart, deptChart;
+
+function initCharts() {
+    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.25)');
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+
+    revenueChart = new Chart(revCtx, {
+        type: 'line',
+        data: {
+            labels: weeklyLabels,
+            datasets: [{
+                label: 'Revenue',
+                data: weeklyData,
+                borderColor: '#10b981',
+                backgroundColor: gradient,
+                borderWidth: 3,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#10b981',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => fmt(ctx.raw) } } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+    });
+
+    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+        type: 'line',
+        data: {
+            labels: visitLabels,
+            datasets: [{
+                label: 'Visits',
+                data: visitData,
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                borderWidth: 3,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#8b5cf6',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+    });
+
+    deptChart = new Chart(document.getElementById('departmentChart'), {
+        type: 'bar',
+        data: {
+            labels: deptLabels,
+            datasets: [{
+                label: 'Visits',
+                data: deptData,
+                backgroundColor: ['#10b981', '#f59e0b', '#8b5cf6', '#0ea5e9', '#ec4899', '#6366f1'],
+                borderRadius: 6,
+                barThickness: 24
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, grid: { color: '#f3f4f6' } }, x: { grid: { display: false } } }
+        }
+    });
+}
+
+function switchRevenue(period) {
+    document.getElementById('revWeeklyBtn').className = period === 'weekly'
+        ? 'px-3 py-1 text-xs font-medium rounded-md bg-white text-emerald-700 shadow-sm'
+        : 'px-3 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-gray-700';
+    document.getElementById('revMonthlyBtn').className = period === 'monthly'
+        ? 'px-3 py-1 text-xs font-medium rounded-md bg-white text-emerald-700 shadow-sm'
+        : 'px-3 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-gray-700';
+
+    revenueChart.data.labels = period === 'weekly' ? weeklyLabels : monthlyLabels;
+    revenueChart.data.datasets[0].data = period === 'weekly' ? weeklyData : monthlyData;
+    revenueChart.update();
+}
+
 function openDashboardPatientModal() {
     const modal = document.getElementById('dashboardPatientModal');
     const panel = document.getElementById('dashboardPatientSlidePanel');
@@ -402,5 +650,93 @@ document.getElementById('dashApptPatientSearch')?.addEventListener('input', func
 setupAjaxForm('#dashboardPatientForm', 'Patient saved successfully.', closeDashboardPatientModal);
 // AJAX appointment form
 setupAjaxForm('#dashboardAppointmentForm', 'Appointment booked successfully.', closeDashboardAppointmentModal);
+
+// Doctor filter
+function filterVisitsByDoctor() {
+    const filter = document.getElementById('doctorFilter').value;
+    const rows = document.querySelectorAll('.visit-row');
+    rows.forEach(row => {
+        const doctorId = row.dataset.doctorId || '';
+        if (filter === '' || doctorId === filter) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// Change doctor modal
+function openChangeDoctorModal(visitId, currentDoctorId) {
+    const modal = document.getElementById('changeDoctorModal');
+    const panel = document.getElementById('changeDoctorPanel');
+    document.getElementById('changeDoctorVisitId').value = visitId;
+    document.getElementById('changeDoctorSelect').value = currentDoctorId;
+    document.getElementById('changeDoctorForm').action = '/visits/' + visitId + '/change-doctor';
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        panel.classList.remove('scale-95', 'opacity-0');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeChangeDoctorModal() {
+    const modal = document.getElementById('changeDoctorModal');
+    const panel = document.getElementById('changeDoctorPanel');
+    panel.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }, 200);
+}
+
+// Change doctor form AJAX
+document.getElementById('changeDoctorForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+    })
+    .then(r => r.json().catch(() => ({})))
+    .then(data => {
+        Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Doctor changed successfully.', timer: 1500, showConfirmButton: false });
+        closeChangeDoctorModal();
+        setTimeout(() => location.reload(), 1000);
+    })
+    .catch(err => {
+        Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to change doctor.' });
+    });
+});
+
+// Initialize charts
+initCharts();
+
+// Real-time refresh every 60 seconds
+setInterval(() => {
+    fetch('/dashboard/stats', { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => r.json())
+        .then(data => {
+            if (data.revenueDays) {
+                revenueChart.data.datasets[0].data = data.revenueDays;
+                revenueChart.data.labels = data.dayLabels;
+                revenueChart.update();
+            }
+            if (data.visitTrend) {
+                visitChart.data.datasets[0].data = data.visitTrend;
+                visitChart.data.labels = data.visitLabels;
+                visitChart.update();
+            }
+            if (data.stats) {
+                document.querySelectorAll('.card-sm p.text-xl').forEach(el => {
+                    const label = el.previousElementSibling?.textContent?.trim();
+                    if (label === 'Today\'s Visits') el.textContent = data.stats.visits_today;
+                    if (label === 'Weekly Revenue') el.textContent = 'TSh ' + Number(data.stats.revenue_this_week).toLocaleString();
+                    if (label === 'Pending Payments') el.textContent = data.stats.pending_payments;
+                });
+            }
+        })
+        .catch(() => {});
+}, 60000);
 </script>
 @endpush

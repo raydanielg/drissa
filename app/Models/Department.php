@@ -14,4 +14,9 @@ class Department extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

@@ -15,11 +15,20 @@ class LabEquipmentController extends Controller
     public function index()
     {
         $equipment = LabEquipment::latest()->paginate(20);
-        return view('lab_equipment.index', compact('equipment'));
+        $stats = [
+            'total' => LabEquipment::count(),
+            'active' => LabEquipment::where('status', 'active')->count(),
+            'maintenance' => LabEquipment::where('status', 'maintenance')->count(),
+            'retired' => LabEquipment::where('status', 'retired')->count(),
+        ];
+        return view('lab_equipment.index', compact('equipment', 'stats'));
     }
 
     public function create()
     {
+        if (request()->wantsJson()) {
+            return response()->json(['statuses' => ['active', 'maintenance', 'retired']]);
+        }
         return view('lab_equipment.create');
     }
 
@@ -37,13 +46,20 @@ class LabEquipmentController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        LabEquipment::create($data);
+        $item = LabEquipment::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Equipment added.', 'item' => $item]);
+        }
 
         return redirect()->route('lab-equipment.index')->with('status', 'Equipment added.');
     }
 
     public function edit(LabEquipment $labEquipment)
     {
+        if (request()->wantsJson()) {
+            return response()->json(['item' => $labEquipment, 'statuses' => ['active', 'maintenance', 'retired']]);
+        }
         return view('lab_equipment.edit', compact('labEquipment'));
     }
 
@@ -63,6 +79,10 @@ class LabEquipmentController extends Controller
 
         $labEquipment->update($data);
 
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Equipment updated.', 'item' => $labEquipment]);
+        }
+
         return redirect()->route('lab-equipment.index')->with('status', 'Equipment updated.');
     }
 
@@ -70,5 +90,20 @@ class LabEquipmentController extends Controller
     {
         $labEquipment->delete();
         return back()->with('status', 'Equipment removed.');
+    }
+
+    public function updateStatus(Request $request, LabEquipment $labEquipment)
+    {
+        $data = $request->validate([
+            'status' => 'required|in:active,maintenance,retired',
+        ]);
+
+        $labEquipment->update($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Status updated.', 'item' => $labEquipment]);
+        }
+
+        return back()->with('status', 'Status updated.');
     }
 }

@@ -70,4 +70,9 @@ class Visit extends Model
     {
         return $this->hasMany(VisitStatusLog::class);
     }
+
+    public function clinicalRecord()
+    {
+        return $this->hasOne(ClinicalRecord::class);
+    }
 }

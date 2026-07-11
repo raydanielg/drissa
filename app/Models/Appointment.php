@@ -22,6 +22,11 @@ class Appointment extends Model
         'scheduled_at' => 'datetime',
     ];
 
+    public function startTime(): ?string
+    {
+        return $this->scheduled_at?->format('H:i');
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);

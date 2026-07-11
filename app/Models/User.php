@@ -43,6 +43,23 @@ class User extends Authenticatable
         return $this->hasMany(Visit::class, 'doctor_id');
     }
 
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function appointmentsAsDoctor()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_user')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
+
     public function isPharmacy(): bool
     {
         return $this->hasRole('pharmacy');

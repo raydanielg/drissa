@@ -27,11 +27,18 @@
     <style>
         @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
         .animate-fade { animation: fadeIn 0.3s ease-out both; }
-        .sidebar-link { transition: all 0.2s ease; }
+        .sidebar-link { transition: all 0.2s ease; position: relative; }
         .sidebar-link:hover { background: rgba(255,255,255,0.06); }
-        .sidebar-link.active { background: rgba(255,255,255,0.08); color: #fff; }
-        .sidebar-submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .sidebar-submenu.open { max-height: 500px; }
+        .sidebar-link.active { background: rgba(249,172,0,0.14); color: #fff; }
+        .sidebar-link.active svg { color: #f9ac00; }
+        .sidebar-submenu { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease; transform-origin: top; }
+        .sidebar-submenu.open { max-height: 600px; opacity: 1; }
+        .submenu-item { position: relative; transition: all 0.2s ease; }
+        .submenu-item:hover { background: rgba(255,255,255,0.05); padding-left: 1rem; }
+        .submenu-item.active { color: #f9ac00 !important; font-weight: 600; background: rgba(249,172,0,0.08); }
+        .arrow-icon { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .arrow-icon.rotate-180 { transform: rotate(180deg); }
+        .group-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.35); padding: 0.5rem 0.75rem; margin-top: 0.5rem; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #01241f; }
         ::-webkit-scrollbar-thumb { background: #024938; border-radius: 3px; }
@@ -58,7 +65,7 @@
 
             {{-- Dashboard --}}
             <div class="sidebar-group">
-                <a href="{{ route('dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
                     <span>Dashboard</span>
                 </a>
@@ -66,55 +73,103 @@
 
             {{-- Reception --}}
             <div class="sidebar-group">
-                <a href="{{ route('reception.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('reception.*') ? 'active' : '' }}">
-                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>Reception</span>
-                </a>
+                <button type="button" onclick="toggleMenu('menu-reception')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('reception.*','patients.*') ? 'active' : '' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>Reception</span>
+                    </div>
+                    <svg id="arrow-reception" class="w-3 h-3 arrow-icon {{ request()->routeIs('reception.*','patients.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div id="menu-reception" class="sidebar-submenu {{ request()->routeIs('reception.*','patients.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('reception.dashboard') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reception.dashboard') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> Reception Dashboard</span>
+                    </a>
+                    <a href="{{ route('patients.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('patients.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Patients</span>
+                    </a>
+                </div>
             </div>
 
             {{-- Doctor --}}
             <div class="sidebar-group">
-                <a href="{{ route('doctor.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('doctor.*') ? 'active' : '' }}">
-                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                    <span>Doctor</span>
+                <button type="button" onclick="toggleMenu('menu-doctor')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('doctor.*') ? 'active' : '' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        <span>Doctor</span>
+                    </div>
+                    <svg id="arrow-doctor" class="w-3 h-3 arrow-icon {{ request()->routeIs('doctor.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div id="menu-doctor" class="sidebar-submenu {{ request()->routeIs('doctor.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('doctor.queue') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('doctor.queue') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6"/></svg> My Queue</span>
+                    </a>
+                    <a href="{{ route('appointments.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Appointments</span>
+                    </a>
+                    <a href="{{ route('patients.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('patients.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Patients</span>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Clinical Records --}}
+            <div class="sidebar-group">
+                <a href="{{ route('clinical-records.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('clinical-records.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Clinical Records</span>
                 </a>
             </div>
 
             {{-- Lab Management --}}
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-lab')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-lab')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                         <span>Lab Management</span>
                     </div>
-                    <svg id="arrow-lab" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    <svg id="arrow-lab" class="w-3 h-3 arrow-icon {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-lab" class="submenu {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'open' : '' }} pl-11 space-y-1">
-                    <a href="{{ route('lab.queue') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('lab.queue') ? 'text-gold-400 font-medium' : '' }}">Lab Queue</a>
-                    <a href="{{ route('lab-tests.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('lab-tests.*') ? 'text-gold-400 font-medium' : '' }}">Test Types</a>
-                    <a href="{{ route('lab-equipment.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('lab-equipment.*') ? 'text-gold-400 font-medium' : '' }}">Lab Equipment</a>
+                <div id="menu-lab" class="sidebar-submenu {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('lab.queue') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab.queue') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> Lab Queue</span>
+                    </a>
+                    <a href="{{ route('lab-tests.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-tests.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6"/></svg> Test Types</span>
+                    </a>
+                    <a href="{{ route('lab-equipment.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-equipment.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg> Lab Equipment</span>
+                    </a>
                 </div>
             </div>
 
             {{-- Pharmacy & Inventory --}}
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-pharmacy')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('pharmacy.*','products.*','suppliers.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-pharmacy')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 00-4-4H5.52a2 2 0 00-1.98 1.73l-.43 3.02a2 2 0 001.66 2.25L8 10V5m4 3v13m0-13V6a4 4 0 014-4h2.48a2 2 0 011.98 1.73l.43 3.02a2 2 0 01-1.66 2.25L16 10V5m-4 8h.01M8 16h.01M12 16h.01M16 16h.01"/></svg>
                         <span>Pharmacy & Inventory</span>
                     </div>
-                    <svg id="arrow-pharmacy" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    <svg id="arrow-pharmacy" class="w-3 h-3 arrow-icon {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-pharmacy" class="submenu {{ request()->routeIs('pharmacy.*','products.*','suppliers.*') ? 'open' : '' }} pl-11 space-y-1">
-                    <a href="{{ route('pharmacy.queue') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('pharmacy.queue') ? 'text-gold-400 font-medium' : '' }}">Pharmacy Queue</a>
-                    <a href="{{ route('products.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('products.*') ? 'text-gold-400 font-medium' : '' }}">Inventory</a>
-                    <a href="{{ route('suppliers.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('suppliers.*') ? 'text-gold-400 font-medium' : '' }}">Suppliers</a>
+                <div id="menu-pharmacy" class="sidebar-submenu {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('pharmacy.queue') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.queue') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg> Pharmacy Queue</span>
+                    </a>
+                    <a href="{{ route('products.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg> Inventory</span>
+                    </a>
+                    <a href="{{ route('categories.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg> Categories</span>
+                    </a>
+                    <a href="{{ route('suppliers.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Suppliers</span>
+                    </a>
                 </div>
             </div>
 
             {{-- Appointments --}}
             <div class="sidebar-group">
-                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
+                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     <span>Appointments</span>
                 </a>
@@ -122,7 +177,7 @@
 
             {{-- Clinic Management --}}
             <div class="sidebar-group">
-                <a href="{{ route('clinic-rooms.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('clinic-rooms.*') ? 'active' : '' }}">
+                <a href="{{ route('clinic-rooms.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('clinic-rooms.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                     <span>Clinic Rooms</span>
                 </a>
@@ -130,23 +185,32 @@
 
             {{-- Medical Staff / HR --}}
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-hr')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('users.*','departments.*','shifts.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-hr')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span>Medical Staff / HR</span>
                     </div>
-                    <svg id="arrow-hr" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    <svg id="arrow-hr" class="w-3 h-3 arrow-icon {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-hr" class="submenu {{ request()->routeIs('users.*','departments.*','shifts.*') ? 'open' : '' }} pl-11 space-y-1">
-                    <a href="{{ route('users.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('users.*') ? 'text-gold-400 font-medium' : '' }}">User Accounts</a>
-                    <a href="{{ route('departments.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('departments.*') ? 'text-gold-400 font-medium' : '' }}">Departments</a>
-                    <a href="{{ route('shifts.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('shifts.*') ? 'text-gold-400 font-medium' : '' }}">Shifts</a>
+                <div id="menu-hr" class="sidebar-submenu {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('admin.doctors.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Doctors Management</span>
+                    </a>
+                    <a href="{{ route('users.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> User Accounts</span>
+                    </a>
+                    <a href="{{ route('departments.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg> Departments</span>
+                    </a>
+                    <a href="{{ route('shifts.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('shifts.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Shifts</span>
+                    </a>
                 </div>
             </div>
 
             {{-- Blog --}}
             <div class="sidebar-group">
-                <a href="{{ route('posts.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('posts.*') ? 'active' : '' }}">
+                <a href="{{ route('posts.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('posts.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                     <span>Blog</span>
                 </a>
@@ -154,7 +218,7 @@
 
             {{-- Financial Management --}}
             <div class="sidebar-group">
-                <a href="{{ route('invoices.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
+                <a href="{{ route('invoices.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 3.666V14m-5.25-3.334L9 14m3.25-3.334L14 14M12 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM6 20.25h12a2.25 2.25 0 002.25-2.25V5.75A2.25 2.25 0 0018 3.5H6A2.25 2.25 0 003.75 5.75v12.25A2.25 2.25 0 006 20.25z"/></svg>
                     <span>Invoices</span>
                 </a>
@@ -162,40 +226,78 @@
 
             {{-- Reports --}}
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-reports')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-reports')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
                         <span>Reports</span>
                     </div>
-                    <svg id="arrow-reports" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    <svg id="arrow-reports" class="w-3 h-3 arrow-icon {{ request()->routeIs('reports.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-reports" class="submenu {{ request()->routeIs('reports.*') ? 'open' : '' }} pl-11 space-y-1">
-                    <a href="{{ route('reports.index') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.index') ? 'text-gold-400 font-medium' : '' }}">Overview</a>
-                    <a href="{{ route('reports.sales') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.sales') ? 'text-gold-400 font-medium' : '' }}">Sales Report</a>
-                    <a href="{{ route('reports.patients') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.patients') ? 'text-gold-400 font-medium' : '' }}">Patient Report</a>
-                    <a href="{{ route('reports.doctors') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.doctors') ? 'text-gold-400 font-medium' : '' }}">Doctor Performance</a>
-                    <a href="{{ route('reports.stock') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.stock') ? 'text-gold-400 font-medium' : '' }}">Stock Report</a>
-                    <a href="{{ route('reports.revenue') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.revenue') ? 'text-gold-400 font-medium' : '' }}">Revenue Report</a>
-                    <a href="{{ route('reports.health') }}" class="block text-sm text-emerald-100/90 hover:text-white py-1.5 {{ request()->routeIs('reports.health') ? 'text-gold-400 font-medium' : '' }}">System Health</a>
+                <div id="menu-reports" class="sidebar-submenu {{ request()->routeIs('reports.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('reports.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.index') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg> Overview</span>
+                    </a>
+                    <a href="{{ route('reports.sales') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Sales Report</span>
+                    </a>
+                    <a href="{{ route('reports.patients') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.patients') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Patient Report</span>
+                    </a>
+                    <a href="{{ route('reports.doctors') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.doctors') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> Doctor Performance</span>
+                    </a>
+                    <a href="{{ route('reports.stock') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.stock') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg> Stock Report</span>
+                    </a>
+                    <a href="{{ route('reports.revenue') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.revenue') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg> Revenue Report</span>
+                    </a>
+                    <a href="{{ route('reports.health') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.health') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg> System Health</span>
+                    </a>
                 </div>
             </div>
 
             {{-- Communications --}}
             <div class="sidebar-group">
-                <button onclick="toggleMenu('menu-communications')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
-                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                    <span>Communications</span>
-                    <svg class="w-4 h-4 ml-auto transition-transform" id="arrow-communications" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                <button onclick="toggleMenu('menu-communications')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('notifications.*','sms.*') ? 'active' : '' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                        <span>Communications</span>
+                    </div>
+                    <svg id="arrow-communications" class="w-3 h-3 arrow-icon {{ request()->routeIs('notifications.*','sms.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-communications" class="sidebar-submenu pl-11 space-y-0.5 {{ request()->routeIs('notifications.*') ? 'open' : '' }}">
-                    <a href="{{ route('notifications.index') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('notifications.index') ? 'text-white font-medium' : '' }}">Send Notification</a>
-                    <a href="{{ route('notifications.templates') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('notifications.templates') ? 'text-white font-medium' : '' }}">Templates</a>
+                <div id="menu-communications" class="sidebar-submenu {{ request()->routeIs('notifications.*','sms.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('notifications.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.index') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg> Send Notification</span>
+                    </a>
+                    <a href="{{ route('notifications.templates') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.templates') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Templates</span>
+                    </a>
+                    <a href="{{ route('sms.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.index','sms.store') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg> Send SMS</span>
+                    </a>
+                    <a href="{{ route('sms.logs') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.logs') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> SMS Logs</span>
+                    </a>
+                    <a href="{{ route('sms.templates') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.templates') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg> SMS Templates</span>
+                    </a>
                 </div>
+            </div>
+
+            {{-- Chat --}}
+            <div class="sidebar-group">
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }}">
+                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1 1 0 01-1-1v-6a1 1 0 011-1h9a1 1 0 011 1v6a1 1 0 01-1 1h-2v4l-4-4H7a2 2 0 01-2-2V6a2 2 0 012-2h7a2 2 0 012 2v2z"/></svg>
+                    <span>Chat</span>
+                    <span id="chatUnreadBadge" class="hidden ml-auto bg-gold-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                </a>
             </div>
 
             {{-- Audit Logs --}}
             <div class="sidebar-group">
-                <a href="{{ route('activity_logs.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('activity_logs.*') ? 'active' : '' }}">
+                <a href="{{ route('activity_logs.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('activity_logs.*') ? 'active' : '' }}">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span>Audit Logs</span>
                 </a>
@@ -203,16 +305,29 @@
 
             {{-- Settings --}}
             <div class="sidebar-group">
-                <button onclick="toggleMenu('menu-settings')" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>Settings</span>
-                    <svg class="w-4 h-4 ml-auto transition-transform" id="arrow-settings" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                <button onclick="toggleMenu('menu-settings')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-100 text-sm font-medium {{ request()->routeIs('settings.*','services.*') ? 'active' : '' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>Settings</span>
+                    </div>
+                    <svg id="arrow-settings" class="w-3 h-3 arrow-icon {{ request()->routeIs('settings.*','services.*') ? 'rotate-180' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div id="menu-settings" class="sidebar-submenu pl-11 space-y-0.5 {{ request()->routeIs('settings.*') ? 'open' : '' }}">
-                    <a href="{{ route('settings.index') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('settings.index') ? 'text-white font-medium' : '' }}">General</a>
-                    <a href="{{ route('settings.email') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('settings.email') ? 'text-white font-medium' : '' }}">Email Config</a>
-                    <a href="{{ route('settings.sms') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('settings.sms') ? 'text-white font-medium' : '' }}">SMS Gateway</a>
-                    <a href="{{ route('settings.payment') }}" class="block py-1.5 text-xs text-emerald-200/70 hover:text-white transition-colors {{ request()->routeIs('settings.payment') ? 'text-white font-medium' : '' }}">Payment Gateways</a>
+                <div id="menu-settings" class="sidebar-submenu {{ request()->routeIs('settings.*','services.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
+                    <a href="{{ route('settings.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg> General</span>
+                    </a>
+                    <a href="{{ route('settings.email') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.email') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Email Config</span>
+                    </a>
+                    <a href="{{ route('settings.sms') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.sms') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg> SMS Gateway</span>
+                    </a>
+                    <a href="{{ route('settings.payment') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.payment') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Payment Gateways</span>
+                    </a>
+                    <a href="{{ route('services.index') }}" class="submenu-item block text-xs text-emerald-100/80 hover:text-white py-1.5 pl-3 {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                        <span class="flex items-center gap-2"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg> Services & Prices</span>
+                    </a>
                 </div>
             </div>
 
@@ -391,6 +506,26 @@
                 }
             });
         });
+
+        // Chat unread badge polling
+        (function() {
+            const badge = document.getElementById('chatUnreadBadge');
+            if (!badge) return;
+            async function updateBadge() {
+                try {
+                    const res = await fetch('{{ route("chat.unread-count") }}', { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' });
+                    const data = await res.json();
+                    if (data.count > 0) {
+                        badge.textContent = data.count > 99 ? '99+' : data.count;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                } catch (e) {}
+            }
+            updateBadge();
+            setInterval(updateBadge, 10000);
+        })();
     </script>
     @stack('scripts')
 </body>

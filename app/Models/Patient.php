@@ -23,6 +23,10 @@ class Patient extends Model
         'blood_group',
     ];
 
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
     public function visits()
     {
         return $this->hasMany(Visit::class)->latest();
@@ -31,6 +35,21 @@ class Patient extends Model
     public function consultations()
     {
         return $this->hasManyThrough(Consultation::class, Visit::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(PatientDocument::class)->latest();
+    }
+
+    public function clinicalRecords()
+    {
+        return $this->hasMany(ClinicalRecord::class)->latest('record_date');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class)->latest('scheduled_at');
     }
 
     public function fullName(): string

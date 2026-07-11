@@ -31,9 +31,14 @@ class SystemDefaultsSeeder extends Seeder
             ['key' => 'mail_password', 'value' => '', 'group' => 'email', 'type' => 'text'],
             ['key' => 'mail_encryption', 'value' => 'tls', 'group' => 'email', 'type' => 'text'],
 
-            ['key' => 'sms_gateway', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_gateway', 'value' => 'log', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_sender_id', 'value' => 'DRISSA', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_api_key', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'twilio_sid', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'twilio_token', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'twilio_from', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_http_url', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_http_method', 'value' => 'POST', 'group' => 'sms', 'type' => 'text'],
 
             ['key' => 'payment_gateway', 'value' => 'cash', 'group' => 'payment', 'type' => 'text'],
             ['key' => 'payment_api_key', 'value' => '', 'group' => 'payment', 'type' => 'text'],
@@ -58,10 +63,11 @@ class SystemDefaultsSeeder extends Seeder
         );
 
         SmsTemplate::firstOrCreate(
-            ['slug' => 'appointment-reminder'],
+            ['name' => 'Appointment Reminder'],
             [
-                'name' => 'Appointment Reminder',
+                'type' => 'appointment',
                 'body' => 'Hi {{name}}, you have an appointment tomorrow at Dr Issa Scientist.',
+                'is_active' => true,
             ]
         );
     }
