@@ -1,0 +1,60 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\EmailTemplate;
+use App\Models\Setting;
+use App\Models\SmsTemplate;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class SystemDefaultsSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $settings = [
+            ['key' => 'app_name', 'value' => 'Dr Issa Scientist', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'clinic_name', 'value' => 'Dr Issa Scientist Hospital', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'clinic_phone', 'value' => '+255 700 000 000', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'clinic_email', 'value' => 'info@drissa.test', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'clinic_address', 'value' => 'Dar es Salaam, Tanzania', 'group' => 'general', 'type' => 'textarea'],
+            ['key' => 'currency', 'value' => 'TSh', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'consultation_fee', 'value' => '10000', 'group' => 'general', 'type' => 'number'],
+
+            ['key' => 'mail_from', 'value' => 'noreply@drissa.test', 'group' => 'email', 'type' => 'text'],
+            ['key' => 'mail_host', 'value' => 'smtp.mailtrap.io', 'group' => 'email', 'type' => 'text'],
+            ['key' => 'mail_port', 'value' => '2525', 'group' => 'email', 'type' => 'text'],
+            ['key' => 'mail_username', 'value' => '', 'group' => 'email', 'type' => 'text'],
+            ['key' => 'mail_password', 'value' => '', 'group' => 'email', 'type' => 'text'],
+            ['key' => 'mail_encryption', 'value' => 'tls', 'group' => 'email', 'type' => 'text'],
+
+            ['key' => 'sms_gateway', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_sender_id', 'value' => 'DRISSA', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_api_key', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+        ];
+
+        foreach ($settings as $setting) {
+            Setting::firstOrCreate(['key' => $setting['key']], $setting);
+        }
+
+        EmailTemplate::firstOrCreate(
+            ['slug' => 'welcome-patient'],
+            [
+                'name' => 'Welcome Patient',
+                'subject' => 'Welcome to Dr Issa Scientist',
+                'body' => 'Dear patient, welcome to our hospital. Your MRN is {{mrn}}.',
+            ]
+        );
+
+        SmsTemplate::firstOrCreate(
+            ['slug' => 'appointment-reminder'],
+            [
+                'name' => 'Appointment Reminder',
+                'body' => 'Hi {{name}}, you have an appointment tomorrow at Dr Issa Scientist.',
+            ]
+        );
+    }
+}
