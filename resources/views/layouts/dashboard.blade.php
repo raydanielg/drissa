@@ -242,6 +242,48 @@
                 @endforeach
             @endif
         })();
+
+        // AJAX form handler with SweetAlert confirmation
+        document.querySelectorAll('form[data-ajax]').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const confirmMessage = this.dataset.confirm;
+                if (confirmMessage) {
+                    const result = await Swal.fire({
+                        title: 'Are you sure?',
+                        text: confirmMessage,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#024938',
+                        cancelButtonColor: '#6b7280',
+                        confirmButtonText: 'Yes, proceed!'
+                    });
+                    if (!result.isConfirmed) return;
+                }
+                const formData = new FormData(this);
+                const method = this.method.toUpperCase();
+                const action = this.action;
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) { btn.disabled = true; btn.innerHTML = '<span class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span> Processing'; }
+
+                try {
+                    const response = await fetch(action, {
+                        method: method,
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                        credentials: 'same-origin'
+                    });
+                    if (response.redirected) { window.location.href = response.url; return; }
+                    const data = await response.json().catch(() => null);
+                    Swal.fire({ icon: 'success', title: data?.message || 'Done', timer: 2000, showConfirmButton: false });
+                    if (!data?.redirect) setTimeout(() => window.location.reload(), 1000);
+                } catch (err) {
+                    Swal.fire({ icon: 'error', title: 'Something went wrong' });
+                } finally {
+                    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.original || 'Submit'; }
+                }
+            });
+        });
     </script>
     @stack('scripts')
 </body>

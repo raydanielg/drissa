@@ -36,7 +36,7 @@
                                 </ul>
                             </td>
                             <td class="px-6 py-3">
-                                <form method="POST" action="{{ route('pharmacy.prescriptions.dispense', $prescription) }}">
+                                <form method="POST" action="{{ route('pharmacy.prescriptions.dispense', $prescription) }}" data-ajax data-confirm="Dispense these drugs?">
                                     @csrf
                                     <button type="submit" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg">Dispense</button>
                                 </form>
