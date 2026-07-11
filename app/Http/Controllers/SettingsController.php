@@ -44,4 +44,10 @@ class SettingsController extends Controller
         $settings = Setting::where('group', 'sms')->get()->keyBy('key');
         return view('settings.sms', compact('settings'));
     }
+
+    public function payment()
+    {
+        $settings = Setting::where('group', 'payment')->get()->keyBy('key');
+        return view('settings.payment', compact('settings'));
+    }
 }

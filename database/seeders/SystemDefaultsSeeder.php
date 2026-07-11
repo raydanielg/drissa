@@ -34,6 +34,14 @@ class SystemDefaultsSeeder extends Seeder
             ['key' => 'sms_gateway', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_sender_id', 'value' => 'DRISSA', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_api_key', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+
+            ['key' => 'payment_gateway', 'value' => 'cash', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_api_key', 'value' => '', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_api_secret', 'value' => '', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_merchant_id', 'value' => '', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_callback_url', 'value' => '', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_bank_name', 'value' => '', 'group' => 'payment', 'type' => 'text'],
+            ['key' => 'payment_bank_account', 'value' => '', 'group' => 'payment', 'type' => 'text'],
         ];
 
         foreach ($settings as $setting) {
