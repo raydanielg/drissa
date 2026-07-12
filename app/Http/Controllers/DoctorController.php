@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\VisitStatus;
 use App\Models\ActivityLog;
 use App\Models\Consultation;
+use App\Models\Invoice;
 use App\Models\LabOrder;
 use App\Models\LabTest;
 use App\Models\Medication;
@@ -23,11 +24,18 @@ class DoctorController extends Controller
 
     public function queue()
     {
-        $visits = Visit::with('patient', 'vitals')
+        $visits = Visit::with([
+                'patient',
+                'vitals',
+                'consultation',
+                'labOrders.items.labTest',
+                'labOrders.results',
+                'prescriptions.items.medication',
+            ])
             ->where('doctor_id', auth()->id())
             ->whereIn('status', [
                 VisitStatus::WaitingForDoctor->value,
-                VisitStatus::LabCompleted->value,
+                VisitStatus::WithDoctor->value,
             ])
             ->orderBy('registered_at')
             ->get();
@@ -38,10 +46,41 @@ class DoctorController extends Controller
         return view('doctor.queue', compact('visits', 'labTests', 'medications'));
     }
 
+    public function labResults()
+    {
+        $visits = Visit::with(['patient', 'vitals', 'labOrders.items.labTest', 'labOrders.results', 'labOrders.attachments'])
+            ->where('doctor_id', auth()->id())
+            ->whereIn('status', [
+                VisitStatus::WaitingForLab->value,
+                VisitStatus::InLab->value,
+                VisitStatus::LabCompleted->value,
+            ])
+            ->orderBy('registered_at')
+            ->get();
+
+        $medications = Medication::where('is_active', true)->get();
+
+        return view('doctor.lab-results', compact('visits', 'medications'));
+    }
+
+    public function returnFromLab(Visit $visit, VisitWorkflow $flow)
+    {
+        $flow->transition($visit, VisitStatus::WithDoctor);
+        ActivityLog::log('lab_review_started', $visit, "Doctor started reviewing lab results for visit {$visit->visit_number}");
+        return redirect()->route('doctor.lab-results')->with('status', 'Patient returned for review. Please write the prescription.');
+    }
+
     public function callNext(Visit $visit, VisitWorkflow $flow)
     {
         $flow->transition($visit, VisitStatus::WithDoctor);
         return back()->with('status', 'Patient called in.');
+    }
+
+    public function markNoShow(Visit $visit, VisitWorkflow $flow)
+    {
+        $flow->transition($visit, VisitStatus::Cancelled, 'Patient did not show up');
+        ActivityLog::log('visit_no_show', $visit, "Marked visit {$visit->visit_number} as no-show");
+        return back()->with('status', 'Patient marked as no-show.');
     }
 
     public function saveConsultation(Request $request, Visit $visit)

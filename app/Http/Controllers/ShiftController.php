@@ -15,7 +15,18 @@ class ShiftController extends Controller
     public function index()
     {
         $shifts = Shift::latest()->paginate(20);
-        return view('shifts.index', compact('shifts'));
+        
+        $stats = [
+            'total' => Shift::count(),
+            'active' => Shift::where('is_active', true)->count(),
+            'inactive' => Shift::where('is_active', false)->count(),
+        ];
+        
+        if (request()->wantsJson()) {
+            return response()->json(['stats' => $stats]);
+        }
+        
+        return view('shifts.index', compact('shifts', 'stats'));
     }
 
     public function create()
@@ -35,6 +46,10 @@ class ShiftController extends Controller
 
         $data['is_active'] = $request->boolean('is_active', true);
         Shift::create($data);
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Shift created successfully.']);
+        }
 
         return redirect()->route('shifts.index')->with('status', 'Shift created.');
     }
@@ -57,12 +72,21 @@ class ShiftController extends Controller
         $data['is_active'] = $request->boolean('is_active', true);
         $shift->update($data);
 
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Shift updated successfully.']);
+        }
+
         return redirect()->route('shifts.index')->with('status', 'Shift updated.');
     }
 
     public function destroy(Shift $shift)
     {
         $shift->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Shift deleted successfully.']);
+        }
+
         return back()->with('status', 'Shift deleted.');
     }
 }

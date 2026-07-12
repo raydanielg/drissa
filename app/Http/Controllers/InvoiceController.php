@@ -16,7 +16,19 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::with(['patient', 'visit'])->latest()->paginate(20);
-        return view('invoices.index', compact('invoices'));
+        
+        $stats = [
+            'total' => Invoice::count(),
+            'paid' => Invoice::where('status', 'paid')->sum('total'),
+            'pending' => Invoice::where('status', '!=', 'paid')->sum('total') - Invoice::where('status', '!=', 'paid')->sum('paid'),
+            'overdue' => Invoice::where('status', 'unpaid')->where('created_at', '<', now()->subDays(30))->count(),
+        ];
+        
+        if (request()->wantsJson()) {
+            return response()->json(['stats' => $stats]);
+        }
+        
+        return view('invoices.index', compact('invoices', 'stats'));
     }
 
     public function show(Invoice $invoice)
@@ -30,5 +42,13 @@ class InvoiceController extends Controller
         $invoice->load(['patient', 'visit', 'items']);
         $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
         return $pdf->download("invoice-{$invoice->invoice_number}.pdf");
+    }
+
+    public function downloadAllPdf()
+    {
+        $invoices = Invoice::with(['patient', 'visit', 'items'])->latest()->get();
+        
+        $pdf = Pdf::loadView('invoices.all-pdf', compact('invoices'));
+        return $pdf->download("all-invoices-" . now()->format('Y-m-d') . ".pdf");
     }
 }

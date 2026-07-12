@@ -20,6 +20,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientDocumentController;
 use App\Http\Controllers\PatientHistoryController;
 use App\Http\Controllers\PharmacyController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceptionController;
@@ -62,9 +63,12 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('doctor')->name('doctor.')->middleware('role:doctor|admin')->group(function () {
         Route::get('/', [DoctorController::class, 'queue'])->name('queue');
+        Route::get('lab-results', [DoctorController::class, 'labResults'])->name('lab-results');
         Route::post('visits/{visit}/call', [DoctorController::class, 'callNext'])->name('visits.call');
+        Route::post('visits/{visit}/no-show', [DoctorController::class, 'markNoShow'])->name('visits.no-show');
         Route::post('visits/{visit}/consult', [DoctorController::class, 'saveConsultation'])->name('visits.consult');
         Route::post('visits/{visit}/lab', [DoctorController::class, 'orderLab'])->name('visits.lab');
+        Route::post('visits/{visit}/lab-return', [DoctorController::class, 'returnFromLab'])->name('visits.lab-return');
         Route::post('visits/{visit}/prescribe', [DoctorController::class, 'prescribe'])->name('visits.prescribe');
         Route::post('visits/{visit}/payment', [DoctorController::class, 'sendToPayment'])->name('visits.payment');
     });
@@ -98,6 +102,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('patient-documents/{document}', [PatientDocumentController::class, 'destroy'])->name('patients.documents.destroy');
     Route::get('patients/{patient}/history', [PatientHistoryController::class, 'show'])->name('patients.history');
 
+    // Profile
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
     // Team Chat
     Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
     Route::post('chat', [ChatController::class, 'store'])->name('chat.store');
@@ -121,6 +129,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('sms/templates/{template}', [SmsController::class, 'destroyTemplate'])->name('sms.templates.destroy');
 
     Route::middleware('role:admin')->group(function () {
+        // Admin Queue - View all patients
+        Route::get('admin/queue', [AdminDoctorController::class, 'queue'])->name('admin.queue');
+        Route::post('admin/visits/{visit}/discharge', [AdminDoctorController::class, 'discharge'])->name('admin.visits.discharge');
+        Route::post('admin/visits/{visit}/complete-lab', [AdminDoctorController::class, 'completeLab'])->name('admin.visits.complete-lab');
+        Route::post('admin/visits/{visit}/complete-payment', [AdminDoctorController::class, 'completePayment'])->name('admin.visits.complete-payment');
+        
         // Doctors Management (Admin)
         Route::get('admin/doctors', [AdminDoctorController::class, 'index'])->name('admin.doctors.index');
         Route::post('admin/doctors', [AdminDoctorController::class, 'store'])->name('admin.doctors.store');
@@ -147,6 +161,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [InvoiceController::class, 'index'])->name('index');
             Route::get('{invoice}', [InvoiceController::class, 'show'])->name('show');
             Route::get('{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('pdf');
+            Route::get('download-all', [InvoiceController::class, 'downloadAllPdf'])->name('download-all');
         });
 
         Route::prefix('settings')->name('settings.')->group(function () {

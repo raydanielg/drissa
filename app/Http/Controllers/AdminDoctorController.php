@@ -173,4 +173,86 @@ class AdminDoctorController extends Controller
 
         return back()->with('status', 'Doctor status updated.');
     }
+
+    public function queue()
+    {
+        $visits = \App\Models\Visit::with(['patient', 'doctor', 'vitals'])
+            ->whereDate('registered_at', today())
+            ->whereIn('status', [
+                \App\Enums\VisitStatus::Registered->value,
+                \App\Enums\VisitStatus::WaitingForDoctor->value,
+                \App\Enums\VisitStatus::WithDoctor->value,
+                \App\Enums\VisitStatus::LabCompleted->value,
+                \App\Enums\VisitStatus::WaitingForLab->value,
+                \App\Enums\VisitStatus::WaitingForPharmacy->value,
+                \App\Enums\VisitStatus::WaitingForPayment->value,
+            ])
+            ->orderBy('registered_at')
+            ->get();
+
+        $doctors = User::role('doctor')->where('is_active', true)->get();
+
+        $stats = [
+            'total' => $visits->count(),
+            'waiting' => $visits->where('status', \App\Enums\VisitStatus::WaitingForDoctor->value)->count(),
+            'with_doctor' => $visits->where('status', \App\Enums\VisitStatus::WithDoctor->value)->count(),
+            'lab' => $visits->where('status', \App\Enums\VisitStatus::WaitingForLab->value)->count(),
+            'pharmacy' => $visits->where('status', \App\Enums\VisitStatus::WaitingForPharmacy->value)->count(),
+            'payment' => $visits->where('status', \App\Enums\VisitStatus::WaitingForPayment->value)->count(),
+        ];
+
+        return view('admin.queue', compact('visits', 'doctors', 'stats'));
+    }
+
+    public function discharge(Request $request, \App\Models\Visit $visit)
+    {
+        $data = $request->validate([
+            'notes' => 'nullable|string',
+        ]);
+
+        $visit->update([
+            'status' => \App\Enums\VisitStatus::Completed->value,
+            'discharge_notes' => $data['notes'] ?? null,
+            'completed_at' => now(),
+        ]);
+
+        \App\Models\ActivityLog::log('patient_discharged', $visit, "Discharged patient from visit {$visit->visit_number}");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Patient discharged successfully.']);
+        }
+
+        return back()->with('status', 'Patient discharged successfully.');
+    }
+
+    public function completeLab(Request $request, \App\Models\Visit $visit)
+    {
+        $visit->update([
+            'status' => \App\Enums\VisitStatus::LabCompleted->value,
+        ]);
+
+        \App\Models\ActivityLog::log('lab_completed', $visit, "Lab completed for visit {$visit->visit_number}");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Lab completed successfully.']);
+        }
+
+        return back()->with('status', 'Lab completed successfully.');
+    }
+
+    public function completePayment(Request $request, \App\Models\Visit $visit)
+    {
+        $visit->update([
+            'status' => \App\Enums\VisitStatus::Completed->value,
+            'completed_at' => now(),
+        ]);
+
+        \App\Models\ActivityLog::log('payment_completed', $visit, "Payment completed for visit {$visit->visit_number}");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Payment completed successfully.']);
+        }
+
+        return back()->with('status', 'Payment completed successfully.');
+    }
 }

@@ -38,12 +38,197 @@
             </button>
         @endif
         @if($user->isDoctor())
-            <a href="{{ route('doctor.queue') }}" class="px-3 py-1.5 text-xs font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors inline-flex items-center gap-1.5 shadow-sm">My Queue</a>
+            <a href="{{ route('doctor.queue') }}" class="px-3 py-1.5 text-xs font-medium bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors inline-flex items-center gap-1.5 shadow-sm">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                My Queue
+            </a>
         @endif
     </div>
 </div>
 
-{{-- KPI Stats Cards --}}
+{{-- DOCTOR DASHBOARD --}}
+@if($user->isDoctor())
+@php
+    $doctorId = auth()->id();
+    $todayDoctorVisits = \App\Models\Visit::where('doctor_id', $doctorId)->whereDate('registered_at', today())->count();
+    $pendingConsultations = \App\Models\Visit::where('doctor_id', $doctorId)->whereIn('status', ['waiting_for_doctor', 'with_doctor'])->count();
+    $completedToday = \App\Models\Visit::where('doctor_id', $doctorId)->whereDate('completed_at', today())->where('status', 'completed')->count();
+    $pendingLabResults = \App\Models\Visit::where('doctor_id', $doctorId)->whereIn('status', ['waiting_for_lab', 'in_lab', 'lab_completed'])->count();
+    $doctorAppointments = \App\Models\Appointment::whereDate('appointment_date', today())->where('doctor_id', $doctorId)->with('patient')->orderBy('start_time')->get();
+    $recentDoctorPatients = \App\Models\Visit::where('doctor_id', $doctorId)->with('patient')->latest()->limit(5)->get();
+@endphp
+
+{{-- Doctor Welcome Banner --}}
+<div class="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 rounded-2xl p-6 mb-6 shadow-xl relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20"></div>
+    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-10 -mb-10"></div>
+    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-bold text-white mb-1">Doctor Workspace</h2>
+            <p class="text-emerald-100 text-sm">Manage your patients, consultations, and appointments efficiently.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="text-center px-4 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                <div class="text-2xl font-bold text-white">{{ $pendingConsultations }}</div>
+                <div class="text-[10px] text-emerald-100 uppercase tracking-wide">Waiting</div>
+            </div>
+            <div class="text-center px-4 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+                <div class="text-2xl font-bold text-white">{{ $completedToday }}</div>
+                <div class="text-[10px] text-emerald-100 uppercase tracking-wide">Done Today</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Doctor KPI Cards --}}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <a href="{{ route('doctor.queue') }}" class="card-sm block bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 text-white relative overflow-hidden shadow-lg hover:shadow-xl">
+        <div class="absolute top-0 right-0 w-14 h-14 bg-white/10 rounded-full -mr-6 -mt-6"></div>
+        <div class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+                <svg class="w-5 h-5 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <p class="text-xl font-bold tracking-tight">{{ $todayDoctorVisits }}</p>
+            <p class="text-[10px] text-blue-100 font-medium mt-1">Today's Patients</p>
+        </div>
+    </a>
+    <a href="{{ route('doctor.queue') }}" class="card-sm block bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl p-4 text-white relative overflow-hidden shadow-lg hover:shadow-xl">
+        <div class="absolute top-0 right-0 w-14 h-14 bg-white/10 rounded-full -mr-6 -mt-6"></div>
+        <div class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+                <svg class="w-5 h-5 text-amber-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                @if($pendingConsultations > 0)
+                <span class="flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                </span>
+                @endif
+            </div>
+            <p class="text-xl font-bold tracking-tight">{{ $pendingConsultations }}</p>
+            <p class="text-[10px] text-amber-100 font-medium mt-1">Pending Consultations</p>
+        </div>
+    </a>
+    <a href="{{ route('doctor.lab-results') }}" class="card-sm block bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 text-white relative overflow-hidden shadow-lg hover:shadow-xl">
+        <div class="absolute top-0 right-0 w-14 h-14 bg-white/10 rounded-full -mr-6 -mt-6"></div>
+        <div class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+                <svg class="w-5 h-5 text-purple-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            </div>
+            <p class="text-xl font-bold tracking-tight">{{ $pendingLabResults }}</p>
+            <p class="text-[10px] text-purple-100 font-medium mt-1">Waiting Lab Results</p>
+        </div>
+    </a>
+    <div class="card-sm block bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-4 text-white relative overflow-hidden shadow-lg hover:shadow-xl">
+        <div class="absolute top-0 right-0 w-14 h-14 bg-white/10 rounded-full -mr-6 -mt-6"></div>
+        <div class="relative z-10">
+            <div class="flex items-center justify-between mb-2">
+                <svg class="w-5 h-5 text-emerald-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <p class="text-xl font-bold tracking-tight">{{ $completedToday }}</p>
+            <p class="text-[10px] text-emerald-100 font-medium mt-1">Completed Today</p>
+        </div>
+    </div>
+</div>
+
+{{-- Doctor Schedule & Recent Patients --}}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    {{-- Today's Appointments --}}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-900">Today's Schedule</h3>
+                <p class="text-xs text-gray-400">{{ today()->format('D, M j') }}</p>
+            </div>
+            <a href="{{ route('appointments.index') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">View All</a>
+        </div>
+        <div class="p-5">
+            @forelse($doctorAppointments as $appt)
+                <div class="flex items-center gap-3 py-3 {{ !$loop->last ? 'border-b border-gray-50' : '' }}">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex flex-col items-center justify-center text-white shadow-sm">
+                        <span class="text-[10px] font-medium">{{ date('H:i', strtotime($appt->start_time)) }}</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900">{{ $appt->patient?->name ?? 'Unknown' }}</div>
+                        <div class="text-xs text-gray-500">{{ ucfirst($appt->status) }}</div>
+                    </div>
+                    <span class="px-2 py-1 rounded-full text-[10px] font-medium capitalize
+                        {{ $appt->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($appt->status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700') }}">
+                        {{ $appt->status }}
+                    </span>
+                </div>
+            @empty
+                <div class="text-center py-8 text-gray-400">
+                    <svg class="w-10 h-10 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <p class="text-xs">No appointments today</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    {{-- Recent Patients --}}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div>
+                <h3 class="text-sm font-semibold text-gray-900">Recent Patients</h3>
+                <p class="text-xs text-gray-400">Last 5 consultations</p>
+            </div>
+            <a href="{{ route('patients.index') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">All Patients</a>
+        </div>
+        <div class="p-5">
+            @forelse($recentDoctorPatients as $visit)
+                <div class="flex items-center gap-3 py-3 {{ !$loop->last ? 'border-b border-gray-50' : '' }}">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-700 flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                        {{ strtoupper(substr($visit->patient->name ?? 'U', 0, 1)) }}
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900">{{ $visit->patient->fullName() ?? 'Unknown' }}</div>
+                        <div class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->registered_at->format('M j, H:i') }}</div>
+                    </div>
+                    <span class="px-2 py-1 rounded-full text-[10px] font-medium capitalize bg-gray-100 text-gray-700">
+                        {{ str_replace('_', ' ', $visit->status) }}
+                    </span>
+                </div>
+            @empty
+                <div class="text-center py-8 text-gray-400">
+                    <svg class="w-10 h-10 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <p class="text-xs">No recent patients</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
+{{-- Quick Actions --}}
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <a href="{{ route('doctor.queue') }}" class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all">
+        <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        </div>
+        <span class="text-xs font-medium text-gray-700">My Queue</span>
+    </a>
+    <a href="{{ route('appointments.index') }}" class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all">
+        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
+        <span class="text-xs font-medium text-gray-700">Appointments</span>
+    </a>
+    <a href="{{ route('patients.index') }}" class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all">
+        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <span class="text-xs font-medium text-gray-700">Patients</span>
+    </a>
+    <a href="{{ route('clinical-records.index') }}" class="flex flex-col items-center gap-2 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all">
+        <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <span class="text-xs font-medium text-gray-700">Records</span>
+    </a>
+</div>
+@endif
+
+{{-- Admin/Reception KPI Stats Cards --}}
+@if(!$user->isDoctor())
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
     @foreach([
         ['label'=>'Total Patients','value'=>number_format($stats['total_patients']),'change'=>'+'.$stats['total_visits'].' visits','link'=>null,'icon'=>'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z','from'=>'emerald-600','to'=>'emerald-700','border'=>'emerald-500','text'=>'emerald-100','sub'=>'emerald-200'],
@@ -163,6 +348,7 @@
         </div>
     </div>
 </div>
+@endif
 
 {{-- Doctor Queue Preview --}}
 @if($waitingForDoctor->isNotEmpty())
@@ -201,7 +387,10 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h3 class="text-sm font-semibold text-gray-900">Today's Appointments</h3>
+            <div>
+                <h3 class="text-sm font-semibold text-gray-900">Today's Appointments</h3>
+                <p class="text-xs text-gray-400">{{ today()->format('D, M j') }}</p>
+            </div>
             <a href="{{ route('appointments.index') }}" class="text-xs font-medium text-emerald-600 hover:text-emerald-700">View All</a>
         </div>
         <div class="p-5">
@@ -214,21 +403,21 @@
                 ];
             @endphp
             <div class="grid grid-cols-4 gap-3 mb-4">
-                <div class="text-center p-2 bg-amber-50 rounded-lg">
-                    <div class="text-lg font-bold text-amber-600">{{ $apptStats['scheduled'] }}</div>
-                    <div class="text-[10px] text-amber-700">Scheduled</div>
+                <div class="text-center p-3 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg border border-amber-200 hover:shadow-md transition-shadow">
+                    <div class="text-xl font-bold text-amber-600">{{ $apptStats['scheduled'] }}</div>
+                    <div class="text-[10px] text-amber-700 font-medium">Scheduled</div>
                 </div>
-                <div class="text-center p-2 bg-blue-50 rounded-lg">
-                    <div class="text-lg font-bold text-blue-600">{{ $apptStats['confirmed'] }}</div>
-                    <div class="text-[10px] text-blue-700">Confirmed</div>
+                <div class="text-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 hover:shadow-md transition-shadow">
+                    <div class="text-xl font-bold text-blue-600">{{ $apptStats['confirmed'] }}</div>
+                    <div class="text-[10px] text-blue-700 font-medium">Confirmed</div>
                 </div>
-                <div class="text-center p-2 bg-emerald-50 rounded-lg">
-                    <div class="text-lg font-bold text-emerald-600">{{ $apptStats['completed'] }}</div>
-                    <div class="text-[10px] text-emerald-700">Completed</div>
+                <div class="text-center p-3 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg border border-emerald-200 hover:shadow-md transition-shadow">
+                    <div class="text-xl font-bold text-emerald-600">{{ $apptStats['completed'] }}</div>
+                    <div class="text-[10px] text-emerald-700 font-medium">Completed</div>
                 </div>
-                <div class="text-center p-2 bg-red-50 rounded-lg">
-                    <div class="text-lg font-bold text-red-600">{{ $apptStats['cancelled'] }}</div>
-                    <div class="text-[10px] text-red-700">Cancelled</div>
+                <div class="text-center p-3 bg-gradient-to-br from-red-50 to-red-100 rounded-lg border border-red-200 hover:shadow-md transition-shadow">
+                    <div class="text-xl font-bold text-red-600">{{ $apptStats['cancelled'] }}</div>
+                    <div class="text-[10px] text-red-700 font-medium">Cancelled</div>
                 </div>
             </div>
         </div>
@@ -242,17 +431,49 @@
                 </tr></thead>
                 <tbody>
                     @forelse($todayAppointments as $appt)
-                    <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
-                        <td class="px-5 py-2.5 text-xs text-gray-600 font-medium">{{ $appt->startTime() }}</td>
-                        <td class="px-5 py-2.5 text-xs text-gray-900">{{ $appt->patient?->name ?? '-' }}</td>
-                        <td class="px-5 py-2.5 text-xs text-gray-600">{{ $appt->doctor?->name ?? '-' }}</td>
+                    <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors cursor-pointer" onclick="window.location.href='{{ route('appointments.edit', $appt) }}'">
                         <td class="px-5 py-2.5">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium capitalize
-                                {{ $appt->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($appt->status === 'cancelled' ? 'bg-red-100 text-red-700' : ($appt->status === 'confirmed' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700')) }}">{{ str_replace('_', ' ', $appt->status) }}</span>
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">
+                                    {{ substr($appt->startTime(), 0, 2) }}
+                                </div>
+                                <span class="text-xs text-gray-900 font-medium">{{ $appt->startTime() }}</span>
+                            </div>
+                        </td>
+                        <td class="px-5 py-2.5">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                    {{ strtoupper(substr($appt->patient?->name ?? '', 0, 1)) }}
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-900 font-medium">{{ $appt->patient?->name ?? '-' }}</div>
+                                    <div class="text-[10px] text-gray-400">{{ $appt->patient?->mrn ?? '' }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-5 py-2.5">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-cyan-700 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                                    {{ strtoupper(substr($appt->doctor?->name ?? '', 0, 1)) }}
+                                </div>
+                                <span class="text-xs text-gray-700">{{ $appt->doctor?->name ?? 'Unassigned' }}</span>
+                            </div>
+                        </td>
+                        <td class="px-5 py-2.5">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium capitalize
+                                {{ $appt->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : ($appt->status === 'cancelled' ? 'bg-red-100 text-red-700' : ($appt->status === 'confirmed' ? 'bg-blue-100 text-blue-700' : 'bg-amber-100 text-amber-700')) }}">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $appt->status === 'completed' ? 'bg-emerald-500' : ($appt->status === 'cancelled' ? 'bg-red-500' : ($appt->status === 'confirmed' ? 'bg-blue-500' : 'bg-amber-500')) }}"></span>
+                                {{ str_replace('_', ' ', $appt->status) }}
+                            </span>
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="4" class="px-5 py-6 text-center text-gray-400 text-xs">No appointments today</td></tr>
+                    <tr><td colspan="4" class="px-5 py-10 text-center text-gray-400 text-xs">
+                        <div class="flex flex-col items-center gap-2">
+                            <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            <p>No appointments today</p>
+                        </div>
+                    </td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -342,7 +563,7 @@
                         </td>
                         <td class="px-6 py-3 text-gray-500 text-xs">{{ $visit->registered_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-3 text-right">
-                            <a href="{{ route('visits.show', $visit) }}" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">View</a>
+                            <span class="text-gray-400 text-xs">-</span>
                         </td>
                     </tr>
                 @empty
@@ -671,7 +892,7 @@ function openChangeDoctorModal(visitId, currentDoctorId) {
     const panel = document.getElementById('changeDoctorPanel');
     document.getElementById('changeDoctorVisitId').value = visitId;
     document.getElementById('changeDoctorSelect').value = currentDoctorId;
-    document.getElementById('changeDoctorForm').action = '/visits/' + visitId + '/change-doctor';
+    document.getElementById('changeDoctorForm').action = '/reception/visits/' + visitId + '/change-doctor';
     modal.classList.remove('hidden');
     setTimeout(() => {
         panel.classList.remove('scale-95', 'opacity-0');
