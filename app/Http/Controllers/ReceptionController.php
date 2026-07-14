@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\VisitStatus;
+use App\Exceptions\InvalidTransitionException;
 use App\Models\ActivityLog;
+use App\Models\Appointment;
 use App\Models\Invoice;
 use App\Models\Patient;
 use App\Models\Payment;
@@ -23,22 +25,62 @@ class ReceptionController extends Controller
 
     public function dashboard()
     {
-        $todayVisits = Visit::with('patient')
-            ->whereDate('registered_at', today())
-            ->latest()
+        $today = today();
+
+        $todayVisits = Visit::with(['patient', 'doctor'])
+            ->whereDate('registered_at', $today)
+            ->latest('registered_at')
             ->get();
 
-        $waitingForPayment = Visit::with('patient')
+        $waitingForPayment = Visit::with(['patient', 'invoice'])
             ->where('status', VisitStatus::WaitingForPayment->value)
+            ->latest('registered_at')
+            ->get();
+
+        $waitingForDoctor = Visit::with(['patient', 'doctor'])
+            ->where('status', VisitStatus::WaitingForDoctor->value)
+            ->latest('registered_at')
+            ->get();
+
+        $registeredVisits = Visit::with(['patient'])
+            ->where('status', VisitStatus::Registered->value)
+            ->latest('registered_at')
+            ->get();
+
+        $withDoctorVisits = Visit::with(['patient', 'doctor'])
+            ->where('status', VisitStatus::WithDoctor->value)
+            ->latest('registered_at')
+            ->get();
+
+        $todayAppointments = Appointment::with(['patient', 'doctor'])
+            ->whereDate('appointment_date', $today)
+            ->orderBy('start_time')
+            ->get();
+
+        $recentPatients = Patient::withCount('visits')
+            ->latest()
+            ->limit(8)
             ->get();
 
         $doctors = User::role('doctor')->get();
+        $patientsList = Patient::orderBy('first_name')->get();
+        $patientSearchData = $patientsList->map(fn ($patient) => [
+            'id' => $patient->id,
+            'name' => $patient->fullName(),
+            'mrn' => $patient->mrn,
+            'phone' => $patient->phone,
+            'url' => route('patients.show', $patient),
+        ])->values();
 
         $kpis = [
-            'today_visits' => Visit::whereDate('registered_at', today())->count(),
+            'today_visits' => Visit::whereDate('registered_at', $today)->count(),
             'waiting_payment' => Visit::where('status', VisitStatus::WaitingForPayment->value)->count(),
-            'today_revenue' => (float) Payment::whereDate('created_at', today())->sum('amount'),
-            'today_patients' => Patient::whereDate('created_at', today())->count(),
+            'today_revenue' => (float) Payment::whereDate('created_at', $today)->sum('amount'),
+            'today_patients' => Patient::whereDate('created_at', $today)->count(),
+            'waiting_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
+            'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
+            'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
+            'appointments_today' => $todayAppointments->count(),
             'avg_wait_minutes' => 12,
         ];
 
@@ -52,13 +94,65 @@ class ReceptionController extends Controller
 
         $statusCounts = [
             'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
+            'waiting_for_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
             'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
             'waiting_for_lab' => Visit::where('status', VisitStatus::WaitingForLab->value)->count(),
+            'waiting_for_pharmacy' => Visit::where('status', VisitStatus::WaitingForPharmacy->value)->count(),
             'waiting_for_payment' => Visit::where('status', VisitStatus::WaitingForPayment->value)->count(),
             'completed' => Visit::where('status', VisitStatus::Completed->value)->count(),
+            'cancelled' => Visit::where('status', VisitStatus::Cancelled->value)->count(),
         ];
 
-        return view('reception.dashboard', compact('todayVisits', 'waitingForPayment', 'doctors', 'kpis', 'visitTrend', 'visitLabels', 'statusCounts'));
+        return view('reception.dashboard', compact(
+            'todayVisits', 'waitingForPayment', 'waitingForDoctor', 'registeredVisits',
+            'withDoctorVisits', 'todayAppointments', 'recentPatients', 'doctors',
+            'patientsList', 'patientSearchData', 'kpis', 'visitTrend', 'visitLabels', 'statusCounts'
+        ));
+    }
+
+    public function queue()
+    {
+        $today = today();
+
+        $allQueues = Visit::with(['patient', 'doctor'])
+            ->whereDate('registered_at', $today)
+            ->whereIn('status', [
+                VisitStatus::Registered->value,
+                VisitStatus::WaitingForDoctor->value,
+                VisitStatus::WithDoctor->value,
+            ])
+            ->latest('registered_at')
+            ->get();
+
+        $registeredQueue = Visit::with(['patient'])
+            ->where('status', VisitStatus::Registered->value)
+            ->latest('registered_at')
+            ->get();
+
+        $waitingForDoctorQueue = Visit::with(['patient', 'doctor'])
+            ->where('status', VisitStatus::WaitingForDoctor->value)
+            ->latest('registered_at')
+            ->get();
+
+        $withDoctorQueue = Visit::with(['patient', 'doctor'])
+            ->where('status', VisitStatus::WithDoctor->value)
+            ->latest('registered_at')
+            ->get();
+
+        $doctors = User::role('doctor')->get();
+        $patientsList = Patient::orderBy('first_name')->get();
+        $patientSearchData = $patientsList->map(fn ($patient) => [
+            'id' => $patient->id,
+            'name' => $patient->fullName(),
+            'mrn' => $patient->mrn,
+            'phone' => $patient->phone,
+            'url' => route('patients.show', $patient),
+        ])->values();
+
+        return view('reception.queue', compact(
+            'allQueues', 'registeredQueue', 'waitingForDoctorQueue', 'withDoctorQueue',
+            'doctors', 'patientsList', 'patientSearchData'
+        ));
     }
 
     public function stats()
@@ -76,14 +170,22 @@ class ReceptionController extends Controller
             'waiting_payment' => Visit::where('status', VisitStatus::WaitingForPayment->value)->count(),
             'today_revenue' => (float) Payment::whereDate('created_at', today())->sum('amount'),
             'today_patients' => Patient::whereDate('created_at', today())->count(),
+            'waiting_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
+            'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
+            'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
+            'appointments_today' => Appointment::whereDate('appointment_date', today())->count(),
+            'avg_wait_minutes' => 12,
             'visit_trend' => $visitTrend,
             'visit_labels' => $visitLabels,
             'status_counts' => [
                 'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
+                'waiting_for_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
                 'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
                 'waiting_for_lab' => Visit::where('status', VisitStatus::WaitingForLab->value)->count(),
+                'waiting_for_pharmacy' => Visit::where('status', VisitStatus::WaitingForPharmacy->value)->count(),
                 'waiting_for_payment' => Visit::where('status', VisitStatus::WaitingForPayment->value)->count(),
                 'completed' => Visit::where('status', VisitStatus::Completed->value)->count(),
+                'cancelled' => Visit::where('status', VisitStatus::Cancelled->value)->count(),
             ],
         ]);
     }
@@ -135,6 +237,7 @@ class ReceptionController extends Controller
     {
         $data = $request->validate([
             'patient_id' => 'required|exists:patients,id',
+            'doctor_id' => 'nullable|exists:users,id',
             'chief_complaint' => 'nullable|string',
             'type' => 'required|in:outpatient,emergency,followup',
         ]);
@@ -142,8 +245,9 @@ class ReceptionController extends Controller
         $visit = Visit::create([
             'visit_number' => 'VIS-' . now()->format('Y') . '-' . str_pad(Visit::count() + 1, 6, '0', STR_PAD_LEFT),
             'patient_id' => $data['patient_id'],
+            'doctor_id' => $data['doctor_id'] ?? null,
             'received_by' => auth()->id(),
-            'status' => VisitStatus::Registered->value,
+            'status' => $data['doctor_id'] ? VisitStatus::WaitingForDoctor->value : VisitStatus::Registered->value,
             'chief_complaint' => $data['chief_complaint'] ?? null,
             'type' => $data['type'],
             'registered_at' => now(),
@@ -230,5 +334,112 @@ class ReceptionController extends Controller
         ActivityLog::log('payment_recorded', $visit, "Recorded payment of TSh {$data['amount']} for visit {$visit->visit_number}");
 
         return back()->with('status', 'Payment recorded.');
+    }
+
+    public function closeVisit(Request $request, Visit $visit, VisitWorkflow $flow)
+    {
+        try {
+            $flow->transition($visit, VisitStatus::Completed);
+            ActivityLog::log('visit_closed', $visit, "Closed visit {$visit->visit_number}");
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Visit closed successfully.']);
+            }
+
+            return back()->with('status', 'Visit closed successfully.');
+        } catch (InvalidTransitionException $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+
+            return back()->with('status', $e->getMessage());
+        }
+    }
+
+    public function markInvoicePaid(Request $request, Invoice $invoice, VisitWorkflow $flow)
+    {
+        DB::transaction(function () use ($invoice, $flow) {
+            $invoice->update([
+                'paid' => $invoice->total,
+                'status' => 'paid',
+            ]);
+
+            if ($invoice->visit && $invoice->visit->status === VisitStatus::WaitingForPayment->value) {
+                $flow->transition($invoice->visit, VisitStatus::Completed);
+            }
+        });
+
+        ActivityLog::log('invoice_marked_paid', $invoice, "Invoice {$invoice->invoice_number} marked as paid");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Invoice marked as paid and visit closed.']);
+        }
+
+        return back()->with('status', 'Invoice marked as paid and visit closed.');
+    }
+
+    public function markInvoiceUnpaid(Request $request, Invoice $invoice)
+    {
+        $invoice->update([
+            'paid' => 0,
+            'status' => 'unpaid',
+        ]);
+
+        ActivityLog::log('invoice_marked_unpaid', $invoice, "Invoice {$invoice->invoice_number} marked as unpaid");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Invoice marked as unpaid.']);
+        }
+
+        return back()->with('status', 'Invoice marked as unpaid.');
+    }
+
+    public function payments()
+    {
+        $today = today();
+
+        $pendingInvoices = Invoice::with(['visit.patient', 'patient', 'payments'])
+            ->whereIn('status', ['unpaid', 'partial'])
+            ->latest()
+            ->get();
+
+        $recentPayments = Payment::with(['invoice.visit.patient', 'invoice.patient', 'receivedBy'])
+            ->latest()
+            ->limit(50)
+            ->get();
+
+        $allInvoices = Invoice::with(['visit.patient', 'patient', 'payments'])
+            ->latest()
+            ->limit(100)
+            ->get();
+
+        $todayPayments = (float) Payment::whereDate('created_at', $today)->sum('amount');
+        $todayInvoicesPaid = Invoice::whereDate('updated_at', $today)->where('status', 'paid')->count();
+        $pendingCount = Invoice::whereIn('status', ['unpaid', 'partial'])->count();
+        $pendingAmount = (float) Invoice::whereIn('status', ['unpaid', 'partial'])
+            ->sum(DB::raw('total - paid'));
+
+        $todayTotal = (float) Invoice::whereDate('created_at', $today)->sum('total');
+        $todayPaidAmount = (float) Invoice::whereDate('updated_at', $today)->where('status', 'paid')->sum('paid');
+        $todayUnpaidAmount = (float) Invoice::whereDate('created_at', $today)->whereIn('status', ['unpaid', 'partial'])
+            ->sum(DB::raw('total - paid'));
+        $collectionRate = $todayTotal > 0 ? round(($todayPaidAmount / $todayTotal) * 100) : 0;
+        $paidVsPending = [
+            'paid' => $todayPaidAmount,
+            'pending' => $todayUnpaidAmount,
+        ];
+
+        $paymentMethods = [
+            'cash' => 'Cash',
+            'card' => 'Card',
+            'mobile_money' => 'Mobile Money',
+            'insurance' => 'Insurance',
+        ];
+
+        return view('reception.payments', compact(
+            'pendingInvoices', 'recentPayments', 'allInvoices', 'todayPayments',
+            'todayInvoicesPaid', 'pendingCount', 'pendingAmount', 'todayTotal',
+            'todayPaidAmount', 'todayUnpaidAmount', 'collectionRate', 'paidVsPending', 'paymentMethods'
+        ));
     }
 }

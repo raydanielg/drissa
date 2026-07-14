@@ -48,20 +48,25 @@ Route::get('/home', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats');
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('redirect.role:admin|reception');
+    Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats')->middleware('redirect.role:admin|reception');
 
-    Route::prefix('reception')->name('reception.')->middleware('role:reception|admin')->group(function () {
+    Route::prefix('reception')->name('reception.')->middleware('redirect.role:reception|admin')->group(function () {
         Route::get('/', [ReceptionController::class, 'dashboard'])->name('dashboard');
+        Route::get('/queue', [ReceptionController::class, 'queue'])->name('queue');
+        Route::get('/payments', [ReceptionController::class, 'payments'])->name('payments');
         Route::get('/stats', [ReceptionController::class, 'stats'])->name('stats');
         Route::post('patients', [ReceptionController::class, 'storePatient'])->name('patients.store');
         Route::post('visits', [ReceptionController::class, 'storeVisit'])->name('visits.store');
         Route::post('visits/{visit}/assign', [ReceptionController::class, 'assignDoctor'])->name('visits.assign');
         Route::post('visits/{visit}/change-doctor', [ReceptionController::class, 'changeDoctor'])->name('visits.change-doctor');
         Route::post('visits/{visit}/pay', [ReceptionController::class, 'storePayment'])->name('visits.pay');
+        Route::post('visits/{visit}/close', [ReceptionController::class, 'closeVisit'])->name('visits.close');
+        Route::post('invoices/{invoice}/mark-paid', [ReceptionController::class, 'markInvoicePaid'])->name('invoices.mark-paid');
+        Route::post('invoices/{invoice}/mark-unpaid', [ReceptionController::class, 'markInvoiceUnpaid'])->name('invoices.mark-unpaid');
     });
 
-    Route::prefix('doctor')->name('doctor.')->middleware('role:doctor|admin')->group(function () {
+    Route::prefix('doctor')->name('doctor.')->middleware('redirect.role:doctor|admin')->group(function () {
         Route::get('/', [DoctorController::class, 'queue'])->name('queue');
         Route::get('lab-results', [DoctorController::class, 'labResults'])->name('lab-results');
         Route::post('visits/{visit}/call', [DoctorController::class, 'callNext'])->name('visits.call');
@@ -73,7 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::post('visits/{visit}/payment', [DoctorController::class, 'sendToPayment'])->name('visits.payment');
     });
 
-    Route::middleware('role:lab|admin')->group(function () {
+    Route::middleware('redirect.role:lab|admin')->group(function () {
         Route::resource('lab-equipment', LabEquipmentController::class);
         Route::patch('lab-equipment/{labEquipment}/status', [LabEquipmentController::class, 'updateStatus'])->name('lab-equipment.status.update');
         Route::resource('lab-tests', LabTestController::class);
@@ -85,7 +90,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::prefix('pharmacy')->name('pharmacy.')->middleware('role:pharmacy|admin')->group(function () {
+    Route::prefix('pharmacy')->name('pharmacy.')->middleware('redirect.role:pharmacy|admin')->group(function () {
         Route::get('/', [PharmacyController::class, 'queue'])->name('queue');
         Route::post('prescriptions/{prescription}/dispense', [PharmacyController::class, 'dispense'])->name('prescriptions.dispense');
     });

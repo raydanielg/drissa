@@ -21,13 +21,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/dashboard';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -36,5 +29,33 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+    }
+
+    /**
+     * Redirect users after login based on their role.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated($request, $user)
+    {
+        if ($user->isDoctor()) {
+            return redirect()->route('doctor.queue');
+        }
+
+        if ($user->isReception()) {
+            return redirect()->route('reception.dashboard');
+        }
+
+        if ($user->isLab()) {
+            return redirect()->route('lab.queue');
+        }
+
+        if ($user->isPharmacy()) {
+            return redirect()->route('pharmacy.queue');
+        }
+
+        return redirect()->route('dashboard');
     }
 }
