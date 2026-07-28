@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\VisitStatus;
 use App\Models\ActivityLog;
+use App\Models\Appointment;
 use App\Models\Consultation;
 use App\Models\Invoice;
 use App\Models\LabOrder;
 use App\Models\LabTest;
 use App\Models\Medication;
+use App\Models\Patient;
 use App\Models\Prescription;
 use App\Models\Visit;
 use App\Services\VisitWorkflow;
@@ -20,6 +22,111 @@ class DoctorController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function dashboard()
+    {
+        $doctorId = auth()->id();
+
+        $stats = [
+            'today_visits' => Visit::where('doctor_id', $doctorId)->whereDate('registered_at', today())->count(),
+            'waiting' => Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::WaitingForDoctor->value)->count(),
+            'with_me' => Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::WithDoctor->value)->count(),
+            'completed_today' => Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::Completed->value)->whereDate('completed_at', today())->count(),
+            'total_patients' => Visit::where('doctor_id', $doctorId)->distinct('patient_id')->count('patient_id'),
+            'lab_pending' => Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::WaitingForLab->value)->count(),
+            'lab_ready' => Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::LabCompleted->value)->count(),
+            'prescriptions_today' => Prescription::where('doctor_id', $doctorId)->whereDate('created_at', today())->count(),
+        ];
+
+        $todayAppointments = Appointment::where('doctor_id', $doctorId)
+            ->whereDate('scheduled_at', today())
+            ->with('patient')
+            ->orderBy('scheduled_at')
+            ->get();
+
+        $recentVisits = Visit::with('patient')
+            ->where('doctor_id', $doctorId)
+            ->latest('registered_at')
+            ->limit(8)
+            ->get();
+
+        $waitingQueue = Visit::with('patient')
+            ->where('doctor_id', $doctorId)
+            ->whereIn('status', [VisitStatus::WaitingForDoctor->value, VisitStatus::WithDoctor->value])
+            ->orderBy('registered_at')
+            ->get();
+
+        return view('doctor.dashboard', compact('stats', 'todayAppointments', 'recentVisits', 'waitingQueue'));
+    }
+
+    public function schedule()
+    {
+        $doctorId = auth()->id();
+
+        $upcoming = Appointment::where('doctor_id', $doctorId)
+            ->whereDate('scheduled_at', '>=', today())
+            ->with('patient')
+            ->orderBy('scheduled_at')
+            ->paginate(20);
+
+        $todayCount = Appointment::where('doctor_id', $doctorId)->whereDate('scheduled_at', today())->count();
+        $weekCount = Appointment::where('doctor_id', $doctorId)
+            ->whereBetween('scheduled_at', [now()->startOfWeek(), now()->endOfWeek()])->count();
+
+        return view('doctor.schedule', compact('upcoming', 'todayCount', 'weekCount'));
+    }
+
+    public function patients()
+    {
+        $doctorId = auth()->id();
+
+        $patients = Patient::whereIn('id', function ($q) use ($doctorId) {
+            $q->select('patient_id')->from('visits')->where('doctor_id', $doctorId);
+        })->withCount(['visits as my_visits' => function ($q) use ($doctorId) {
+            $q->where('doctor_id', $doctorId);
+        }])->latest()->paginate(20);
+
+        return view('doctor.patients', compact('patients'));
+    }
+
+    public function reports()
+    {
+        $doctorId = auth()->id();
+
+        $totalVisits = Visit::where('doctor_id', $doctorId)->count();
+        $completed = Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::Completed->value)->count();
+        $cancelled = Visit::where('doctor_id', $doctorId)->where('status', VisitStatus::Cancelled->value)->count();
+        $successRate = $totalVisits > 0 ? round(($completed / $totalVisits) * 100) : 0;
+
+        $monthlyStats = collect();
+        $monthLabels = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $count = Visit::where('doctor_id', $doctorId)
+                ->whereMonth('registered_at', $date->month)
+                ->whereYear('registered_at', $date->year)
+                ->count();
+            $monthlyStats->push($count);
+            $monthLabels[] = $date->format('M Y');
+        }
+
+        $topDiagnoses = Consultation::where('doctor_id', $doctorId)
+            ->select('diagnosis', DB::raw('count(*) as total'))
+            ->whereNotNull('diagnosis')
+            ->groupBy('diagnosis')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get();
+
+        $prescriptionCount = Prescription::where('doctor_id', $doctorId)->count();
+        $labOrderCount = LabOrder::where('ordered_by', $doctorId)->count();
+
+        return view('doctor.reports', compact(
+            'totalVisits', 'completed', 'cancelled', 'successRate',
+            'monthlyStats', 'monthLabels', 'topDiagnoses',
+            'prescriptionCount', 'labOrderCount'
+        ));
     }
 
     public function queue()
