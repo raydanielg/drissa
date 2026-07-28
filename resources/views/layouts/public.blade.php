@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
     <title>@yield('title', config('app.name', 'Dr Issa Scientific Clinic'))</title>
 
@@ -66,9 +67,7 @@
             <div class="flex items-center justify-between h-16">
                 {{-- Logo --}}
                 <a href="{{ route('public.home') }}" class="flex items-center gap-2 flex-shrink-0">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white font-extrabold text-lg shadow-md">
-                        IS
-                    </div>
+                    <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-10 h-10 rounded-xl object-cover shadow-md">
                     <div class="hidden sm:block">
                         <span class="block text-emerald-800 font-extrabold text-sm leading-tight">Issa Scientist</span>
                         <span class="block text-gold-600 font-semibold text-[10px] leading-tight">Clinic Limited</span>
@@ -140,7 +139,7 @@
                 {{-- About --}}
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-white font-extrabold text-lg">IS</div>
+                        <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-10 h-10 rounded-xl object-cover">
                         <div>
                             <span class="block text-white font-extrabold text-sm leading-tight">Issa Scientist</span>
                             <span class="block text-gold-400 font-semibold text-[10px] leading-tight">Clinic Limited</span>

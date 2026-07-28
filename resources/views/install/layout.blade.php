@@ -29,9 +29,7 @@
     <div class="w-full max-w-2xl">
         {{-- Logo --}}
         <div class="text-center mb-8">
-            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-gold-400 to-gold-600 rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl shadow-lg mb-3">
-                IS
-            </div>
+            <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-lg mb-3">
             <h1 class="text-2xl font-extrabold text-white">Issa Scientist Clinic</h1>
             <p class="text-emerald-200/60 text-sm">Installation Wizard</p>
         </div>

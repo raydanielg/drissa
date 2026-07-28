@@ -54,9 +54,7 @@
     <aside id="dashboardSidebar" class="fixed top-0 left-0 z-50 w-64 h-screen bg-emerald-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
         {{-- Brand --}}
         <div class="h-16 flex items-center px-6 border-b border-emerald-800/50 flex-shrink-0">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-white font-extrabold text-sm">
-                {{ strtoupper(substr(config('app.name', 'L'), 0, 1)) }}
-            </div>
+            <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="w-8 h-8 rounded-lg object-cover">
             <span class="ml-2 text-white font-bold text-sm tracking-wide uppercase">{{ config('app.name', 'Laravel') }}</span>
         </div>
 

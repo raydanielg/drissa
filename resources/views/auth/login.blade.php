@@ -7,8 +7,8 @@
     <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
         {{-- Header --}}
         <div class="bg-gradient-to-br from-emerald-600 to-emerald-700 px-8 py-8 text-center">
-            <div class="w-16 h-16 mx-auto bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4">
-                <img src="{{ asset('login.png') }}" alt="Login" class="w-10 h-10 object-contain">
+            <div class="w-16 h-16 mx-auto bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
+                <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="w-12 h-12 object-cover rounded-xl">
             </div>
             <h2 class="text-2xl font-extrabold text-white">Welcome Back</h2>
             <p class="text-emerald-100 text-sm mt-1">Sign in to your {{ config('app.name', 'Laravel') }} account</p>
