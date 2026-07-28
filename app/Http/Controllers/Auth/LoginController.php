@@ -53,7 +53,7 @@ class LoginController extends Controller
         }
 
         if ($user->isPharmacy()) {
-            return redirect()->route('pharmacy.queue');
+            return redirect()->route('pharmacy.dashboard');
         }
 
         return redirect()->route('dashboard');
