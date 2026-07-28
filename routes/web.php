@@ -165,10 +165,10 @@ Route::middleware('auth')->group(function () {
     // Team Chat
     Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
     Route::post('chat', [ChatController::class, 'store'])->name('chat.store');
+    Route::get('chat/unread-count', [ChatController::class, 'unreadCount'])->name('chat.unread-count');
     Route::get('chat/{conversation}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('chat/{conversation}/send', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::get('chat/{conversation}/poll', [ChatController::class, 'poll'])->name('chat.poll');
-    Route::get('chat/unread-count', [ChatController::class, 'unreadCount'])->name('chat.unread-count');
 
     // Clinical Records
     Route::resource('clinical-records', ClinicalRecordController::class);
