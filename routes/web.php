@@ -117,6 +117,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('lab-equipment', LabEquipmentController::class);
         Route::patch('lab-equipment/{labEquipment}/status', [LabEquipmentController::class, 'updateStatus'])->name('lab-equipment.status.update');
         Route::resource('lab-tests', LabTestController::class);
+        Route::post('lab-tests/import', [LabTestController::class, 'import'])->name('lab-tests.import');
+        Route::get('lab-tests/sample', [LabTestController::class, 'sample'])->name('lab-tests.sample');
 
         Route::prefix('lab')->name('lab.')->group(function () {
             Route::get('/', [LabController::class, 'queue'])->name('queue');
