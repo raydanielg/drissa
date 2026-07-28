@@ -106,9 +106,9 @@ class HomeController extends Controller
         }
 
         // Today's schedule
-        $todayAppointments = Appointment::whereDate('appointment_date', today())
+        $todayAppointments = Appointment::whereDate('scheduled_at', today())
             ->with('patient', 'doctor')
-            ->orderBy('start_time')
+            ->orderBy('scheduled_at')
             ->get();
 
         $recentPatients = Patient::latest()->limit(5)->get();
