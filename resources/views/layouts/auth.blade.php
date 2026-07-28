@@ -41,11 +41,7 @@
         }
     </script>
 </head>
-<body class="font-['Nunito',sans-serif] antialiased text-slate-800 min-h-screen">
-
-    <div class="fixed inset-0 z-0" style="background-image: url('{{ asset('flat-abstract-background-pattern-vector_822782-866.jpg') }}'); background-size: cover; background-position: center;">
-        <div class="absolute inset-0 bg-white/70"></div>
-    </div>
+<body class="font-['Nunito',sans-serif] antialiased text-slate-800 min-h-screen bg-white">
 
     <div id="ajaxLoader" class="ajax-loader"></div>
 
