@@ -79,6 +79,7 @@ class InstallController extends Controller
         }
 
         $this->writeEnvFile($validated);
+        Artisan::call('config:clear');
 
         return view('install.process', compact('dbName'))->with('currentStep', 3);
     }

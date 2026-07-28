@@ -12,7 +12,31 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 
 // If .env doesn't exist or app not installed, redirect to installer
 // before Laravel tries to bootstrap (which would cause a 500 error)
-if (!file_exists(__DIR__.'/../.env') || !file_exists(__DIR__.'/../storage/app/installed')) {
+$envPath = __DIR__.'/../.env';
+$installedFile = __DIR__.'/../storage/app/installed';
+if (!file_exists($envPath) || !file_exists($installedFile)) {
+    // Create minimal .env so Laravel can bootstrap the installer
+    // without needing a database connection
+    if (!file_exists($envPath)) {
+        $tempKey = 'base64:' . base64_encode(random_bytes(32));
+        $minimalEnv = "APP_NAME=\"Dr Issa Scientific Clinic\"\n";
+        $minimalEnv .= "APP_ENV=local\n";
+        $minimalEnv .= "APP_KEY={$tempKey}\n";
+        $minimalEnv .= "APP_DEBUG=true\n";
+        $minimalEnv .= "APP_URL=http://localhost\n\n";
+        $minimalEnv .= "DB_CONNECTION=mysql\n";
+        $minimalEnv .= "DB_HOST=127.0.0.1\n";
+        $minimalEnv .= "DB_PORT=3306\n";
+        $minimalEnv .= "DB_DATABASE=\n";
+        $minimalEnv .= "DB_USERNAME=root\n";
+        $minimalEnv .= "DB_PASSWORD=\n\n";
+        $minimalEnv .= "SESSION_DRIVER=file\n";
+        $minimalEnv .= "CACHE_STORE=file\n";
+        $minimalEnv .= "QUEUE_CONNECTION=sync\n";
+        $minimalEnv .= "FILESYSTEM_DISK=local\n";
+        file_put_contents($envPath, $minimalEnv);
+    }
+
     $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
     if (strpos($requestUri, '/install') !== 0) {
         header('Location: /install');
