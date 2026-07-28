@@ -12,7 +12,8 @@ class CheckInstallation
     {
         $isInstalled = file_exists(base_path('.env')) &&
                        file_exists(storage_path('app/installed')) &&
-                       env('APP_KEY') !== '';
+                       config('app.key') !== null &&
+                       config('app.key') !== '';
 
         $isInstallerRoute = $request->is('install/*') || $request->is('install');
 

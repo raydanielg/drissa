@@ -123,7 +123,8 @@ class InstallController extends Controller
     {
         return file_exists(base_path('.env')) &&
                file_exists(storage_path('app/installed')) &&
-               env('APP_KEY') !== '';
+               config('app.key') !== null &&
+               config('app.key') !== '';
     }
 
     private function writeEnvFile(array $data): void
