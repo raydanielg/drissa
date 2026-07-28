@@ -195,8 +195,8 @@
             </div>
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1.5">Message Body</label>
-                <textarea name="body" placeholder="Use {{'{{name}}'}}, {{'{{date}}'}}, {{'{{time}}'}}, {{'{{amount}}'}}, {{'{{phone}}'}} etc." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" rows="4" required></textarea>
-                <p class="text-[10px] text-gray-400 mt-1">Available placeholders: {{'{{name}}'}}, {{'{{date}}'}}, {{'{{time}}'}}, {{'{{amount}}'}}, {{'{{phone}}'}}, {{'{{mrn}}'}}, {{'{{doctor}}'}}, {{'{{medication}}'}}, {{'{{discount}}'}}, {{'{{clinic}}'}}</p>
+                <textarea name="body" placeholder="Use &#123;&#123;name&#125;&#125;, &#123;&#123;date&#125;&#125;, &#123;&#123;time&#125;&#125;, &#123;&#123;amount&#125;&#125;, &#123;&#123;phone&#125;&#125; etc." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" rows="4" required></textarea>
+                <p class="text-[10px] text-gray-400 mt-1">Available placeholders: &#123;&#123;name&#125;&#125;, &#123;&#123;date&#125;&#125;, &#123;&#123;time&#125;&#125;, &#123;&#123;amount&#125;&#125;, &#123;&#123;phone&#125;&#125;, &#123;&#123;mrn&#125;&#125;, &#123;&#123;doctor&#125;&#125;, &#123;&#123;medication&#125;&#125;, &#123;&#123;discount&#125;&#125;, &#123;&#123;clinic&#125;&#125;</p>
             </div>
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('addModal').classList.add('hidden')" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-all">Cancel</button>
