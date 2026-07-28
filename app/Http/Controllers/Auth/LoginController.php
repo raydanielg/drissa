@@ -56,6 +56,10 @@ class LoginController extends Controller
             return redirect()->route('pharmacy.dashboard');
         }
 
+        if ($user->isNurse()) {
+            return redirect()->route('nurse.dashboard');
+        }
+
         return redirect()->route('dashboard');
     }
 }

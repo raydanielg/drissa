@@ -18,6 +18,7 @@ use App\Http\Controllers\LabController;
 use App\Http\Controllers\LabEquipmentController;
 use App\Http\Controllers\LabTestController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NurseController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientDocumentController;
 use App\Http\Controllers\PatientHistoryController;
