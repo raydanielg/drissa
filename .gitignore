@@ -21,7 +21,15 @@
 /storage/*.key
 /storage/app/installed
 /storage/pail
-/vendor
+/vendor/*/.git
+/vendor/*/bin
+/vendor/*/tests
+/vendor/*/test
+/vendor/*/Tests
+/vendor/*/Test
+/vendor/*/docs
+/vendor/*/doc
+/vendor/*/README*
 _ide_helper.php
 Homestead.json
 Homestead.yaml
