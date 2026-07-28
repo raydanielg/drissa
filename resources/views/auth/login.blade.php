@@ -78,8 +78,6 @@
 
     {{-- Footer --}}
     <p class="mt-6 text-center text-xs text-gray-400">
-        <a href="{{ route('public.home') }}" class="text-emerald-600 hover:text-emerald-700 font-semibold">&larr; Back to Home</a>
-        <span class="mx-2">&middot;</span>
         &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
     </p>
 </div>

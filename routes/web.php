@@ -51,7 +51,7 @@ Route::get('/install/complete', [InstallController::class, 'complete'])->name('i
 | Public Website Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', [PublicController::class, 'home'])->name('public.home');
+Route::get('/home', [PublicController::class, 'home'])->name('public.home');
 Route::get('/about', [PublicController::class, 'about'])->name('public.about');
 Route::get('/branches', [PublicController::class, 'branches'])->name('public.branches');
 Route::get('/our-services', [PublicController::class, 'services'])->name('public.services');
@@ -67,8 +67,12 @@ Route::post('/contact', [PublicController::class, 'storeContact'])->name('public
 | Authentication
 |--------------------------------------------------------------------------
 */
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/', [LoginController::class, 'login']);
+
+Route::get('/login', function () {
+    return redirect()->route('login');
+})->name('login.alt');
 
 Auth::routes(['login' => false, 'register' => false]);
 
