@@ -75,7 +75,7 @@
     </div>
 
     {{-- Footer --}}
-    <p class="mt-6 text-center text-xs text-gray-400">
+    <p class="mt-6 text-center text-xs text-gray-400/70">
         &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
     </p>
 </div>
