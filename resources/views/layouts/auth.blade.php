@@ -108,103 +108,20 @@
         const card = document.querySelector('#authMain .max-w-md');
         if (!card) return;
 
-        // Remove built-in simple fade-in and use stronger entrance
         card.style.animation = 'none';
         card.classList.add('auth-card-entrance');
 
-        // Animate header
-        const header = card.querySelector('.bg-gradient-to-br');
+        const header = card.querySelector('.auth-header');
         if (header) header.classList.add('auth-header-entrance');
 
-        // Animate form fields with stagger
         const fields = card.querySelectorAll('form > div, form > button');
         fields.forEach((field, i) => {
             field.classList.add('auth-field-entrance');
             field.style.animationDelay = (0.3 + (i * 0.08)) + 's';
         });
 
-        // Add pulse hover class to submit button
         const submitBtn = card.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.classList.add('auth-btn');
-    })();
-
-    // Auth slideshow
-    (function() {
-        const slideshow = document.getElementById('authSlideshow');
-        if (!slideshow) return;
-
-        const images = slideshow.querySelectorAll('.slide-image');
-        const dots = slideshow.querySelectorAll('.slide-dot');
-        const slideText = document.getElementById('slideText');
-        const slideTitle = document.getElementById('slideTitle');
-        const slideDesc = document.getElementById('slideDesc');
-
-        const slides = [
-            { title: 'Compassionate Patient Care', desc: 'A friendly, stress-free experience for every patient who walks through our doors.' },
-            { title: 'Modern Facilities', desc: 'State-of-the-art equipment and a clean, comfortable clinic.' },
-            { title: 'Expert Medical Team', desc: 'Professional doctors committed to your health and well-being.' },
-            { title: 'Care for the Whole Family', desc: 'Comprehensive medical services tailored to every age.' }
-        ];
-
-        let current = 0;
-        const total = images.length;
-        const interval = 5000;
-        let isTransitioning = false;
-
-        function updateDots(index) {
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('bg-white', i === index);
-                dot.classList.toggle('w-6', i === index);
-                dot.classList.toggle('bg-white/40', i !== index);
-                dot.classList.toggle('w-2.5', i !== index);
-            });
-        }
-
-        function showSlide(index) {
-            if (isTransitioning) return;
-            isTransitioning = true;
-
-            images.forEach((img, i) => {
-                img.classList.toggle('opacity-100', i === index);
-                img.classList.toggle('opacity-0', i !== index);
-            });
-
-            updateDots(index);
-
-            // Fade text out, update content, then fade in
-            slideText.style.opacity = '0';
-            slideText.style.transform = 'translateY(12px)';
-
-            setTimeout(() => {
-                slideTitle.textContent = slides[index].title;
-                slideDesc.textContent = slides[index].desc;
-                slideText.style.opacity = '1';
-                slideText.style.transform = 'translateY(0)';
-                isTransitioning = false;
-            }, 500);
-        }
-
-        function nextSlide() {
-            current = (current + 1) % total;
-            showSlide(current);
-        }
-
-        dots.forEach((dot, i) => {
-            dot.addEventListener('click', () => {
-                if (i === current) return;
-                current = i;
-                showSlide(current);
-                resetTimer();
-            });
-        });
-
-        let timer = setInterval(nextSlide, interval);
-        function resetTimer() {
-            clearInterval(timer);
-            timer = setInterval(nextSlide, interval);
-        }
-
-        updateDots(0);
     })();
     </script>
 </body>
