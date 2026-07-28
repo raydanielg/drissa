@@ -54,7 +54,7 @@
     $pendingConsultations = \App\Models\Visit::where('doctor_id', $doctorId)->whereIn('status', ['waiting_for_doctor', 'with_doctor'])->count();
     $completedToday = \App\Models\Visit::where('doctor_id', $doctorId)->whereDate('completed_at', today())->where('status', 'completed')->count();
     $pendingLabResults = \App\Models\Visit::where('doctor_id', $doctorId)->whereIn('status', ['waiting_for_lab', 'in_lab', 'lab_completed'])->count();
-    $doctorAppointments = \App\Models\Appointment::whereDate('appointment_date', today())->where('doctor_id', $doctorId)->with('patient')->orderBy('start_time')->get();
+    $doctorAppointments = \App\Models\Appointment::whereDate('scheduled_at', today())->where('doctor_id', $doctorId)->with('patient')->orderBy('scheduled_at')->get();
     $recentDoctorPatients = \App\Models\Visit::where('doctor_id', $doctorId)->with('patient')->latest()->limit(5)->get();
 @endphp
 
@@ -145,7 +145,7 @@
             @forelse($doctorAppointments as $appt)
                 <div class="flex items-center gap-3 py-3 {{ !$loop->last ? 'border-b border-gray-50' : '' }}">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex flex-col items-center justify-center text-white shadow-sm">
-                        <span class="text-[10px] font-medium">{{ date('H:i', strtotime($appt->start_time)) }}</span>
+                        <span class="text-[10px] font-medium">{{ date('H:i', strtotime($appt->scheduled_at)) }}</span>
                     </div>
                     <div class="flex-1">
                         <div class="text-sm font-medium text-gray-900">{{ $appt->patient?->name ?? 'Unknown' }}</div>
