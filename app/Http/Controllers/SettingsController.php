@@ -22,14 +22,28 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
+        $updated = 0;
         foreach ($request->except('_token', '_method') as $key => $value) {
             $setting = Setting::where('key', $key)->first();
             if ($setting) {
                 $setting->update(['value' => $value]);
+                $updated++;
+            } else {
+                Setting::create([
+                    'key' => $key,
+                    'value' => $value,
+                    'group' => 'general',
+                    'type' => 'text',
+                ]);
+                $updated++;
             }
         }
 
-        ActivityLog::log('settings_updated', null, 'System settings updated');
+        ActivityLog::log('settings_updated', null, 'System settings updated (' . $updated . ' fields)');
+
+        if ($request->ajax() || $request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Settings saved successfully!']);
+        }
 
         return back()->with('status', 'Settings saved.');
     }
