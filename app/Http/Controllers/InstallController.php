@@ -91,8 +91,11 @@ class InstallController extends Controller
         }
 
         try {
-            Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+            Artisan::call('migrate:fresh', ['--force' => true]);
             $output = Artisan::output();
+
+            Artisan::call('db:seed', ['--class' => 'RoleSeeder', '--force' => true]);
+            $output .= Artisan::output();
 
             Artisan::call('db:seed', ['--class' => 'UserSeeder', '--force' => true]);
             $output .= Artisan::output();
