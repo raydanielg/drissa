@@ -136,6 +136,13 @@ Route::middleware('auth')->group(function () {
         Route::post('prescriptions/{prescription}/dispense', [PharmacyController::class, 'dispense'])->name('prescriptions.dispense');
     });
 
+    Route::prefix('nurse')->name('nurse.')->middleware('redirect.role:nurse|admin')->group(function () {
+        Route::get('/dashboard', [NurseController::class, 'dashboard'])->name('dashboard');
+        Route::get('/queue', [NurseController::class, 'queue'])->name('queue');
+        Route::post('visits/{visit}/vitals', [NurseController::class, 'saveVitals'])->name('visits.vitals');
+        Route::get('/patients', [NurseController::class, 'patients'])->name('patients');
+    });
+
     // Patient Registry, Documents & History
     Route::get('patients', [PatientController::class, 'index'])->name('patients.index');
     Route::get('patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
