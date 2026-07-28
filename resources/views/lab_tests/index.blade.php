@@ -371,6 +371,69 @@
             labTestSlideContent.innerHTML = '<div class="text-center text-red-600 py-8">Failed to load test type details.</div>';
         }
     }
+
+    // --- Import Modal ---
+    function openImportModal() {
+        document.getElementById('importModal').classList.remove('hidden');
+    }
+
+    function closeImportModal() {
+        document.getElementById('importModal').classList.add('hidden');
+    }
+
+    function handleFileSelect(input) {
+        const file = input.files[0];
+        if (!file) return;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        document.getElementById('dropZoneContent').classList.add('hidden');
+        document.getElementById('filePreview').classList.remove('hidden');
+        document.getElementById('importBtn').disabled = false;
+    }
+
+    function submitImport() {
+        const fileInput = document.getElementById('importFile');
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const btn = document.getElementById('importBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="3" class="opacity-25"/><path d="M4 12a8 8 0 018-8" stroke-width="3" class="opacity-75"/></svg> Importing...';
+
+        fetch('{{ route("lab-tests.import") }}', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+            body: formData,
+        })
+        .then(r => r.json())
+        .then(data => {
+            closeImportModal();
+            if (data.success) {
+                Swal.fire({
+                    toast: true, position: 'top-end', icon: 'success',
+                    title: data.message, showConfirmButton: false, timer: 4000,
+                });
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: data.message || 'Import failed', showConfirmButton: false, timer: 4000 });
+            }
+        })
+        .catch(err => {
+            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'Network error: ' + err.message, showConfirmButton: false, timer: 4000 });
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg> Import Now';
+        });
+    }
+
+    // Close import modal on backdrop click
+    document.getElementById('importModal').addEventListener('click', function(e) {
+        if (e.target === this) closeImportModal();
+    });
 </script>
 @endpush
 @endsection
