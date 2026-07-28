@@ -702,18 +702,17 @@
                 'Avg Wait': data.avg_wait_minutes ?? 12,
             };
             document.querySelectorAll('.kpi-counter').forEach(el => {
-                const label = el.parentElement.querySelector('p:first-child')?.textContent?.trim();
+                const card = el.closest('.kpi-card');
+                const labelEl = card?.querySelector('p.uppercase');
+                const label = labelEl?.textContent?.trim();
                 if (label && kpiMap[label] !== undefined) {
                     const newVal = kpiMap[label];
                     const max = parseFloat(el.dataset.max) || 1;
                     const pct = Math.min(100, (newVal / max) * 100);
                     el.dataset.target = newVal;
-                    const card = el.closest('.bg-white');
                     if (card) {
                         const bar = card.querySelector('.kpi-bar');
-                        const ring = card.querySelector('.kpi-ring');
                         if (bar) bar.dataset.width = pct + '%';
-                        if (ring) ring.dataset.pct = pct;
                     }
                 }
             });
