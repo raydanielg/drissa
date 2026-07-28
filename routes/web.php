@@ -203,6 +203,7 @@ Route::middleware('auth')->group(function () {
             Route::put('/', [SettingsController::class, 'update'])->name('update');
             Route::get('email', [SettingsController::class, 'email'])->name('email');
             Route::get('sms', [SettingsController::class, 'sms'])->name('sms');
+            Route::post('sms/test', [SettingsController::class, 'testSms'])->name('sms.test');
             Route::get('payment', [SettingsController::class, 'payment'])->name('payment');
         });
 

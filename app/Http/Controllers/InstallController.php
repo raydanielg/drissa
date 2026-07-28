@@ -100,6 +100,9 @@ class InstallController extends Controller
             Artisan::call('db:seed', ['--class' => 'UserSeeder', '--force' => true]);
             $output .= Artisan::output();
 
+            Artisan::call('db:seed', ['--class' => 'SmsDefaultsSeeder', '--force' => true]);
+            $output .= Artisan::output();
+
             $this->markInstalled();
 
             return response()->json([

@@ -12,12 +12,16 @@ class SmsDefaultsSeeder extends Seeder
     {
         $settings = [
             ['key' => 'sms_gateway', 'value' => 'log', 'group' => 'sms', 'type' => 'text'],
-            ['key' => 'sms_sender_id', 'value' => 'DRISSA', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_sender_id', 'value' => 'UZAZICLINIC', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_sid', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_token', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_from', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_http_url', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_http_method', 'value' => 'POST', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'nextsms_from', 'value' => 'UZAZICLINIC', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'nextsms_username', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'nextsms_password', 'value' => '', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'nextsms_url', 'value' => 'https://messaging-service.co.tz/api/sms/v1/text/single', 'group' => 'sms', 'type' => 'text'],
         ];
 
         foreach ($settings as $setting) {

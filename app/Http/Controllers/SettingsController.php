@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\Setting;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
@@ -21,7 +22,7 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        foreach ($request->except('_token') as $key => $value) {
+        foreach ($request->except('_token', '_method') as $key => $value) {
             $setting = Setting::where('key', $key)->first();
             if ($setting) {
                 $setting->update(['value' => $value]);
@@ -43,6 +44,18 @@ class SettingsController extends Controller
     {
         $settings = Setting::where('group', 'sms')->get()->keyBy('key');
         return view('settings.sms', compact('settings'));
+    }
+
+    public function testSms(Request $request)
+    {
+        $data = $request->validate([
+            'phone' => 'required|string|max:20',
+            'message' => 'required|string|max:1600',
+        ]);
+
+        $result = SmsService::send($data['phone'], $data['message'], auth()->user(), 'Test Recipient');
+
+        return response()->json($result);
     }
 
     public function payment()

@@ -27,6 +27,7 @@ class SmsService
             $result = match ($gateway) {
                 'twilio' => self::sendTwilio($phone, $message),
                 'http' => self::sendHttp($phone, $message),
+                'nextsms' => self::sendNextSms($phone, $message),
                 default => self::sendLog($phone, $message),
             };
 
@@ -100,6 +101,49 @@ class SmsService
         }
 
         return ['success' => false, 'error' => $response->body()];
+    }
+
+    protected static function sendNextSms(string $phone, string $message): array
+    {
+        $username = setting('nextsms_username');
+        $password = setting('nextsms_password');
+        $from = setting('nextsms_from', setting('sms_sender_id', 'UZAZICLINIC'));
+        $url = setting('nextsms_url', 'https://messaging-service.co.tz/api/sms/v1/text/single');
+
+        if (! $username || ! $password) {
+            return ['success' => false, 'error' => 'NextSMS credentials not configured. Go to Settings > SMS to configure.'];
+        }
+
+        $phone = self::formatForNextSms($phone);
+
+        $response = Http::withBasicAuth($username, $password)
+            ->withHeaders(['Content-Type' => 'application/json'])
+            ->post($url, [
+                'from' => $from,
+                'to' => $phone,
+                'text' => $message,
+            ]);
+
+        if ($response->successful()) {
+            return ['success' => true, 'gateway' => 'nextsms', 'data' => $response->json() ?? $response->body()];
+        }
+
+        return ['success' => false, 'gateway' => 'nextsms', 'error' => $response->body(), 'status' => $response->status()];
+    }
+
+    protected static function formatForNextSms(string $phone): string
+    {
+        $phone = preg_replace('/[^0-9]/', '', $phone);
+        if (str_starts_with($phone, '255')) {
+            return $phone;
+        }
+        if (str_starts_with($phone, '0')) {
+            return '255' . substr($phone, 1);
+        }
+        if (str_starts_with($phone, '256')) {
+            return $phone;
+        }
+        return $phone;
     }
 
     protected static function normalizePhone(string $phone): string
