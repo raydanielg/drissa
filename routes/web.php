@@ -174,6 +174,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('sms/templates/{template}', [SmsController::class, 'destroyTemplate'])->name('sms.templates.destroy');
 
     Route::middleware('role:admin')->group(function () {
+        // Analytics
+        Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+
         // Admin Queue - View all patients
         Route::get('admin/queue', [AdminDoctorController::class, 'queue'])->name('admin.queue');
         Route::post('admin/visits/{visit}/discharge', [AdminDoctorController::class, 'discharge'])->name('admin.visits.discharge');
