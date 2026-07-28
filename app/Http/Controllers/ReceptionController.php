@@ -53,8 +53,8 @@ class ReceptionController extends Controller
             ->get();
 
         $todayAppointments = Appointment::with(['patient', 'doctor'])
-            ->whereDate('appointment_date', $today)
-            ->orderBy('start_time')
+            ->whereDate('scheduled_at', $today)
+            ->orderBy('scheduled_at')
             ->get();
 
         $recentPatients = Patient::withCount('visits')
@@ -173,7 +173,7 @@ class ReceptionController extends Controller
             'waiting_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
             'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
             'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
-            'appointments_today' => Appointment::whereDate('appointment_date', today())->count(),
+            'appointments_today' => Appointment::whereDate('scheduled_at', today())->count(),
             'avg_wait_minutes' => 12,
             'visit_trend' => $visitTrend,
             'visit_labels' => $visitLabels,
