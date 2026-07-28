@@ -6,55 +6,6 @@
 @section('content')
 <div class="max-w-7xl mx-auto space-y-6">
 
-    {{-- Stats --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        @php
-            $allTypes = ['registration','appointment','visit','doctor','lab','pharmacy','payment','birthday','holiday','general','reminder','marketing'];
-            $typeLabels = [
-                'registration' => 'Registration', 'appointment' => 'Appointment', 'visit' => 'Visit',
-                'doctor' => 'Doctor', 'lab' => 'Lab', 'pharmacy' => 'Pharmacy',
-                'payment' => 'Payment', 'birthday' => 'Birthday', 'holiday' => 'Holiday',
-                'general' => 'General', 'reminder' => 'Reminder', 'marketing' => 'Marketing',
-            ];
-        @endphp
-        <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total</span>
-                <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                </div>
-            </div>
-            <p class="text-2xl font-bold text-gray-900">{{ $templates->total() }}</p>
-        </div>
-        <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active</span>
-                <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                </div>
-            </div>
-            <p class="text-2xl font-bold text-green-600">{{ $templates->where('is_active', true)->count() }}</p>
-        </div>
-        <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Categories</span>
-                <div class="w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                </div>
-            </div>
-            <p class="text-2xl font-bold text-sky-600">{{ count($allTypes) }}</p>
-        </div>
-        <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Inactive</span>
-                <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
-                </div>
-            </div>
-            <p class="text-2xl font-bold text-gray-500">{{ $templates->where('is_active', false)->count() }}</p>
-        </div>
-    </div>
-
     {{-- Filters Bar --}}
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
         <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
@@ -62,105 +13,34 @@
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
                 <span>Filter:</span>
             </div>
-            <select id="filterType" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none md:w-48">
+            <select id="filterType" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none md:w-48" onchange="loadTemplates()">
                 <option value="">All Types</option>
-                @foreach ($allTypes as $t)
-                    <option value="{{ $t }}">{{ $typeLabels[$t] }}</option>
+                @php
+                    $allTypes = ['registration'=>'Registration','appointment'=>'Appointment','visit'=>'Visit','doctor'=>'Doctor','lab'=>'Lab','pharmacy'=>'Pharmacy','payment'=>'Payment','birthday'=>'Birthday','holiday'=>'Holiday','general'=>'General','reminder'=>'Reminder','marketing'=>'Marketing'];
+                @endphp
+                @foreach ($allTypes as $t => $label)
+                    <option value="{{ $t }}">{{ $label }}</option>
                 @endforeach
             </select>
-            <select id="filterStatus" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none md:w-40">
+            <select id="filterStatus" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none md:w-40" onchange="loadTemplates()">
                 <option value="">All Status</option>
                 <option value="active">Active Only</option>
                 <option value="inactive">Inactive Only</option>
             </select>
-            <div class="flex-1"></div>
-            <button type="button" onclick="document.getElementById('addModal').classList.remove('hidden')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all flex items-center gap-2">
+            <div class="flex-1 relative">
+                <input type="text" id="searchInput" placeholder="Search templates..." class="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" onkeyup="debouncedSearch()">
+                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+            <button type="button" onclick="document.getElementById('addModal').classList.remove('hidden')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all flex items-center gap-2 whitespace-nowrap">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                 <span>New Template</span>
             </button>
         </div>
     </div>
 
-    {{-- Templates Table --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm" id="templatesTable">
-                <thead>
-                    <tr class="text-left text-xs text-gray-500 border-b border-gray-100 bg-gray-50/50">
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">#</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">Name</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">Type</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">Subject</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">Message</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider">Status</th>
-                        <th class="px-5 py-3 font-semibold uppercase tracking-wider text-right">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($templates as $template)
-                        <tr class="border-b border-gray-50 hover:bg-gray-50/30 transition-colors template-row" data-type="{{ $template->type }}" data-active="{{ $template->is_active ? 'active' : 'inactive' }}">
-                            <td class="px-5 py-3 text-gray-400 text-xs">{{ $template->id }}</td>
-                            <td class="px-5 py-3">
-                                <div class="font-medium text-gray-900">{{ $template->name }}</div>
-                            </td>
-                            <td class="px-5 py-3">
-                                @php
-                                    $typeColors = [
-                                        'registration' => 'bg-purple-100 text-purple-700',
-                                        'appointment' => 'bg-blue-100 text-blue-700',
-                                        'visit' => 'bg-indigo-100 text-indigo-700',
-                                        'doctor' => 'bg-cyan-100 text-cyan-700',
-                                        'lab' => 'bg-teal-100 text-teal-700',
-                                        'pharmacy' => 'bg-emerald-100 text-emerald-700',
-                                        'payment' => 'bg-amber-100 text-amber-700',
-                                        'birthday' => 'bg-pink-100 text-pink-700',
-                                        'holiday' => 'bg-red-100 text-red-700',
-                                        'general' => 'bg-gray-100 text-gray-700',
-                                        'reminder' => 'bg-orange-100 text-orange-700',
-                                        'marketing' => 'bg-fuchsia-100 text-fuchsia-700',
-                                    ];
-                                    $color = $typeColors[$template->type] ?? 'bg-gray-100 text-gray-700';
-                                @endphp
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold {{ $color }}">{{ $typeLabels[$template->type] ?? ucfirst($template->type) }}</span>
-                            </td>
-                            <td class="px-5 py-3 text-gray-500 text-xs">{{ $template->subject ?? '-' }}</td>
-                            <td class="px-5 py-3 text-gray-500 text-xs max-w-xs">
-                                <span class="line-clamp-2">{{ Str::limit($template->body, 80) }}</span>
-                            </td>
-                            <td class="px-5 py-3">
-                                @if($template->is_active)
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 text-green-700">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-500">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> Inactive
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-5 py-3 text-right">
-                                <div class="flex items-center justify-end gap-1">
-                                    <button type="button" onclick="editTemplate({{ $template->id }}, {{ json_encode($template->name) }}, {{ json_encode($template->body) }}, {{ json_encode($template->type) }}, {{ json_encode($template->subject ?? '') }}, {{ $template->is_active ? 1 : 0 }})" class="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 transition-colors" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                    </button>
-                                    <button type="button" onclick="deleteTemplate({{ $template->id }}, {{ json_encode($template->name) }})" class="p-1.5 rounded-lg hover:bg-red-50 text-red-600 transition-colors" title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr><td colspan="7" class="px-5 py-12 text-center text-gray-400">
-                            <svg class="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                            No templates found
-                        </td></tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        @if($templates->hasPages())
-        <div class="px-5 py-3 border-t border-gray-100">{{ $templates->links() }}</div>
-        @endif
+    {{-- AJAX Content Container --}}
+    <div id="ajaxContent">
+        @include('sms.partials.templates-table')
     </div>
 </div>
 
@@ -183,8 +63,8 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">Type</label>
                     <select name="type" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" required>
-                        @foreach ($allTypes as $t)
-                            <option value="{{ $t }}">{{ $typeLabels[$t] }}</option>
+                        @foreach ($allTypes as $t => $label)
+                            <option value="{{ $t }}">{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -229,8 +109,8 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1.5">Type</label>
                     <select name="type" id="editType" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none" required>
-                        @foreach ($allTypes as $t)
-                            <option value="{{ $t }}">{{ $typeLabels[$t] }}</option>
+                        @foreach ($allTypes as $t => $label)
+                            <option value="{{ $t }}">{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -267,7 +147,66 @@
 @push('scripts')
 <script>
     const allTypes = @json($allTypes);
-    const typeLabels = @json($typeLabels);
+    let currentPage = {{ $templates->currentPage() }};
+    let perPage = {{ (int) request('per_page', 20) }};
+    let searchTimer = null;
+
+    function loadTemplates(page) {
+        if (page === undefined) page = currentPage;
+        const type = document.getElementById('filterType').value;
+        const status = document.getElementById('filterStatus').value;
+        const search = document.getElementById('searchInput').value;
+
+        const params = new URLSearchParams();
+        if (type) params.set('type', type);
+        if (status) params.set('status', status);
+        if (search) params.set('search', search);
+        if (perPage) params.set('per_page', perPage);
+        params.set('page', page);
+
+        const container = document.getElementById('ajaxContent');
+        container.style.opacity = '0.5';
+
+        fetch('{{ route("sms.templates") }}?' + params.toString(), {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            container.innerHTML = data.html;
+            container.style.opacity = '1';
+            currentPage = page;
+            attachPaginationListeners();
+        })
+        .catch(() => {
+            container.style.opacity = '1';
+            Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: 'Failed to load templates', showConfirmButton: false, timer: 3000 });
+        });
+    }
+
+    function changePerPage(value) {
+        perPage = parseInt(value);
+        currentPage = 1;
+        loadTemplates();
+    }
+
+    function debouncedSearch() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+            currentPage = 1;
+            loadTemplates();
+        }, 400);
+    }
+
+    function attachPaginationListeners() {
+        document.querySelectorAll('#ajaxContent .pagination a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = new URL(this.href);
+                const page = url.searchParams.get('page') || 1;
+                loadTemplates(page);
+            });
+        });
+    }
 
     function editTemplate(id, name, body, type, subject, isActive) {
         const form = document.getElementById('editTemplateForm');
@@ -288,7 +227,7 @@
             showCancelButton: true,
             confirmButtonColor: '#dc2626',
             cancelButtonColor: '#6b7280',
-            confirmButtonText: '<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg> Yes, Delete',
+            confirmButtonText: 'Yes, Delete',
             cancelButtonText: 'Cancel',
             reverseButtons: true,
         }).then((result) => {
@@ -300,37 +239,24 @@
         });
     }
 
-    // Filtering
-    function applyFilters() {
-        const typeFilter = document.getElementById('filterType').value;
-        const statusFilter = document.getElementById('filterStatus').value;
-        const rows = document.querySelectorAll('.template-row');
+    // Override default AJAX form success to reload table instead of full page
+    document.addEventListener('DOMContentLoaded', function() {
+        attachPaginationListeners();
 
-        rows.forEach(row => {
-            const type = row.dataset.type;
-            const status = row.dataset.active;
-            const typeMatch = !typeFilter || type === typeFilter;
-            const statusMatch = !statusFilter || status === statusFilter;
-            row.style.display = (typeMatch && statusMatch) ? '' : 'none';
+        // Intercept data-ajax form submissions to reload table on success
+        document.querySelectorAll('form[data-ajax]').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                if (e.defaultPrevented && e.target !== this) return;
+            });
         });
 
-        // Show empty message if no rows visible
-        const visibleRows = document.querySelectorAll('.template-row');
-        let anyVisible = false;
-        visibleRows.forEach(r => { if (r.style.display !== 'none') anyVisible = true; });
-        const emptyRow = document.getElementById('emptyRow');
-        if (emptyRow) emptyRow.style.display = anyVisible ? 'none' : '';
-    }
-
-    document.getElementById('filterType').addEventListener('change', applyFilters);
-    document.getElementById('filterStatus').addEventListener('change', applyFilters);
-
-    // Close modals on backdrop click
-    document.getElementById('addModal').addEventListener('click', function(e) {
-        if (e.target === this) this.classList.add('hidden');
-    });
-    document.getElementById('editTemplateModal').addEventListener('click', function(e) {
-        if (e.target === this) this.classList.add('hidden');
+        // Close modals on backdrop click
+        document.getElementById('addModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hidden');
+        });
+        document.getElementById('editTemplateModal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hidden');
+        });
     });
 </script>
 @endpush
