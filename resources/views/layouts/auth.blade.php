@@ -96,6 +96,49 @@
             50%     { border-color: rgba(77,181,168,0.4); }
         }
         .auth-card-glow { animation: borderGlow 4s ease-in-out 1.5s infinite; }
+
+        /* Background Clinic Name Watermark */
+        .bg-clinic-name {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            font-size: clamp(3rem, 12vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(77, 181, 168, 0.07);
+            text-stroke: 1.5px rgba(77, 181, 168, 0.07);
+            user-select: none;
+            animation: bgNameFade 3s ease-out 0.5s both, bgNameFloat 8s ease-in-out 3s infinite;
+        }
+        @keyframes bgNameFade {
+            0%   { opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes bgNameFloat {
+            0%,100% { transform: translate(-50%, -50%) scale(1); }
+            50%     { transform: translate(-50%, -52%) scale(1.02); }
+        }
+        .bg-clinic-sub {
+            position: fixed;
+            top: calc(50% + clamp(2rem, 7vw, 5rem));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            pointer-events: none;
+            white-space: nowrap;
+            font-size: clamp(0.7rem, 2vw, 1.1rem);
+            font-weight: 600;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: rgba(77, 181, 168, 0.08);
+            user-select: none;
+            animation: bgNameFade 3s ease-out 1s both;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -113,6 +156,10 @@
 <body class="font-['Nunito',sans-serif] antialiased text-slate-800 min-h-screen" style="background: linear-gradient(135deg, #001816 0%, #01241f 30%, #013028 60%, #024938 100%);">
 
     <canvas id="particleCanvas"></canvas>
+
+    {{-- Background Clinic Name Watermark --}}
+    <div class="bg-clinic-name">{{ config('app.name', 'Dr Issa Clinic') }}</div>
+    <div class="bg-clinic-sub">Scientific Clinic &middot; Dar es Salaam</div>
 
     <div id="ajaxLoader" class="ajax-loader"></div>
 
