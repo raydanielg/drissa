@@ -50,6 +50,11 @@ class RedirectIfWrongRole
                 ->with('status', 'Redirected to your pharmacy dashboard.');
         }
 
+        if ($user->isNurse()) {
+            return redirect()->route('nurse.dashboard')
+                ->with('status', 'Redirected to your nurse dashboard.');
+        }
+
         return redirect()->route('profile')
             ->with('status', 'Redirected to your profile.');
     }
