@@ -20,7 +20,7 @@ class ResetPasswordNotification extends BaseResetPassword
 
         return (new MailMessage())
             ->subject('Reset Your Password - ' . $clinicName)
-            ->view('emails.password-reset', [
+            ->view('emails.reset-link', [
                 'url' => $url,
                 'clinicName' => $clinicName,
                 'userName' => $notifiable->name ?? 'User',
