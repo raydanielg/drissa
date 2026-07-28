@@ -80,7 +80,7 @@ class SmsController extends Controller
             'name' => 'required|string|max:255',
             'subject' => 'nullable|string|max:255',
             'body' => 'required|string|max:1600',
-            'type' => 'required|in:appointment,payment,lab,general,birthday',
+            'type' => 'required|in:appointment,payment,lab,general,birthday,holiday,pharmacy,visit,doctor,registration,reminder,marketing',
         ]);
         $data['is_active'] = true;
         SmsTemplate::create($data);
@@ -93,7 +93,7 @@ class SmsController extends Controller
             'name' => 'required|string|max:255',
             'subject' => 'nullable|string|max:255',
             'body' => 'required|string|max:1600',
-            'type' => 'required|in:appointment,payment,lab,general,birthday',
+            'type' => 'required|in:appointment,payment,lab,general,birthday,holiday,pharmacy,visit,doctor,registration,reminder,marketing',
             'is_active' => 'boolean',
         ]);
         $data['is_active'] = $request->boolean('is_active', true);
