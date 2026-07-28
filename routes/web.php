@@ -76,10 +76,6 @@ Route::get('/login', function () {
 
 Auth::routes(['login' => false, 'register' => false]);
 
-Route::get('/home', function () {
-    return redirect()->route('dashboard');
-});
-
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('redirect.role:admin|reception');
     Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats')->middleware('redirect.role:admin|reception');

@@ -49,48 +49,8 @@
 
     <div id="ajaxLoader" class="ajax-loader"></div>
 
-    <main id="authMain" class="relative z-10 min-h-screen w-full flex flex-col lg:flex-row">
-        {{-- Left side: rotating slideshow --}}
-        <div class="hidden lg:block lg:w-1/2 relative h-screen overflow-hidden" id="authSlideshow">
-            {{-- Slide images --}}
-            <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 slide-image" data-index="0">
-                <img src="{{ asset('1411.jpg') }}" alt="Patient Care" class="absolute inset-0 w-full h-full object-cover">
-            </div>
-            <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 slide-image" data-index="1">
-                <img src="{{ asset('7678.jpg') }}" alt="Modern Clinic" class="absolute inset-0 w-full h-full object-cover">
-            </div>
-            <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 slide-image" data-index="2">
-                <img src="{{ asset('images.png') }}" alt="Expert Team" class="absolute inset-0 w-full h-full object-cover">
-            </div>
-            <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 slide-image" data-index="3">
-                <img src="{{ asset('watoto.png') }}" alt="Family Care" class="absolute inset-0 w-full h-full object-cover">
-            </div>
-
-            <div class="absolute inset-0 bg-gradient-to-br from-emerald-900/70 via-emerald-800/50 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-emerald-900/80 via-transparent to-transparent"></div>
-
-            {{-- Slide text --}}
-            <div class="absolute inset-0 p-12 flex flex-col justify-end">
-                <div id="slideText" class="absolute bottom-12 left-12 right-12 transition-all duration-500 ease-in-out" style="opacity: 1; transform: translateY(0);">
-                    <h2 id="slideTitle" class="text-4xl font-extrabold text-white leading-tight">Compassionate Patient Care</h2>
-                    <p id="slideDesc" class="mt-4 text-white/90 text-lg max-w-md">A friendly, stress-free experience for every patient who walks through our doors.</p>
-                </div>
-            </div>
-
-            {{-- Slide indicators --}}
-            <div class="absolute bottom-28 right-12 flex gap-2">
-                <button class="slide-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-index="0"></button>
-                <button class="slide-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-index="1"></button>
-                <button class="slide-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-index="2"></button>
-                <button class="slide-dot w-2.5 h-2.5 rounded-full bg-white/40 transition-all duration-300" data-index="3"></button>
-            </div>
-        </div>
-
-        {{-- Right side: auth card --}}
-        <div class="w-full lg:w-1/2 min-h-screen flex items-center justify-center p-6 sm:p-12 relative">
-            <div class="absolute inset-0 bg-white/10"></div>
-            @yield('content')
-        </div>
+    <main id="authMain" class="relative z-10 min-h-screen w-full flex items-center justify-center p-4 sm:p-6">
+        @yield('content')
     </main>
 
     <script>
