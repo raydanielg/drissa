@@ -18,11 +18,17 @@ class CheckInstallation
         $isInstallerRoute = $request->is('install/*') || $request->is('install');
 
         if (!$isInstalled && !$isInstallerRoute) {
-            return redirect()->route('install.welcome');
+            if (app('router')->has('install.welcome')) {
+                return redirect()->route('install.welcome');
+            }
+            abort(503, 'Application is not installed. Please run the installer.');
         }
 
         if ($isInstalled && $isInstallerRoute && !$request->is('install/complete')) {
-            return redirect()->route('public.home');
+            if (app('router')->has('public.home')) {
+                return redirect()->route('public.home');
+            }
+            return redirect('/');
         }
 
         return $next($request);
