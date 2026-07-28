@@ -27,56 +27,35 @@
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         @php
             $kpiCards = [
-                ['label' => 'Today Visits', 'value' => $kpis['today_visits'], 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6', 'gradient' => 'from-emerald-500 to-emerald-700', 'bg' => 'bg-emerald-50', 'text' => 'text-emerald-600', 'bar' => 'bg-emerald-500', 'ring' => 'text-emerald-500', 'max' => 50, 'trend' => 'up', 'trend_val' => '12%', 'spark' => [3,5,4,7,6,9,8]],
-                ['label' => 'Waiting Payment', 'value' => $kpis['waiting_payment'], 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'gradient' => 'from-amber-500 to-orange-600', 'bg' => 'bg-amber-50', 'text' => 'text-amber-600', 'bar' => 'bg-amber-500', 'ring' => 'text-amber-500', 'max' => 20, 'trend' => 'down', 'trend_val' => '5%', 'spark' => [5,4,6,3,4,2,3]],
-                ['label' => 'Waiting Doctor', 'value' => $kpis['waiting_doctor'], 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'gradient' => 'from-blue-500 to-blue-700', 'bg' => 'bg-blue-50', 'text' => 'text-blue-600', 'bar' => 'bg-blue-500', 'ring' => 'text-blue-500', 'max' => 20, 'trend' => 'up', 'trend_val' => '8%', 'spark' => [2,3,5,4,6,5,7]],
-                ['label' => 'With Doctor', 'value' => $kpis['with_doctor'], 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'gradient' => 'from-purple-500 to-purple-700', 'bg' => 'bg-purple-50', 'text' => 'text-purple-600', 'bar' => 'bg-purple-500', 'ring' => 'text-purple-500', 'max' => 20, 'trend' => 'up', 'trend_val' => '3%', 'spark' => [1,2,3,3,4,4,5]],
-                ['label' => 'Today Revenue', 'value' => 'TSh ' . number_format($kpis['today_revenue']), 'raw' => round($kpis['today_revenue']), 'icon' => 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z', 'gradient' => 'from-amber-500 to-yellow-600', 'bg' => 'bg-amber-50', 'text' => 'text-amber-600', 'bar' => 'bg-amber-500', 'ring' => 'text-amber-500', 'max' => 500000, 'trend' => 'up', 'trend_val' => '18%', 'spark' => [10,15,12,20,18,25,30]],
-                ['label' => 'New Patients', 'value' => $kpis['today_patients'], 'icon' => 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z', 'gradient' => 'from-sky-500 to-cyan-600', 'bg' => 'bg-sky-50', 'text' => 'text-sky-600', 'bar' => 'bg-sky-500', 'ring' => 'text-sky-500', 'max' => 20, 'trend' => 'up', 'trend_val' => '15%', 'spark' => [1,2,2,3,4,3,5]],
-                ['label' => 'Appointments', 'value' => $kpis['appointments_today'], 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'gradient' => 'from-rose-500 to-pink-600', 'bg' => 'bg-rose-50', 'text' => 'text-rose-600', 'bar' => 'bg-rose-500', 'ring' => 'text-rose-500', 'max' => 30, 'trend' => 'down', 'trend_val' => '2%', 'spark' => [8,7,6,7,5,6,4]],
-                ['label' => 'Avg Wait', 'value' => $kpis['avg_wait_minutes'] . 'm', 'raw' => $kpis['avg_wait_minutes'], 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', 'gradient' => 'from-indigo-500 to-violet-600', 'bg' => 'bg-indigo-50', 'text' => 'text-indigo-600', 'bar' => 'bg-indigo-500', 'ring' => 'text-indigo-500', 'max' => 60, 'trend' => 'down', 'trend_val' => '10%', 'spark' => [20,18,15,16,14,12,10]],
+                ['label' => 'Today Visits', 'value' => $kpis['today_visits'], 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6', 'bg' => 'bg-emerald-100', 'text' => 'text-emerald-600', 'bar' => 'bg-emerald-500', 'ring' => 'text-emerald-500', 'max' => 50],
+                ['label' => 'Waiting Payment', 'value' => $kpis['waiting_payment'], 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'bg' => 'bg-amber-100', 'text' => 'text-amber-600', 'bar' => 'bg-amber-500', 'ring' => 'text-amber-500', 'max' => 20],
+                ['label' => 'Waiting Doctor', 'value' => $kpis['waiting_doctor'], 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'bg' => 'bg-blue-100', 'text' => 'text-blue-600', 'bar' => 'bg-blue-500', 'ring' => 'text-blue-500', 'max' => 20],
+                ['label' => 'With Doctor', 'value' => $kpis['with_doctor'], 'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'bg' => 'bg-purple-100', 'text' => 'text-purple-600', 'bar' => 'bg-purple-500', 'ring' => 'text-purple-500', 'max' => 20],
+                ['label' => 'Today Revenue', 'value' => 'TSh ' . number_format($kpis['today_revenue']), 'raw' => round($kpis['today_revenue']), 'icon' => 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z', 'bg' => 'bg-amber-100', 'text' => 'text-amber-600', 'bar' => 'bg-amber-500', 'ring' => 'text-amber-500', 'max' => 500000],
+                ['label' => 'New Patients', 'value' => $kpis['today_patients'], 'icon' => 'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z', 'bg' => 'bg-sky-100', 'text' => 'text-sky-600', 'bar' => 'bg-sky-500', 'ring' => 'text-sky-500', 'max' => 20],
+                ['label' => 'Appointments', 'value' => $kpis['appointments_today'], 'icon' => 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', 'bg' => 'bg-rose-100', 'text' => 'text-rose-600', 'bar' => 'bg-rose-500', 'ring' => 'text-rose-500', 'max' => 30],
+                ['label' => 'Avg Wait', 'value' => $kpis['avg_wait_minutes'] . 'm', 'raw' => $kpis['avg_wait_minutes'], 'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', 'bg' => 'bg-indigo-100', 'text' => 'text-indigo-600', 'bar' => 'bg-indigo-500', 'ring' => 'text-indigo-500', 'max' => 60],
             ];
         @endphp
         @foreach ($kpiCards as $card)
-            <div class="kpi-card group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1">
-                {{-- Gradient Top Bar --}}
-                <div class="h-1.5 bg-gradient-to-r {{ $card['gradient'] }}"></div>
-
-                {{-- Glow Effect --}}
-                <div class="absolute inset-0 bg-gradient-to-br {{ $card['gradient'] }} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500"></div>
-
-                <div class="relative p-4">
-                    {{-- Header: Icon + Trend --}}
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="w-11 h-11 rounded-xl {{ $card['bg'] }} flex items-center justify-center {{ $card['text'] }}">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}"/></svg>
-                        </div>
-                        <div class="flex items-center gap-1 text-[10px] font-bold {{ $card['trend'] === 'up' ? 'text-emerald-600' : 'text-rose-500' }} bg-{{ $card['trend'] === 'up' ? 'emerald' : 'rose' }}-50 px-2 py-1 rounded-full">
-                            @if ($card['trend'] === 'up')
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-                            @else
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-                            @endif
-                            {{ $card['trend_val'] }}
+            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">{{ $card['label'] }}</p>
+                        <p class="text-xl font-bold text-gray-900 mt-1 kpi-counter" data-target="{{ $card['raw'] ?? $card['value'] }}" data-max="{{ $card['max'] }}" data-prefix="{{ str_starts_with((string) $card['value'], 'TSh') ? 'TSh ' : '' }}" data-suffix="{{ str_ends_with((string) $card['value'], 'm') ? 'm' : '' }}">{{ $card['value'] }}</p>
+                    </div>
+                    <div class="relative w-12 h-12">
+                        <svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 48 48">
+                            <circle cx="24" cy="24" r="20" stroke="#f3f4f6" stroke-width="5" fill="none"></circle>
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" class="kpi-ring {{ $card['ring'] }}" stroke-dasharray="125.66" stroke-dashoffset="125.66" data-pct="{{ min(100, (($card['raw'] ?? $card['value']) / $card['max']) * 100) }}"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="w-5 h-5 {{ $card['text'] }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}"/></svg>
                         </div>
                     </div>
-
-                    {{-- Value --}}
-                    <p class="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">{{ $card['label'] }}</p>
-                    <p class="text-2xl font-extrabold text-gray-900 kpi-counter leading-tight" data-target="{{ $card['raw'] ?? $card['value'] }}" data-max="{{ $card['max'] }}" data-prefix="{{ str_starts_with((string) $card['value'], 'TSh') ? 'TSh ' : '' }}" data-suffix="{{ str_ends_with((string) $card['value'], 'm') ? 'm' : '' }}">{{ $card['value'] }}</p>
-
-                    {{-- Sparkline + Progress --}}
-                    <div class="mt-3 flex items-end justify-between gap-3">
-                        <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r {{ $card['gradient'] }} kpi-bar rounded-full transition-all duration-700" style="width: 0%" data-width="{{ min(100, (($card['raw'] ?? $card['value']) / $card['max']) * 100) }}%"></div>
-                        </div>
-                        {{-- Mini Sparkline --}}
-                        <div class="flex items-end gap-0.5 h-6">
-                            @foreach ($card['spark'] as $point)
-                                <div class="w-1 rounded-sm {{ $card['bar'] }} opacity-40 group-hover:opacity-70 transition-opacity" style="height: {{ ($point / max($card['spark']) * 100) }}%"></div>
-                            @endforeach
-                        </div>
-                    </div>
+                </div>
+                <div class="mt-3 h-1 bg-gray-100 rounded-full overflow-hidden">
+                    <div class="h-full {{ $card['bar'] }} kpi-bar" style="width: 0%" data-width="{{ min(100, (($card['raw'] ?? $card['value']) / $card['max']) * 100) }}%"></div>
                 </div>
             </div>
         @endforeach
@@ -702,17 +681,18 @@
                 'Avg Wait': data.avg_wait_minutes ?? 12,
             };
             document.querySelectorAll('.kpi-counter').forEach(el => {
-                const card = el.closest('.kpi-card');
-                const labelEl = card?.querySelector('p.uppercase');
-                const label = labelEl?.textContent?.trim();
+                const label = el.parentElement.querySelector('p:first-child')?.textContent?.trim();
                 if (label && kpiMap[label] !== undefined) {
                     const newVal = kpiMap[label];
                     const max = parseFloat(el.dataset.max) || 1;
                     const pct = Math.min(100, (newVal / max) * 100);
                     el.dataset.target = newVal;
+                    const card = el.closest('.bg-white');
                     if (card) {
                         const bar = card.querySelector('.kpi-bar');
+                        const ring = card.querySelector('.kpi-ring');
                         if (bar) bar.dataset.width = pct + '%';
+                        if (ring) ring.dataset.pct = pct;
                     }
                 }
             });
