@@ -222,15 +222,17 @@ Route::middleware('auth')->group(function () {
             Route::get('{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('pdf');
             Route::get('download-all', [InvoiceController::class, 'downloadAllPdf'])->name('download-all');
         });
+    });
 
-        Route::prefix('settings')->name('settings.')->group(function () {
-            Route::get('/', [SettingsController::class, 'index'])->name('index');
-            Route::put('/', [SettingsController::class, 'update'])->name('update');
-            Route::get('email', [SettingsController::class, 'email'])->name('email');
-            Route::get('sms', [SettingsController::class, 'sms'])->name('sms');
-            Route::post('sms/test', [SettingsController::class, 'testSms'])->name('sms.test');
-            Route::get('payment', [SettingsController::class, 'payment'])->name('payment');
-        });
+    // Settings - accessible to admin, redirects others to their dashboard
+    Route::prefix('settings')->name('settings.')->middleware('redirect.role:admin')->group(function () {
+        Route::get('/', [SettingsController::class, 'index'])->name('index');
+        Route::put('/', [SettingsController::class, 'update'])->name('update');
+        Route::get('email', [SettingsController::class, 'email'])->name('email');
+        Route::get('sms', [SettingsController::class, 'sms'])->name('sms');
+        Route::post('sms/test', [SettingsController::class, 'testSms'])->name('sms.test');
+        Route::get('payment', [SettingsController::class, 'payment'])->name('payment');
+    });
 
         Route::prefix('reports')->name('reports.')->group(function () {
             Route::get('/', [ReportController::class, 'index'])->name('index');
