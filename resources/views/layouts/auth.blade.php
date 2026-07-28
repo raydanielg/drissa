@@ -20,14 +20,82 @@
 
     <style>
         @keyframes simpleFadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-        .auth-card-entrance { animation: fadeInUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
-        .auth-header-entrance { animation: fadeInDown 0.6s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
-        .auth-field-entrance { animation: fadeIn 0.5s cubic-bezier(0.16,1,0.3,1) both; }
-        .auth-btn:hover { animation: pulse 0.8s ease-in-out infinite; }
+
+        /* 3D Card Entrance */
+        @keyframes cardEntrance {
+            0%   { opacity:0; transform: perspective(1200px) rotateX(-12deg) translateY(60px) scale(0.92); }
+            50%  { opacity:0.6; transform: perspective(1200px) rotateX(-4deg) translateY(20px) scale(0.97); }
+            100% { opacity:1; transform: perspective(1200px) rotateX(0deg) translateY(0) scale(1); }
+        }
+        .auth-card-entrance { animation: cardEntrance 1s cubic-bezier(0.16,1,0.3,1) both; }
+
+        /* Header Slide + Glow */
+        @keyframes headerEntrance {
+            0%   { opacity:0; transform: translateY(-24px); filter: blur(6px); }
+            60%  { opacity:0.8; filter: blur(2px); }
+            100% { opacity:1; transform: translateY(0); filter: blur(0); }
+        }
+        .auth-header-entrance { animation: headerEntrance 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
+
+        /* Logo Bounce + Glow Ring */
+        @keyframes logoEntrance {
+            0%   { opacity:0; transform: scale(0) rotate(-180deg); }
+            60%  { opacity:1; transform: scale(1.15) rotate(10deg); }
+            100% { opacity:1; transform: scale(1) rotate(0deg); }
+        }
+        .auth-logo-entrance { animation: logoEntrance 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
+        @keyframes logoGlow {
+            0%,100% { box-shadow: 0 0 0 0 rgba(77,181,168,0); }
+            50%     { box-shadow: 0 0 25px 4px rgba(77,181,168,0.35); }
+        }
+        .auth-logo-glow { animation: logoGlow 3s ease-in-out 1.3s infinite; border-radius: 50%; }
+
+        /* Field Staggered Slide-In */
+        @keyframes fieldSlideIn {
+            0%   { opacity:0; transform: translateX(-30px); filter: blur(4px); }
+            100% { opacity:1; transform: translateX(0); filter: blur(0); }
+        }
+        .auth-field-entrance { animation: fieldSlideIn 0.6s cubic-bezier(0.16,1,0.3,1) both; }
+
+        /* Button Glow Pulse on Hover */
+        @keyframes btnGlow {
+            0%,100% { box-shadow: 0 4px 14px rgba(249,172,0,0.3); }
+            50%     { box-shadow: 0 6px 24px rgba(249,172,0,0.55); }
+        }
+        .auth-btn:hover { animation: btnGlow 1.2s ease-in-out infinite; transform: translateY(-1px); }
+
+        /* Floating Card */
+        @keyframes floatCard {
+            0%,100% { transform: translateY(0); }
+            50%     { transform: translateY(-6px); }
+        }
+        .auth-card-float { animation: floatCard 4s ease-in-out 2s infinite; }
+
+        /* Shimmer on header text */
+        @keyframes shimmerText {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #1f2937 0%, #1f2937 40%, #024938 50%, #1f2937 60%, #1f2937 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 3s linear 1.5s infinite;
+        }
+
         .ajax-loader { position:fixed; top:0; left:0; right:0; height:3px; background: linear-gradient(90deg, #024938, #f9ac00, #024938); background-size: 200% 100%; animation: ajaxProgress 1s linear infinite; z-index:9999; display:none; }
         @keyframes ajaxProgress { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
         .page-transition { animation: simpleFadeIn 0.35s ease-out both; }
         #particleCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        /* Card glow border */
+        @keyframes borderGlow {
+            0%,100% { border-color: rgba(77,181,168,0.15); }
+            50%     { border-color: rgba(77,181,168,0.4); }
+        }
+        .auth-card-glow { animation: borderGlow 4s ease-in-out 1.5s infinite; }
     </style>
     <script>
         tailwind.config = {
@@ -106,23 +174,39 @@
         });
     })();
 
-    // Animate.css entrance animations for auth card
+    // Entrance animations for auth card
     (function() {
-        const card = document.querySelector('#authMain .max-w-md');
+        const card = document.querySelector('#authMain .max-w-md > div');
         if (!card) return;
 
+        // 3D card entrance
         card.style.animation = 'none';
-        card.classList.add('auth-card-entrance');
+        void card.offsetWidth; // reflow
+        card.classList.add('auth-card-entrance', 'auth-card-float', 'auth-card-glow');
 
+        // Logo entrance + glow
+        const logo = card.querySelector('img');
+        if (logo) {
+            logo.classList.add('auth-logo-entrance', 'auth-logo-glow');
+            logo.style.padding = '4px';
+        }
+
+        // Header entrance
         const header = card.querySelector('.auth-header');
         if (header) header.classList.add('auth-header-entrance');
 
+        // Shimmer on header title
+        const title = card.querySelector('.auth-header h2');
+        if (title) title.classList.add('shimmer-text');
+
+        // Staggered field entrance
         const fields = card.querySelectorAll('form > div, form > button');
         fields.forEach((field, i) => {
             field.classList.add('auth-field-entrance');
-            field.style.animationDelay = (0.3 + (i * 0.08)) + 's';
+            field.style.animationDelay = (0.5 + (i * 0.1)) + 's';
         });
 
+        // Button glow on hover
         const submitBtn = card.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.classList.add('auth-btn');
     })();
