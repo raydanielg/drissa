@@ -683,7 +683,7 @@
                         <select name="patient_id" id="dashApptPatientSelect" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-emerald-500" required>
                             <option value="">Select patient</option>
                             @foreach($patientsList as $p)
-                            <option value="{{ $p->id }}" data-search="{{ strtolower($p->name . ' ' . ($p->phone ?? '') . ' ' . $p->mrn) }}">{{ $p->name }} ({{ $p->mrn }})</option>
+                            <option value="{{ $p->id }}" data-search="{{ strtolower($p->fullName() . ' ' . ($p->phone ?? '') . ' ' . $p->mrn) }}">{{ $p->fullName() }} ({{ $p->mrn }})</option>
                             @endforeach
                         </select>
                     </div>
