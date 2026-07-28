@@ -14,6 +14,17 @@ if (file_exists($maintenance = __DIR__.'/storage/framework/maintenance.php')) {
     require $maintenance;
 }
 
+// If .env doesn't exist or app not installed, redirect to installer
+// before Laravel tries to bootstrap (which would cause a 500 error)
+if (!file_exists(__DIR__.'/.env') || !file_exists(__DIR__.'/storage/app/installed')) {
+    // Only redirect if we're not already on the install route
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+    if (strpos($requestUri, '/install') !== 0) {
+        header('Location: /install');
+        exit;
+    }
+}
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
