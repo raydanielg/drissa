@@ -42,7 +42,9 @@
         }
     </script>
 </head>
-<body class="font-['Nunito',sans-serif] antialiased text-slate-800 min-h-screen bg-white">
+<body class="font-['Nunito',sans-serif] antialiased text-slate-800 min-h-screen" style="background: linear-gradient(135deg, #001816 0%, #01241f 30%, #013028 60%, #024938 100%);">
+
+    <canvas id="particleCanvas"></canvas>
 
     <div id="ajaxLoader" class="ajax-loader"></div>
 
