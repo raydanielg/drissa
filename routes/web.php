@@ -124,7 +124,14 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('pharmacy')->name('pharmacy.')->middleware('redirect.role:pharmacy|admin')->group(function () {
+        Route::get('/dashboard', [PharmacyController::class, 'dashboard'])->name('dashboard');
         Route::get('/', [PharmacyController::class, 'queue'])->name('queue');
+        Route::get('/inventory', [PharmacyController::class, 'inventory'])->name('inventory');
+        Route::post('/medications', [PharmacyController::class, 'storeMedication'])->name('medications.store');
+        Route::put('/medications/{medication}', [PharmacyController::class, 'updateMedication'])->name('medications.update');
+        Route::delete('/medications/{medication}', [PharmacyController::class, 'deleteMedication'])->name('medications.destroy');
+        Route::get('/history', [PharmacyController::class, 'prescriptionHistory'])->name('history');
+        Route::get('/reports', [PharmacyController::class, 'reports'])->name('reports');
         Route::post('prescriptions/{prescription}/dispense', [PharmacyController::class, 'dispense'])->name('prescriptions.dispense');
     });
 
