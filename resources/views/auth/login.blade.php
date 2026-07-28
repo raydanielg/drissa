@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="w-full max-w-md mx-auto" style="animation: simpleFadeIn 0.4s ease-out both;">
-    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden sm:rounded-2xl">
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 overflow-hidden sm:rounded-2xl">
         {{-- Header --}}
         <div class="auth-header px-8 pt-8 pb-6 text-center">
             <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="w-24 h-24 mx-auto object-contain mb-4">
