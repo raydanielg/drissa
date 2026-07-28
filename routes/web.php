@@ -23,6 +23,7 @@ use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ServiceController;
@@ -35,11 +36,27 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
+| Public Website Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [PublicController::class, 'home'])->name('public.home');
+Route::get('/about', [PublicController::class, 'about'])->name('public.about');
+Route::get('/branches', [PublicController::class, 'branches'])->name('public.branches');
+Route::get('/our-services', [PublicController::class, 'services'])->name('public.services');
+Route::get('/book-appointment', [PublicController::class, 'appointments'])->name('public.appointments');
+Route::post('/book-appointment', [PublicController::class, 'storeAppointment'])->name('public.appointments.store');
+Route::get('/blog', [PublicController::class, 'blog'])->name('public.blog');
+Route::get('/shop', [PublicController::class, 'shop'])->name('public.shop');
+Route::get('/contact', [PublicController::class, 'contact'])->name('public.contact');
+Route::post('/contact', [PublicController::class, 'storeContact'])->name('public.contact.store');
+
+/*
+|--------------------------------------------------------------------------
 | Authentication
 |--------------------------------------------------------------------------
 */
-Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/', [LoginController::class, 'login']);
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
 
 Auth::routes(['login' => false, 'register' => false]);
 

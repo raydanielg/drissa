@@ -54,7 +54,7 @@
         <div class="hidden lg:block lg:w-1/2 relative h-screen overflow-hidden" id="authSlideshow">
             {{-- Slide images --}}
             <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 slide-image" data-index="0">
-                <img src="{{ asset('1411.jpg') }}" alt="Kids Dental Care" class="absolute inset-0 w-full h-full object-cover">
+                <img src="{{ asset('1411.jpg') }}" alt="Patient Care" class="absolute inset-0 w-full h-full object-cover">
             </div>
             <div class="absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 slide-image" data-index="1">
                 <img src="{{ asset('7678.jpg') }}" alt="Modern Clinic" class="absolute inset-0 w-full h-full object-cover">
@@ -72,8 +72,8 @@
             {{-- Slide text --}}
             <div class="absolute inset-0 p-12 flex flex-col justify-end">
                 <div id="slideText" class="absolute bottom-12 left-12 right-12 transition-all duration-500 ease-in-out" style="opacity: 1; transform: translateY(0);">
-                    <h2 id="slideTitle" class="text-4xl font-extrabold text-white leading-tight">Gentle Care for Kids</h2>
-                    <p id="slideDesc" class="mt-4 text-white/90 text-lg max-w-md">A friendly, stress-free dental experience for your little ones.</p>
+                    <h2 id="slideTitle" class="text-4xl font-extrabold text-white leading-tight">Compassionate Patient Care</h2>
+                    <p id="slideDesc" class="mt-4 text-white/90 text-lg max-w-md">A friendly, stress-free experience for every patient who walks through our doors.</p>
                 </div>
             </div>
 
@@ -184,10 +184,10 @@
         const slideDesc = document.getElementById('slideDesc');
 
         const slides = [
-            { title: 'Gentle Care for Kids', desc: 'A friendly, stress-free dental experience for your little ones.' },
+            { title: 'Compassionate Patient Care', desc: 'A friendly, stress-free experience for every patient who walks through our doors.' },
             { title: 'Modern Facilities', desc: 'State-of-the-art equipment and a clean, comfortable clinic.' },
-            { title: 'Expert Dental Team', desc: 'Professional dentists committed to your healthy, confident smile.' },
-            { title: 'Care for the Whole Family', desc: 'Comprehensive dental services tailored to every age.' }
+            { title: 'Expert Medical Team', desc: 'Professional doctors committed to your health and well-being.' },
+            { title: 'Care for the Whole Family', desc: 'Comprehensive medical services tailored to every age.' }
         ];
 
         let current = 0;
