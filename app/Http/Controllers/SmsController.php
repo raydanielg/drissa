@@ -68,10 +68,44 @@ class SmsController extends Controller
         return view('sms.logs', compact('logs'));
     }
 
-    public function templates()
+    public function templates(Request $request)
     {
-        $templates = SmsTemplate::latest()->paginate(20);
-        return view('sms.templates', compact('templates'));
+        $perPage = in_array((int) $request->get('per_page'), [20, 50, 100, 500]) ? (int) $request->get('per_page') : 20;
+        $query = SmsTemplate::latest();
+
+        if ($request->filled('type') && $request->type !== 'all') {
+            $query->where('type', $request->type);
+        }
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('body', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%");
+            });
+        }
+
+        $templates = $query->paginate($perPage)->appends($request->only(['per_page', 'type', 'status', 'search']));
+        $stats = [
+            'total' => SmsTemplate::count(),
+            'active' => SmsTemplate::where('is_active', true)->count(),
+            'inactive' => SmsTemplate::where('is_active', false)->count(),
+        ];
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('sms.partials.templates-table', compact('templates', 'stats'))->render(),
+            ]);
+        }
+
+        return view('sms.templates', compact('templates', 'stats'));
     }
 
     public function storeTemplate(Request $request)
