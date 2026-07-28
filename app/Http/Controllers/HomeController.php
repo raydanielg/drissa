@@ -114,7 +114,7 @@ class HomeController extends Controller
         $recentPatients = Patient::latest()->limit(5)->get();
 
         // Lists for quick forms
-        $patientsList = Patient::orderBy('name')->get();
+        $patientsList = Patient::orderBy('first_name')->get();
         $doctorsList = User::role('doctor')->get();
 
         return view('dashboard', compact(
