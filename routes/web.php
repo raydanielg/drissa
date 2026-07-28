@@ -11,6 +11,7 @@ use App\Http\Controllers\ClinicRoomController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\LabEquipmentController;
@@ -33,6 +34,17 @@ use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Installer Routes
+|--------------------------------------------------------------------------
+*/
+Route::get('/install', [InstallController::class, 'welcome'])->name('install.welcome');
+Route::get('/install/database', [InstallController::class, 'database'])->name('install.database');
+Route::post('/install/process', [InstallController::class, 'process'])->name('install.process');
+Route::post('/install/run', [InstallController::class, 'runMigrations'])->name('install.run');
+Route::get('/install/complete', [InstallController::class, 'complete'])->name('install.complete');
 
 /*
 |--------------------------------------------------------------------------
