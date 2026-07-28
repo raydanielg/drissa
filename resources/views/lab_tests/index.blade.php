@@ -180,6 +180,107 @@
     </form>
 </template>
 
+{{-- Import Modal --}}
+<div id="importModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-sky-600 to-sky-700">
+            <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Import Lab Test Types
+                </h3>
+                <p class="text-sky-100 text-xs mt-0.5">Upload a CSV file or use the sample template to get started quickly.</p>
+            </div>
+            <button type="button" onclick="closeImportModal()" class="text-white/80 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="p-6 space-y-5">
+            {{-- Download Sample --}}
+            <div class="bg-sky-50 border border-sky-100 rounded-xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-sky-600 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m2 2v-4m2 2v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-sky-900">Download Sample Template</p>
+                        <p class="text-xs text-sky-700 mt-0.5">CSV file with 30 common lab tests pre-filled</p>
+                    </div>
+                </div>
+                <a href="{{ route('lab-tests.sample') }}" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download
+                </a>
+            </div>
+
+            {{-- Upload Form --}}
+            <div>
+                <label class="block text-xs font-semibold text-gray-600 mb-2">Upload CSV File</label>
+                <div id="dropZone" class="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-sky-400 transition-colors cursor-pointer" onclick="document.getElementById('importFile').click()">
+                    <input type="file" id="importFile" accept=".csv,.txt" class="hidden" onchange="handleFileSelect(this)">
+                    <div id="dropZoneContent">
+                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                        <p class="text-sm text-gray-500 font-medium">Click to select or drag CSV file here</p>
+                        <p class="text-xs text-gray-400 mt-1">Max 2MB. Supported: .csv, .txt</p>
+                    </div>
+                    <div id="filePreview" class="hidden">
+                        <div class="flex items-center justify-center gap-2">
+                            <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <div class="text-left">
+                                <p class="text-sm font-bold text-gray-900" id="fileName"></p>
+                                <p class="text-xs text-gray-500" id="fileSize"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- CSV Format Guide --}}
+            <div class="bg-gray-50 rounded-xl p-4">
+                <p class="text-xs font-bold text-gray-700 mb-2 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    CSV Format
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead>
+                            <tr class="text-left text-gray-500 border-b border-gray-200">
+                                <th class="py-1.5 pr-3">name</th>
+                                <th class="py-1.5 pr-3">code</th>
+                                <th class="py-1.5 pr-3">unit</th>
+                                <th class="py-1.5 pr-3">reference_range</th>
+                                <th class="py-1.5 pr-3">price</th>
+                                <th class="py-1.5 pr-3">is_active</th>
+                                <th class="py-1.5">description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600">
+                            <tr>
+                                <td class="py-1.5 pr-3">Complete Blood Count</td>
+                                <td class="py-1.5 pr-3">CBC</td>
+                                <td class="py-1.5 pr-3">cells/uL</td>
+                                <td class="py-1.5 pr-3">4.0-11.0</td>
+                                <td class="py-1.5 pr-3">15000</td>
+                                <td class="py-1.5 pr-3">1</td>
+                                <td class="py-1.5">Full blood count</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
+                <button type="button" onclick="closeImportModal()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-all">Cancel</button>
+                <button type="button" id="importBtn" onclick="submitImport()" disabled class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-bold rounded-lg transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Import Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
     const labTestSlide = document.getElementById('labTestSlideOver');
