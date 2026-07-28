@@ -29,7 +29,7 @@
             <p class="text-emerald-100 text-xs mt-1">Configure how the system sends SMS messages to patients and staff.</p>
         </div>
 
-        <form method="POST" action="{{ route('settings.update') }}" class="p-6 space-y-5">
+        <form method="POST" action="{{ route('settings.update') }}" class="p-6 space-y-5" data-ajax>
             @csrf
             @method('PUT')
 
@@ -202,6 +202,7 @@
     </div>
 </div>
 
+@push('scripts')
 <script>
     function toggleGatewaySections() {
         const gateway = document.getElementById('smsGateway').value;
@@ -251,4 +252,5 @@
         });
     });
 </script>
+@endpush
 @endsection
