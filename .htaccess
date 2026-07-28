@@ -5,6 +5,12 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Serve static files from public/ directory (when document root is project root)
+    RewriteCond %{REQUEST_URI} ^/(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|map|txt|xml|json))$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
+    RewriteRule ^(.*)$ /public/$1 [L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
