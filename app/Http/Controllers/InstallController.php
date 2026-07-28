@@ -133,7 +133,12 @@ class InstallController extends Controller
         $appName = $data['app_name'] ?? 'Dr Issa Scientific Clinic';
         $appUrl = $data['app_url'] ?? 'http://localhost';
 
-        $key = 'base64:' . base64_encode(random_bytes(32));
+        // Keep the existing APP_KEY from the temporary .env so the
+        // current session and CSRF token remain valid during installation
+        $key = config('app.key');
+        if (empty($key)) {
+            $key = 'base64:' . base64_encode(random_bytes(32));
+        }
 
         $envContent = "APP_NAME=\"{$appName}\"\n";
         $envContent .= "APP_ENV=production\n";
@@ -155,15 +160,15 @@ class InstallController extends Controller
         $envContent .= "DB_DATABASE={$data['db_name']}\n";
         $envContent .= "DB_USERNAME={$data['db_user']}\n";
         $envContent .= "DB_PASSWORD={$data['db_pass']}\n\n";
-        $envContent .= "SESSION_DRIVER=database\n";
+        $envContent .= "SESSION_DRIVER=file\n";
         $envContent .= "SESSION_LIFETIME=120\n";
         $envContent .= "SESSION_ENCRYPT=false\n";
         $envContent .= "SESSION_PATH=/\n";
         $envContent .= "SESSION_DOMAIN=null\n\n";
         $envContent .= "BROADCAST_CONNECTION=log\n";
         $envContent .= "FILESYSTEM_DISK=local\n";
-        $envContent .= "QUEUE_CONNECTION=database\n\n";
-        $envContent .= "CACHE_STORE=database\n\n";
+        $envContent .= "QUEUE_CONNECTION=sync\n\n";
+        $envContent .= "CACHE_STORE=file\n\n";
         $envContent .= "MAIL_MAILER=log\n";
         $envContent .= "MAIL_SCHEME=null\n";
         $envContent .= "MAIL_HOST=127.0.0.1\n";

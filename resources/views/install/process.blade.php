@@ -100,9 +100,22 @@
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
             },
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        return data;
+                    } catch(e) {
+                        throw new Error('Server returned HTML instead of JSON (HTTP ' + res.status + '). Check if migration completed successfully.');
+                    }
+                });
+            }
+            return res.json();
+        })
         .then(data => {
             document.getElementById('progressBar').style.width = '100%';
             document.getElementById('spinner').style.display = 'none';
