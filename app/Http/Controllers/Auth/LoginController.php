@@ -41,7 +41,7 @@ class LoginController extends Controller
     protected function authenticated($request, $user)
     {
         if ($user->isDoctor()) {
-            return redirect()->route('doctor.queue');
+            return redirect()->route('doctor.dashboard');
         }
 
         if ($user->isReception()) {
