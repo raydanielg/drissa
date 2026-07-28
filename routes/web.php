@@ -96,6 +96,10 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('doctor')->name('doctor.')->middleware('redirect.role:doctor|admin')->group(function () {
+        Route::get('/dashboard', [DoctorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/schedule', [DoctorController::class, 'schedule'])->name('schedule');
+        Route::get('/patients', [DoctorController::class, 'patients'])->name('patients');
+        Route::get('/reports', [DoctorController::class, 'reports'])->name('reports');
         Route::get('/', [DoctorController::class, 'queue'])->name('queue');
         Route::get('lab-results', [DoctorController::class, 'labResults'])->name('lab-results');
         Route::post('visits/{visit}/call', [DoctorController::class, 'callNext'])->name('visits.call');
