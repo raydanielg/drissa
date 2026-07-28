@@ -11,10 +11,18 @@
             <h2 class="text-lg font-bold text-gray-900">Lab Test Types</h2>
             <p class="text-sm text-gray-500">Manage laboratory tests, prices and reference ranges</p>
         </div>
-        <button type="button" onclick="openAddLabTestPanel()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            Add Test Type
-        </button>
+        <div class="flex items-center gap-2">
+            @if($tests->total() === 0)
+            <button type="button" onclick="openImportModal()" class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Import Sample Data
+            </button>
+            @endif
+            <button type="button" onclick="openAddLabTestPanel()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm hover:shadow transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Add Test Type
+            </button>
+        </div>
     </div>
 
     {{-- Stats --}}
