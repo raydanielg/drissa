@@ -179,10 +179,10 @@
         const card = document.querySelector('#authMain .max-w-md > div');
         if (!card) return;
 
-        // 3D card entrance
+        // 3D card entrance + float + border glow (combined animations)
         card.style.animation = 'none';
         void card.offsetWidth; // reflow
-        card.classList.add('auth-card-entrance', 'auth-card-float', 'auth-card-glow');
+        card.style.animation = "cardEntrance 1s cubic-bezier(0.16,1,0.3,1) both, floatCard 4s ease-in-out 2s infinite, borderGlow 4s ease-in-out 1.5s infinite";
 
         // Logo entrance + glow
         const logo = card.querySelector('img');
