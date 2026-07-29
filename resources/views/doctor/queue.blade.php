@@ -239,12 +239,12 @@
                                 </div>
                             </form>
 
-                            {{-- Send to Payment --}}
-                            <form method="POST" action="{{ route('doctor.visits.payment', $visit) }}" onsubmit="return confirm('Send patient to payment? No prescription will be created.')">
+                            {{-- Complete Visit --}}
+                            <form method="POST" action="{{ route('doctor.visits.complete', $visit) }}" onsubmit="return confirm('Complete this visit? The patient will be discharged.')">
                                 @csrf
-                                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-gold-400 hover:bg-gold-500 text-gray-900 text-xs font-semibold rounded-lg transition-colors">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a1 1 0 11-2 0 1 1 0 012 0z"/></svg>
-                                    Send to Payment (No Drugs)
+                                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Complete Visit
                                 </button>
                             </form>
                         @endif
