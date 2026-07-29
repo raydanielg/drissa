@@ -324,6 +324,7 @@ function openStepperModal(visitId, patientName, status) {
     
     // Find current step index
     const currentStepIndex = steps.findIndex(step => {
+        if (status === 'registered') return step.name === 'Payment';
         if (status.includes('waiting_for_doctor')) return step.name === 'Waiting for Doctor';
         if (status.includes('with_doctor')) return step.name === 'With Doctor';
         if (status.includes('lab')) return step.name === 'Lab Tests';
