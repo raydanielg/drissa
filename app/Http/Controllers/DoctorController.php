@@ -267,31 +267,12 @@ class DoctorController extends Controller
         return back()->with('status', 'Prescription sent to pharmacy.');
     }
 
-    public function sendToPayment(Visit $visit, VisitWorkflow $flow)
+    public function completeVisit(Visit $visit, VisitWorkflow $flow)
     {
-        // Generate a simple invoice for consultation only
-        $total = 10000; // default consultation fee
+        $flow->transition($visit, VisitStatus::Completed);
 
-        $invoice = Invoice::create([
-            'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
-            'visit_id' => $visit->id,
-            'patient_id' => $visit->patient_id,
-            'total' => $total,
-        ]);
+        ActivityLog::log('visit_completed', $visit, "Completed visit {$visit->visit_number}");
 
-        $invoice->items()->create([
-            'billable_type' => Consultation::class,
-            'billable_id' => $visit->consultation?->id ?? 0,
-            'description' => 'Consultation fee',
-            'quantity' => 1,
-            'unit_price' => $total,
-            'line_total' => $total,
-        ]);
-
-        $flow->transition($visit, VisitStatus::WaitingForPayment);
-
-        ActivityLog::log('sent_to_payment', $visit, "Sent visit {$visit->visit_number} to payment");
-
-        return back()->with('status', 'Visit sent to reception for payment.');
+        return back()->with('status', 'Visit completed successfully.');
     }
 }

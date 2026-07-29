@@ -387,8 +387,16 @@ class ReceptionController extends Controller
                 'status' => 'paid',
             ]);
 
-            if ($invoice->visit && $invoice->visit->status === VisitStatus::WaitingForPayment->value) {
-                $flow->transition($invoice->visit, VisitStatus::Completed);
+            $visit = $invoice->visit;
+            if ($visit) {
+                // New flow: Registered → WaitingForDoctor
+                if ($visit->status === VisitStatus::Registered->value) {
+                    $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                }
+                // Legacy flow: WaitingForPayment → Completed
+                elseif ($visit->status === VisitStatus::WaitingForPayment->value) {
+                    $flow->transition($visit, VisitStatus::Completed);
+                }
             }
         });
 
