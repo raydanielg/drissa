@@ -110,7 +110,7 @@ Route::middleware('auth')->group(function () {
         Route::post('visits/{visit}/lab', [DoctorController::class, 'orderLab'])->name('visits.lab');
         Route::post('visits/{visit}/lab-return', [DoctorController::class, 'returnFromLab'])->name('visits.lab-return');
         Route::post('visits/{visit}/prescribe', [DoctorController::class, 'prescribe'])->name('visits.prescribe');
-        Route::post('visits/{visit}/payment', [DoctorController::class, 'sendToPayment'])->name('visits.payment');
+        Route::post('visits/{visit}/complete', [DoctorController::class, 'completeVisit'])->name('visits.complete');
     });
 
     Route::middleware('redirect.role:lab|admin')->group(function () {

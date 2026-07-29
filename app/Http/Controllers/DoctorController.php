@@ -6,7 +6,6 @@ use App\Enums\VisitStatus;
 use App\Models\ActivityLog;
 use App\Models\Appointment;
 use App\Models\Consultation;
-use App\Models\Invoice;
 use App\Models\LabOrder;
 use App\Models\LabTest;
 use App\Models\Medication;
