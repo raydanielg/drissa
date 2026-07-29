@@ -344,9 +344,12 @@ class ReceptionController extends Controller
                 'status' => $totalPaid >= $invoice->total ? 'paid' : ($totalPaid > 0 ? 'partial' : 'unpaid'),
             ]);
 
-            // New flow: Registered → WaitingForDoctor after payment
+            // New flow: Registered → WaitingForDoctor after payment (only if doctor assigned)
             if ($invoice->status === 'paid' && $visit->status === VisitStatus::Registered->value) {
-                $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                if ($visit->doctor_id) {
+                    $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                }
+                // If no doctor assigned, stay Registered so receptionist can assign one
             }
             // Legacy flow: WaitingForPayment → Completed
             elseif ($invoice->status === 'paid' && $visit->status === VisitStatus::WaitingForPayment->value) {
@@ -389,9 +392,11 @@ class ReceptionController extends Controller
 
             $visit = $invoice->visit;
             if ($visit) {
-                // New flow: Registered → WaitingForDoctor
+                // New flow: Registered → WaitingForDoctor (only if doctor assigned)
                 if ($visit->status === VisitStatus::Registered->value) {
-                    $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                    if ($visit->doctor_id) {
+                        $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                    }
                 }
                 // Legacy flow: WaitingForPayment → Completed
                 elseif ($visit->status === VisitStatus::WaitingForPayment->value) {
