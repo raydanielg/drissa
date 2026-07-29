@@ -247,16 +247,34 @@ class ReceptionController extends Controller
             'patient_id' => $data['patient_id'],
             'doctor_id' => $data['doctor_id'] ?? null,
             'received_by' => auth()->id(),
-            'status' => $data['doctor_id'] ? VisitStatus::WaitingForDoctor->value : VisitStatus::Registered->value,
+            'status' => VisitStatus::Registered->value,
             'chief_complaint' => $data['chief_complaint'] ?? null,
             'type' => $data['type'],
             'registered_at' => now(),
         ]);
 
-        ActivityLog::log('visit_created', $visit, "Created visit {$visit->visit_number}");
+        // Auto-create invoice with consultation fee
+        $consultationFee = (float) Setting::get('consultation_fee', 10000);
+        $invoice = Invoice::create([
+            'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
+            'visit_id' => $visit->id,
+            'patient_id' => $visit->patient_id,
+            'total' => $consultationFee,
+            'paid' => 0,
+            'status' => 'unpaid',
+        ]);
+
+        $invoice->items()->create([
+            'description' => 'Consultation Fee',
+            'quantity' => 1,
+            'unit_price' => $consultationFee,
+            'line_total' => $consultationFee,
+        ]);
+
+        ActivityLog::log('visit_created', $visit, "Created visit {$visit->visit_number} with consultation fee TSh {$consultationFee}");
 
         return redirect()->route('reception.dashboard')
-            ->with('status', "Visit {$visit->visit_number} created.");
+            ->with('status', "Visit {$visit->visit_number} created. Collect consultation fee before sending to doctor.");
     }
 
     public function assignDoctor(Request $request, Visit $visit, VisitWorkflow $flow)
@@ -302,7 +320,7 @@ class ReceptionController extends Controller
             $invoice = $visit->invoice;
 
             if (! $invoice) {
-                $total = Setting::get('consultation_fee', 10000);
+                $total = (float) Setting::get('consultation_fee', 10000);
                 $invoice = Invoice::create([
                     'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
                     'visit_id' => $visit->id,
@@ -326,14 +344,19 @@ class ReceptionController extends Controller
                 'status' => $totalPaid >= $invoice->total ? 'paid' : ($totalPaid > 0 ? 'partial' : 'unpaid'),
             ]);
 
-            if ($invoice->status === 'paid') {
+            // New flow: Registered → WaitingForDoctor after payment
+            if ($invoice->status === 'paid' && $visit->status === VisitStatus::Registered->value) {
+                $flow->transition($visit, VisitStatus::WaitingForDoctor);
+            }
+            // Legacy flow: WaitingForPayment → Completed
+            elseif ($invoice->status === 'paid' && $visit->status === VisitStatus::WaitingForPayment->value) {
                 $flow->transition($visit, VisitStatus::Completed);
             }
         });
 
         ActivityLog::log('payment_recorded', $visit, "Recorded payment of TSh {$data['amount']} for visit {$visit->visit_number}");
 
-        return back()->with('status', 'Payment recorded.');
+        return back()->with('status', 'Payment recorded. Patient can now see the doctor.');
     }
 
     public function closeVisit(Request $request, Visit $visit, VisitWorkflow $flow)
