@@ -42,7 +42,7 @@ class ReceptionController extends Controller
             ->latest('registered_at')
             ->get();
 
-        $registeredVisits = Visit::with(['patient'])
+        $registeredVisits = Visit::with(['patient', 'invoice'])
             ->where('status', VisitStatus::Registered->value)
             ->latest('registered_at')
             ->get();
@@ -282,6 +282,12 @@ class ReceptionController extends Controller
         $data = $request->validate([
             'doctor_id' => 'required|exists:users,id',
         ]);
+
+        // Check if payment has been made
+        $invoice = $visit->invoice;
+        if ($invoice && $invoice->status !== 'paid') {
+            return back()->with('error', 'Payment must be collected before assigning a doctor.');
+        }
 
         $visit->update(['doctor_id' => $data['doctor_id']]);
         $flow->transition($visit, VisitStatus::WaitingForDoctor);
