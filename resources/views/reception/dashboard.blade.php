@@ -164,7 +164,7 @@
         <div class="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 class="text-sm font-semibold text-gray-900">Live Reception Queue</h2>
             <div class="flex flex-wrap gap-2" id="queueTabs">
-                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-100 text-emerald-700">Need Doctor <span class="ml-1 tab-count" data-count="registered">{{ $registeredVisits->count() }}</span></button>
+                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded-lg bg-emerald-100 text-emerald-700">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $registeredVisits->count() }}</span></button>
                 <button data-tab="waiting-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded-lg text-gray-600 hover:bg-gray-100">Waiting Doctor <span class="ml-1 tab-count" data-count="waiting_for_doctor">{{ $waitingForDoctor->count() }}</span></button>
                 <button data-tab="with-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded-lg text-gray-600 hover:bg-gray-100">With Doctor <span class="ml-1 tab-count" data-count="with_doctor">{{ $withDoctorVisits->count() }}</span></button>
                 <button data-tab="payment" class="queue-tab px-3 py-1.5 text-xs font-medium rounded-lg text-gray-600 hover:bg-gray-100">Payment <span class="ml-1 tab-count" data-count="waiting_for_payment">{{ $waitingForPayment->count() }}</span></button>
@@ -185,28 +185,59 @@
             @endphp
             <div id="tab-need-doctor" class="queue-panel">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Registered</th><th class="px-6 py-3">Action</th></tr></thead>
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Fee</th><th class="px-6 py-3">Pay Status</th><th class="px-6 py-3">Action</th></tr></thead>
                     <tbody>
                         @forelse ($registeredVisits as $visit)
+                            @php
+                                $invoice = $visit->invoice;
+                                $isPaid = $invoice && $invoice->status === 'paid';
+                            @endphp
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
-                                <td class="px-6 py-3 text-gray-500 text-xs">{{ $visit->registered_at->diffForHumans() }}</td>
+                                <td class="px-6 py-3 font-medium text-emerald-700">{{ number_format($invoice?->total ?? 0) }} TSh</td>
                                 <td class="px-6 py-3">
-                                    <form method="POST" action="{{ route('reception.visits.assign', $visit) }}" class="ajax-assign-form flex gap-2">
-                                        @csrf
-                                        <select name="doctor_id" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                            <option value="">Doctor</option>
-                                            @foreach ($doctors as $doctor)
-                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <button type="submit" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700">Assign</button>
-                                    </form>
+                                    @if ($isPaid)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Paid</span>
+                                    @elseif ($invoice && $invoice->paid > 0)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Partial</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Unpaid</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-3">
+                                    @if (! $isPaid)
+                                        {{-- Collect Payment --}}
+                                        <form method="POST" action="{{ route('reception.visits.pay', $visit) }}" class="ajax-pay-form flex gap-2">
+                                            @csrf
+                                            <input type="number" name="amount" step="0.01" value="{{ ($invoice?->total ?? 0) - ($invoice?->paid ?? 0) }}" class="border border-gray-200 rounded-lg text-xs px-2 py-1 w-24 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                            <select name="method" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                                <option value="cash">Cash</option>
+                                                <option value="card">Card</option>
+                                                <option value="mobile_money">Mobile</option>
+                                                <option value="insurance">Insurance</option>
+                                            </select>
+                                            <button type="submit" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700">Pay</button>
+                                        </form>
+                                    @elseif (! $visit->doctor_id)
+                                        {{-- Paid but no doctor: assign doctor --}}
+                                        <form method="POST" action="{{ route('reception.visits.assign', $visit) }}" class="ajax-assign-form flex gap-2">
+                                            @csrf
+                                            <select name="doctor_id" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                                <option value="">Select Doctor</option>
+                                                @foreach ($doctors as $doctor)
+                                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <button type="submit" class="bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700">Send to Doctor</button>
+                                        </form>
+                                    @else
+                                        <span class="text-xs text-emerald-600 font-medium">Ready for doctor</span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="px-6 py-6 text-center text-gray-400">No visits waiting for doctor assignment</td></tr>
+                            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No visits waiting for payment</td></tr>
                         @endforelse
                     </tbody>
                 </table>
