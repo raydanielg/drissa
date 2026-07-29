@@ -20,16 +20,16 @@ enum VisitStatus: string
     public function allowedTransitions(): array
     {
         return match ($this) {
-            self::Registered => [self::WaitingForDoctor, self::Cancelled],
+            self::Registered => [self::WaitingForDoctor, self::WaitingForPayment, self::Cancelled],
             self::WaitingForDoctor => [self::WithDoctor, self::Cancelled],
-            self::WithDoctor => [self::WaitingForLab, self::WaitingForPharmacy, self::WaitingForPayment, self::Cancelled],
+            self::WithDoctor => [self::WaitingForLab, self::WaitingForPharmacy, self::Completed, self::Cancelled],
             self::WaitingForLab => [self::InLab],
             self::InLab => [self::LabCompleted],
             self::LabCompleted => [self::WithDoctor],
             self::WaitingForPharmacy => [self::InPharmacy],
             self::InPharmacy => [self::PharmacyCompleted],
-            self::PharmacyCompleted => [self::WaitingForPayment],
-            self::WaitingForPayment => [self::Completed],
+            self::PharmacyCompleted => [self::Completed],
+            self::WaitingForPayment => [self::WaitingForDoctor, self::Completed],
             default => [],
         };
     }
