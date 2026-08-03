@@ -286,6 +286,9 @@ class ReceptionController extends Controller
         // Check if payment has been made
         $invoice = $visit->invoice;
         if ($invoice && $invoice->status !== 'paid') {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Payment must be collected before assigning a doctor.'], 422);
+            }
             return back()->with('error', 'Payment must be collected before assigning a doctor.');
         }
 
@@ -293,6 +296,10 @@ class ReceptionController extends Controller
         $flow->transition($visit, VisitStatus::WaitingForDoctor);
 
         ActivityLog::log('doctor_assigned', $visit, "Assigned doctor to visit {$visit->visit_number}");
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Patient sent to doctor queue.']);
+        }
 
         return back()->with('status', 'Patient sent to doctor queue.');
     }
@@ -365,7 +372,24 @@ class ReceptionController extends Controller
 
         ActivityLog::log('payment_recorded', $visit, "Recorded payment of TSh {$data['amount']} for visit {$visit->visit_number}");
 
-        return back()->with('status', 'Payment recorded. Patient can now see the doctor.');
+        $message = 'Payment recorded. Patient can now see the doctor.';
+        if ($request->wantsJson()) {
+            $invoice->refresh();
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'payment' => [
+                    'amount' => (float) $data['amount'],
+                    'method' => $data['method'],
+                    'invoice_status' => $invoice->status,
+                    'invoice_paid' => (float) $invoice->paid,
+                    'invoice_total' => (float) $invoice->total,
+                    'visit_status' => $visit->fresh()->status,
+                ],
+            ]);
+        }
+
+        return back()->with('status', $message);
     }
 
     public function closeVisit(Request $request, Visit $visit, VisitWorkflow $flow)
