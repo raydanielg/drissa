@@ -492,6 +492,81 @@
         </div>
     </div>
 </div>
+
+{{-- Custom Payment Modal --}}
+<div id="paymentModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closePaymentModal()"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+        <div class="bg-white rounded-2xl shadow-2xl m-4 animate-fade overflow-hidden">
+            <div class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-base">Collect Payment</h3>
+                        <p class="text-emerald-100 text-xs" id="paymentModalVisit">Visit #</p>
+                    </div>
+                </div>
+                <button onclick="closePaymentModal()" class="text-white/70 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-500">Patient</p>
+                        <p class="text-sm font-medium text-gray-900" id="paymentModalPatient">-</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-gray-500">Balance Due</p>
+                        <p class="text-lg font-bold text-emerald-700" id="paymentModalBalance">0 TSh</p>
+                    </div>
+                </div>
+                <form id="paymentModalForm" method="POST" action="" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1.5">Amount (TSh) <span class="text-red-500">*</span></label>
+                        <input type="number" name="amount" id="paymentModalAmount" step="0.01" min="0.01" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1.5">Payment Method <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" data-method="cash" class="method-btn flex flex-col items-center gap-1 p-2.5 border-2 border-emerald-500 bg-emerald-50 rounded-lg text-xs font-medium text-emerald-700 transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Cash
+                            </button>
+                            <button type="button" data-method="card" class="method-btn flex flex-col items-center gap-1 p-2.5 border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-emerald-400 hover:text-emerald-600 transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                Card
+                            </button>
+                            <button type="button" data-method="mobile_money" class="method-btn flex flex-col items-center gap-1 p-2.5 border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-emerald-400 hover:text-emerald-600 transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                Mobile
+                            </button>
+                            <button type="button" data-method="insurance" class="method-btn flex flex-col items-center gap-1 p-2.5 border-2 border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-emerald-400 hover:text-emerald-600 transition-all">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                Insurance
+                            </button>
+                        </div>
+                        <input type="hidden" name="method" id="paymentModalMethod" value="cash">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1.5">Reference <span class="font-normal text-gray-400">(optional)</span></label>
+                        <input type="text" name="reference" id="paymentModalReference" placeholder="Transaction ID, cheque no, etc." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div class="flex justify-end gap-2 pt-2">
+                        <button type="button" onclick="closePaymentModal()" class="px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
+                        <button type="submit" class="btn-submit inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Record Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -642,6 +717,43 @@
     function closeRegisterPatientModal() { document.getElementById('registerPatientModal').classList.add('hidden'); }
     function openOpenVisitModal() { document.getElementById('openVisitModal').classList.remove('hidden'); }
     function closeOpenVisitModal() { document.getElementById('openVisitModal').classList.add('hidden'); }
+
+    // Payment modal
+    function openPaymentModal(visitId, visitNumber, patientName, total, paid, balance) {
+        const url = '{{ route("reception.visits.pay", "__ID__") }}'.replace('__ID__', visitId);
+        document.getElementById('paymentModalForm').action = url;
+        document.getElementById('paymentModalVisit').textContent = 'Visit #' + visitNumber;
+        document.getElementById('paymentModalPatient').textContent = patientName;
+        document.getElementById('paymentModalBalance').textContent = number_format(balance) + ' TSh';
+        document.getElementById('paymentModalAmount').value = balance;
+        document.getElementById('paymentModalReference').value = '';
+        // Reset method to cash
+        document.getElementById('paymentModalMethod').value = 'cash';
+        document.querySelectorAll('.method-btn').forEach(b => {
+            b.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+            b.classList.add('border-gray-200', 'text-gray-600');
+        });
+        document.querySelector('.method-btn[data-method="cash"]').classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+        document.querySelector('.method-btn[data-method="cash"]').classList.remove('border-gray-200', 'text-gray-600');
+        document.getElementById('paymentModal').classList.remove('hidden');
+    }
+    function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+
+    // Method button selection
+    document.querySelectorAll('.method-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.method-btn').forEach(b => {
+                b.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+                b.classList.add('border-gray-200', 'text-gray-600');
+            });
+            this.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-700');
+            this.classList.remove('border-gray-200', 'text-gray-600');
+            document.getElementById('paymentModalMethod').value = this.dataset.method;
+        });
+    });
+
+    // Submit payment modal form via AJAX
+    submitFormAjax(document.getElementById('paymentModalForm'), closePaymentModal);
 
     const receptionAction = new URLSearchParams(window.location.search).get('action');
     if (receptionAction === 'register') openRegisterPatientModal();
