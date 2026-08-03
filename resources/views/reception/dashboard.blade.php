@@ -191,6 +191,7 @@
                             @php
                                 $invoice = $visit->invoice;
                                 $isPaid = $invoice && $invoice->status === 'paid';
+                                $balance = ($invoice?->total ?? 0) - ($invoice?->paid ?? 0);
                             @endphp
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
@@ -207,29 +208,34 @@
                                 </td>
                                 <td class="px-6 py-3">
                                     @if (! $isPaid)
-                                        {{-- Collect Payment --}}
-                                        <form method="POST" action="{{ route('reception.visits.pay', $visit) }}" class="ajax-pay-form flex gap-2">
-                                            @csrf
-                                            <input type="number" name="amount" step="0.01" value="{{ ($invoice?->total ?? 0) - ($invoice?->paid ?? 0) }}" class="border border-gray-200 rounded-lg text-xs px-2 py-1 w-24 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                            <select name="method" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                                <option value="cash">Cash</option>
-                                                <option value="card">Card</option>
-                                                <option value="mobile_money">Mobile</option>
-                                                <option value="insurance">Insurance</option>
-                                            </select>
-                                            <button type="submit" class="btn-submit bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors">Pay</button>
-                                        </form>
+                                        <div class="flex items-center gap-2">
+                                            {{-- Quick Pay Full Amount --}}
+                                            <form method="POST" action="{{ route('reception.visits.pay', $visit) }}" class="ajax-pay-form">
+                                                @csrf
+                                                <input type="hidden" name="amount" value="{{ $balance }}">
+                                                <input type="hidden" name="method" value="cash">
+                                                <button type="submit" class="btn-submit inline-flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                    Pay {{ number_format($balance) }}
+                                                </button>
+                                            </form>
+                                            {{-- Detailed Payment Button --}}
+                                            <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient->fullName() }}', {{ $invoice?->total ?? 0 }}, {{ $invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                                Custom
+                                            </button>
+                                        </div>
                                     @elseif (! $visit->doctor_id)
                                         {{-- Paid but no doctor: assign doctor --}}
                                         <form method="POST" action="{{ route('reception.visits.assign', $visit) }}" class="ajax-assign-form flex gap-2">
                                             @csrf
-                                            <select name="doctor_id" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                            <select name="doctor_id" class="border border-gray-200 rounded-lg text-xs px-2 py-1.5 focus:ring-emerald-500 focus:border-emerald-500" required>
                                                 <option value="">Select Doctor</option>
                                                 @foreach ($doctors as $doctor)
                                                     <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="submit" class="btn-submit bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors">Send to Doctor</button>
+                                            <button type="submit" class="btn-submit bg-blue-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors">Send to Doctor</button>
                                         </form>
                                     @else
                                         <span class="text-xs text-emerald-600 font-medium">Ready for doctor</span>
@@ -307,22 +313,29 @@
                     <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Total</th><th class="px-6 py-3">Action</th><th class="px-6 py-3 text-right">Cancel</th></tr></thead>
                     <tbody>
                         @forelse ($waitingForPayment as $visit)
+                            @php
+                                $balance = ($visit->invoice?->total ?? 0) - ($visit->invoice?->paid ?? 0);
+                            @endphp
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
                                 <td class="px-6 py-3 font-medium text-emerald-700">{{ number_format($visit->invoice?->total ?? 0) }} TSh</td>
                                 <td class="px-6 py-3">
-                                    <form method="POST" action="{{ route('reception.visits.pay', $visit) }}" class="ajax-pay-form flex gap-2">
-                                        @csrf
-                                        <input type="number" name="amount" step="0.01" value="{{ $visit->invoice?->total ?? 0 }}" class="border border-gray-200 rounded-lg text-xs px-2 py-1 w-24 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                        <select name="method" class="border border-gray-200 rounded-lg text-xs px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                            <option value="cash">Cash</option>
-                                            <option value="card">Card</option>
-                                            <option value="mobile_money">Mobile</option>
-                                            <option value="insurance">Insurance</option>
-                                        </select>
-                                        <button type="submit" class="btn-submit bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors">Pay</button>
-                                    </form>
+                                    <div class="flex items-center gap-2">
+                                        <form method="POST" action="{{ route('reception.visits.pay', $visit) }}" class="ajax-pay-form">
+                                            @csrf
+                                            <input type="hidden" name="amount" value="{{ $balance }}">
+                                            <input type="hidden" name="method" value="cash">
+                                            <button type="submit" class="btn-submit inline-flex items-center gap-1.5 bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg hover:bg-emerald-700 transition-colors shadow-sm">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                Pay {{ number_format($balance) }}
+                                            </button>
+                                        </form>
+                                        <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient->fullName() }}', {{ $visit->invoice?->total ?? 0 }}, {{ $visit->invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                            Custom
+                                        </button>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-3 text-right">
                                     <button type="button" onclick="cancelVisit({{ $visit->id }}, '{{ $visit->visit_number }}')" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors" title="Cancel visit">
