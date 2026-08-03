@@ -22,26 +22,54 @@ class LabController extends Controller
 
     public function queue()
     {
-        $orders = LabOrder::with(['visit.patient', 'items.labTest'])
+        $pendingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'doctor'])
             ->where('status', 'pending')
             ->latest()
             ->get();
 
-        return view('lab.queue', compact('orders'));
+        $processingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'labTech'])
+            ->where('status', 'processing')
+            ->latest()
+            ->get();
+
+        $completedOrders = LabOrder::with(['visit.patient', 'items.labTest', 'labTech', 'results', 'attachments'])
+            ->where('status', 'completed')
+            ->latest('completed_at')
+            ->limit(20)
+            ->get();
+
+        $stats = [
+            'pending' => $pendingOrders->count(),
+            'processing' => $processingOrders->count(),
+            'completed_today' => LabOrder::where('status', 'completed')->whereDate('completed_at', today())->count(),
+            'total_tests' => LabOrderItem::whereHas('labOrder', fn ($q) => $q->whereIn('status', ['pending', 'processing']))->count(),
+        ];
+
+        return view('lab.queue', compact('pendingOrders', 'processingOrders', 'completedOrders', 'stats'));
     }
 
     public function startProcessing(LabOrder $order, VisitWorkflow $flow)
     {
-        $order->update(['status' => 'processing']);
+        if ($order->status !== 'pending') {
+            return back()->with('error', 'This order is already being processed or completed.');
+        }
+
+        $order->update([
+            'status' => 'processing',
+            'processed_by' => auth()->id(),
+        ]);
         $flow->transition($order->visit, VisitStatus::InLab);
 
-        return back()->with('status', 'Processing started.');
+        ActivityLog::log('lab_processing_started', $order->visit, "Started processing lab order #{$order->id} for visit {$order->visit->visit_number}");
+
+        return back()->with('status', 'Processing started for Order #' . $order->id);
     }
 
     public function submitResults(Request $request, LabOrder $order, VisitWorkflow $flow)
     {
         $data = $request->validate([
             'results' => 'required|array',
+            'results.*.lab_order_item_id' => 'required|exists:lab_order_items,id',
             'results.*.parameter' => 'required|string',
             'results.*.value' => 'required|string',
             'results.*.unit' => 'nullable|string',
@@ -53,7 +81,7 @@ class LabController extends Controller
         DB::transaction(function () use ($order, $data, $request) {
             foreach ($data['results'] as $item) {
                 LabResult::create([
-                    'lab_order_item_id' => $order->items()->first()->id,
+                    'lab_order_item_id' => $item['lab_order_item_id'],
                     'parameter' => $item['parameter'],
                     'value' => $item['value'],
                     'unit' => $item['unit'] ?? null,
@@ -87,6 +115,13 @@ class LabController extends Controller
 
         ActivityLog::log('lab_results_submitted', $order->visit, "Submitted lab results for visit {$order->visit->visit_number}");
 
-        return back()->with('status', 'Results submitted.');
+        return back()->with('status', 'Lab results submitted successfully. Results sent back to doctor.');
+    }
+
+    public function showResults(LabOrder $order)
+    {
+        $order->load(['visit.patient', 'items.labTest', 'results.labOrderItem', 'attachments', 'doctor', 'labTech']);
+
+        return view('lab.results', compact('order'));
     }
 }
