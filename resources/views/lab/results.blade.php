@@ -3,17 +3,39 @@
 @section('title', 'Lab Results - ' . config('app.name', 'Laravel'))
 @section('page_title', 'Lab Results Detail')
 
+@push('styles')
+<style>
+    @media print {
+        body * { visibility: hidden; }
+        #printReport, #printReport * { visibility: visible; }
+        #printReport { position: absolute; left: 0; top: 0; width: 100%; }
+        .no-print { display: none !important; }
+        @page { margin: 1.5cm; }
+    }
+    #printReport { display: none; }
+    @media print {
+        #printReport { display: block; }
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     @if (session('status'))
         <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm animate-fade">{{ session('status') }}</div>
     @endif
 
-    {{-- Back Link --}}
-    <a href="{{ route('lab.queue') }}" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Back to Lab Queue
-    </a>
+    {{-- Action Bar --}}
+    <div class="flex items-center justify-between no-print">
+        <a href="{{ route('lab.queue') }}" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Back to Lab Queue
+        </a>
+        <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            Print / Preview
+        </button>
+    </div>
 
     {{-- Order Header Card --}}
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
