@@ -791,5 +791,51 @@
     }
 
     setInterval(refreshStats, 30000);
+
+    // Cancel visit with confirmation
+    function cancelVisit(visitId, visitNumber) {
+        Swal.fire({
+            title: 'Cancel Visit?',
+            text: 'Are you sure you want to cancel visit ' + visitNumber + '? This cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, cancel it',
+            cancelButtonText: 'No, keep it',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const cancelUrl = '{{ route("reception.visits.cancel", "__ID__") }}'.replace('__ID__', visitId);
+                fetch(cancelUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || document.querySelector('input[name="_token"]')?.value,
+                    },
+                })
+                .then(r => r.json().catch(() => ({})))
+                .then(data => {
+                    if (data.success !== false) {
+                        const row = document.getElementById('visit-row-' + visitId);
+                        if (row) {
+                            row.style.transition = 'opacity 0.3s, transform 0.3s';
+                            row.style.opacity = '0';
+                            row.style.transform = 'translateX(20px)';
+                            setTimeout(() => row.remove(), 300);
+                        }
+                        Swal.fire({ icon: 'success', title: 'Cancelled', text: data.message || 'Visit cancelled successfully.', timer: 1500, showConfirmButton: false });
+                        refreshStats();
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Could not cancel visit.' });
+                    }
+                })
+                .catch(() => {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.' });
+                });
+            }
+        });
+    }
 </script>
 @endpush
