@@ -122,6 +122,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('lab')->name('lab.')->group(function () {
             Route::get('/', [LabController::class, 'queue'])->name('queue');
+            Route::get('orders/{order}/results', [LabController::class, 'showResults'])->name('orders.show');
             Route::post('orders/{order}/start', [LabController::class, 'startProcessing'])->name('orders.start');
             Route::post('orders/{order}/results', [LabController::class, 'submitResults'])->name('orders.results');
         });

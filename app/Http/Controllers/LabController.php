@@ -6,6 +6,7 @@ use App\Enums\VisitStatus;
 use App\Models\ActivityLog;
 use App\Models\LabAttachment;
 use App\Models\LabOrder;
+use App\Models\LabOrderItem;
 use App\Models\LabResult;
 use App\Models\Visit;
 use App\Services\VisitWorkflow;
