@@ -267,6 +267,29 @@ class DoctorController extends Controller
         return back()->with('status', 'Prescription sent to pharmacy.');
     }
 
+    public function saveVitals(Request $request, Visit $visit)
+    {
+        $data = $request->validate([
+            'temperature' => 'nullable|numeric',
+            'blood_pressure' => 'nullable|string|max:20',
+            'pulse' => 'nullable|integer',
+            'weight' => 'nullable|numeric',
+            'height' => 'nullable|numeric',
+            'respiratory_rate' => 'nullable|integer',
+            'oxygen_saturation' => 'nullable|numeric',
+            'notes' => 'nullable|string',
+        ]);
+
+        Vital::updateOrCreate(
+            ['visit_id' => $visit->id],
+            $data
+        );
+
+        ActivityLog::log('vitals_recorded', $visit, "Vitals recorded by Dr. " . auth()->user()->name . " for visit {$visit->visit_number}");
+
+        return back()->with('status', 'Vitals saved successfully.');
+    }
+
     public function completeVisit(Visit $visit, VisitWorkflow $flow)
     {
         $flow->transition($visit, VisitStatus::Completed);
