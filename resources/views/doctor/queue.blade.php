@@ -384,5 +384,12 @@ function addPrescriptionItem(visitId) {
     `;
     container.appendChild(row);
 }
+
+function toggleVitalsForm(visitId) {
+    const display = document.getElementById('vitals-display-' + visitId);
+    const form = document.getElementById('vitals-form-' + visitId);
+    display.classList.toggle('hidden');
+    form.classList.toggle('hidden');
+}
 </script>
 @endsection
