@@ -44,6 +44,7 @@
         ::-webkit-scrollbar-thumb { background: #024938; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #f9ac00; }
     </style>
+    @stack('styles')
 </head>
 <body class="font-['Nunito',sans-serif] antialiased bg-gray-50 text-slate-800">
 
