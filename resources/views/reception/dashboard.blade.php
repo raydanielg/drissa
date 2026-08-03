@@ -724,7 +724,7 @@
         document.getElementById('paymentModalForm').action = url;
         document.getElementById('paymentModalVisit').textContent = 'Visit #' + visitNumber;
         document.getElementById('paymentModalPatient').textContent = patientName;
-        document.getElementById('paymentModalBalance').textContent = number_format(balance) + ' TSh';
+        document.getElementById('paymentModalBalance').textContent = balance.toLocaleString() + ' TSh';
         document.getElementById('paymentModalAmount').value = balance;
         document.getElementById('paymentModalReference').value = '';
         // Reset method to cash
@@ -764,7 +764,7 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = form.querySelector('.btn-submit');
-            const originalText = btn ? btn.textContent : '';
+            const originalHTML = btn ? btn.innerHTML : '';
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<svg class="w-3.5 h-3.5 animate-spin inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Saving...';
@@ -776,23 +776,27 @@
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
             })
-            .then(r => r.json().catch(() => ({})))
-            .then(data => {
-                Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Saved successfully', timer: 1500, showConfirmButton: false });
-                form.reset();
-                if (modalCloseFn) modalCloseFn();
-                refreshStats();
+            .then(r => r.json().then(data => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Saved successfully', timer: 1500, showConfirmButton: false });
+                    form.reset();
+                    if (modalCloseFn) modalCloseFn();
+                    refreshStats();
+                } else {
+                    Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong.' });
+                }
                 if (btn) {
                     btn.disabled = false;
-                    btn.textContent = originalText;
+                    btn.innerHTML = originalHTML;
                     btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.' });
                 if (btn) {
                     btn.disabled = false;
-                    btn.textContent = originalText;
+                    btn.innerHTML = originalHTML;
                     btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 }
             });
