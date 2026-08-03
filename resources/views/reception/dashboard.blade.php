@@ -185,14 +185,14 @@
             @endphp
             <div id="tab-need-doctor" class="queue-panel">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Fee</th><th class="px-6 py-3">Pay Status</th><th class="px-6 py-3">Action</th></tr></thead>
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Fee</th><th class="px-6 py-3">Pay Status</th><th class="px-6 py-3">Action</th><th class="px-6 py-3 text-right">Cancel</th></tr></thead>
                     <tbody>
                         @forelse ($registeredVisits as $visit)
                             @php
                                 $invoice = $visit->invoice;
                                 $isPaid = $invoice && $invoice->status === 'paid';
                             @endphp
-                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
+                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
                                 <td class="px-6 py-3 font-medium text-emerald-700">{{ number_format($invoice?->total ?? 0) }} TSh</td>
@@ -217,7 +217,7 @@
                                                 <option value="mobile_money">Mobile</option>
                                                 <option value="insurance">Insurance</option>
                                             </select>
-                                            <button type="submit" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700">Pay</button>
+                                            <button type="submit" class="btn-submit bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors">Pay</button>
                                         </form>
                                     @elseif (! $visit->doctor_id)
                                         {{-- Paid but no doctor: assign doctor --}}
@@ -229,25 +229,30 @@
                                                     <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                                 @endforeach
                                             </select>
-                                            <button type="submit" class="bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700">Send to Doctor</button>
+                                            <button type="submit" class="btn-submit bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors">Send to Doctor</button>
                                         </form>
                                     @else
                                         <span class="text-xs text-emerald-600 font-medium">Ready for doctor</span>
                                     @endif
                                 </td>
+                                <td class="px-6 py-3 text-right">
+                                    <button type="button" onclick="cancelVisit({{ $visit->id }}, '{{ $visit->visit_number }}')" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors" title="Cancel visit">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No visits waiting for payment</td></tr>
+                            <tr><td colspan="6" class="px-6 py-6 text-center text-gray-400">No visits waiting for payment</td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
             <div id="tab-waiting-doctor" class="queue-panel hidden">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Doctor</th><th class="px-6 py-3">Waiting</th><th class="px-6 py-3">Action</th></tr></thead>
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Doctor</th><th class="px-6 py-3">Waiting</th><th class="px-6 py-3">Action</th><th class="px-6 py-3 text-right">Cancel</th></tr></thead>
                     <tbody>
                         @forelse ($waitingForDoctor as $visit)
-                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
+                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
                                 <td class="px-6 py-3 text-xs">{{ $visit->doctor?->name ?? 'Unassigned' }}</td>
@@ -260,39 +265,49 @@
                                                 <option value="{{ $doctor->id }}" {{ $visit->doctor_id == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }}</option>
                                             @endforeach
                                         </select>
-                                        <button type="submit" class="bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700">Change</button>
+                                        <button type="submit" class="btn-submit bg-blue-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors">Change</button>
                                     </form>
+                                </td>
+                                <td class="px-6 py-3 text-right">
+                                    <button type="button" onclick="cancelVisit({{ $visit->id }}, '{{ $visit->visit_number }}')" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors" title="Cancel visit">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No patients waiting for doctor</td></tr>
+                            <tr><td colspan="6" class="px-6 py-6 text-center text-gray-400">No patients waiting for doctor</td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
             <div id="tab-with-doctor" class="queue-panel hidden">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Doctor</th><th class="px-6 py-3">Status</th></tr></thead>
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Doctor</th><th class="px-6 py-3">Status</th><th class="px-6 py-3 text-right">Cancel</th></tr></thead>
                     <tbody>
                         @forelse ($withDoctorVisits as $visit)
-                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
+                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
                                 <td class="px-6 py-3 text-xs">{{ $visit->doctor?->name ?? 'Unassigned' }}</td>
                                 <td class="px-6 py-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $badgeColors[$visit->status] ?? 'bg-gray-100 text-gray-700' }}">{{ str_replace('_', ' ', $visit->status) }}</span></td>
+                                <td class="px-6 py-3 text-right">
+                                    <button type="button" onclick="cancelVisit({{ $visit->id }}, '{{ $visit->visit_number }}')" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors" title="Cancel visit">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                </td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="px-6 py-6 text-center text-gray-400">No patients currently with doctor</td></tr>
+                            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No patients currently with doctor</td></tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
             <div id="tab-payment" class="queue-panel hidden">
                 <table class="w-full text-sm text-left">
-                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Total</th><th class="px-6 py-3">Action</th></tr></thead>
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500"><tr><th class="px-6 py-3">Visit #</th><th class="px-6 py-3">Patient</th><th class="px-6 py-3">Total</th><th class="px-6 py-3">Action</th><th class="px-6 py-3 text-right">Cancel</th></tr></thead>
                     <tbody>
                         @forelse ($waitingForPayment as $visit)
-                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
+                            <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
                                 <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
                                 <td class="px-6 py-3 font-medium text-emerald-700">{{ number_format($visit->invoice?->total ?? 0) }} TSh</td>
@@ -306,12 +321,17 @@
                                             <option value="mobile_money">Mobile</option>
                                             <option value="insurance">Insurance</option>
                                         </select>
-                                        <button type="submit" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700">Pay</button>
+                                        <button type="submit" class="btn-submit bg-emerald-600 text-white text-xs font-medium px-3 py-1 rounded-lg hover:bg-emerald-700 transition-colors">Pay</button>
                                     </form>
+                                </td>
+                                <td class="px-6 py-3 text-right">
+                                    <button type="button" onclick="cancelVisit({{ $visit->id }}, '{{ $visit->visit_number }}')" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 transition-colors" title="Cancel visit">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="4" class="px-6 py-6 text-center text-gray-400">No pending payments</td></tr>
+                            <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No pending payments</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -618,6 +638,13 @@
     function submitFormAjax(form, modalCloseFn) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            const btn = form.querySelector('.btn-submit');
+            const originalText = btn ? btn.textContent : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<svg class="w-3.5 h-3.5 animate-spin inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Saving...';
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            }
             const formData = new FormData(form);
             fetch(form.action, {
                 method: 'POST',
@@ -626,13 +653,23 @@
             })
             .then(r => r.json().catch(() => ({})))
             .then(data => {
-                Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Saved successfully', timer: 2000, showConfirmButton: false });
+                Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Saved successfully', timer: 1500, showConfirmButton: false });
                 form.reset();
                 if (modalCloseFn) modalCloseFn();
                 refreshStats();
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                }
             })
             .catch(err => {
                 Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.' });
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                }
             });
         });
     }
