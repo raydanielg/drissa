@@ -145,7 +145,7 @@
 
     {{-- Attachments --}}
     @if ($order->attachments->isNotEmpty())
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden no-print">
             <div class="px-6 py-4 border-b border-gray-100">
                 <h3 class="text-sm font-bold text-gray-900">Attached Reports</h3>
             </div>
@@ -162,5 +162,104 @@
             </div>
         </div>
     @endif
+</div>
+
+{{-- Print Report --}}
+<div id="printReport">
+    <div style="text-align:center; margin-bottom: 24px;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:8px;">
+            <img src="{{ asset('logo.png') }}" alt="logo" style="width:48px; height:48px; border-radius:8px;">
+            <div style="text-align:left;">
+                <h1 style="font-size:22px; font-weight:800; color:#024938; margin:0;">{{ config('app.name', 'Clinic') }}</h1>
+                <p style="font-size:11px; color:#666; margin:2px 0 0;">Laboratory Report</p>
+            </div>
+        </div>
+        <div style="height:3px; background:#024938; border-radius:2px; margin:12px 0;"></div>
+    </div>
+
+    {{-- Report Meta --}}
+    <table style="width:100%; font-size:11px; margin-bottom:20px; border-collapse:collapse;">
+        <tr>
+            <td style="padding:4px 0;"><strong>Report #:</strong> {{ $order->id }}</td>
+            <td style="padding:4px 0;"><strong>Date:</strong> {{ $order->completed_at?->format('d M Y H:i') }}</td>
+        </tr>
+        <tr>
+            <td style="padding:4px 0;"><strong>Patient:</strong> {{ $order->visit->patient->fullName() }}</td>
+            <td style="padding:4px 0;"><strong>Visit #:</strong> {{ $order->visit->visit_number }}</td>
+        </tr>
+        <tr>
+            <td style="padding:4px 0;"><strong>Ordered By:</strong> Dr. {{ $order->doctor?->name ?? 'Unknown' }}</td>
+            <td style="padding:4px 0;"><strong>Processed By:</strong> {{ $order->labTech?->name ?? 'Unknown' }}</td>
+        </tr>
+    </table>
+
+    {{-- Results per Test --}}
+    @foreach ($order->items as $item)
+        @php $itemResults = $order->results->where('lab_order_item_id', $item->id); @endphp
+        <div style="margin-bottom:20px;">
+            <h2 style="font-size:13px; font-weight:700; color:#024938; border-bottom:2px solid #024938; padding-bottom:4px; margin-bottom:8px;">
+                {{ $item->labTest?->name ?? 'Unknown Test' }}
+            </h2>
+            @if ($itemResults->isEmpty())
+                <p style="font-size:11px; color:#999;">No results recorded</p>
+            @else
+                <table style="width:100%; font-size:11px; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#f3f4f6;">
+                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Parameter</th>
+                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Value</th>
+                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Unit</th>
+                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Reference Range</th>
+                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Flag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($itemResults as $result)
+                            @php
+                                $flagLabel = match($result->flag) {
+                                    'normal' => 'Normal',
+                                    'high' => 'High',
+                                    'low' => 'Low',
+                                    'critical' => 'Critical',
+                                    default => ucfirst($result->flag),
+                                };
+                                $flagColor = match($result->flag) {
+                                    'normal' => '#059669',
+                                    'high' => '#D97706',
+                                    'low' => '#D97706',
+                                    'critical' => '#DC2626',
+                                    default => '#666',
+                                };
+                            @endphp
+                            <tr>
+                                <td style="padding:6px 8px; border:1px solid #e5e7eb; font-weight:600;">{{ $result->parameter }}</td>
+                                <td style="padding:6px 8px; border:1px solid #e5e7eb; font-weight:700;">{{ $result->value }}</td>
+                                <td style="padding:6px 8px; border:1px solid #e5e7eb;">{{ $result->unit ?? '-' }}</td>
+                                <td style="padding:6px 8px; border:1px solid #e5e7eb; color:#666;">{{ $result->reference_range ?? '-' }}</td>
+                                <td style="padding:6px 8px; border:1px solid #e5e7eb; color:{{ $flagColor }}; font-weight:700;">{{ $flagLabel }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
+    @endforeach
+
+    {{-- Attachments --}}
+    @if ($order->attachments->isNotEmpty())
+        <div style="margin-top:20px;">
+            <h2 style="font-size:13px; font-weight:700; color:#024938; margin-bottom:8px;">Attached Reports:</h2>
+            <ul style="font-size:11px; color:#666; padding-left:16px;">
+                @foreach ($order->attachments as $attachment)
+                    <li>{{ $attachment->file_name }} ({{ number_format($attachment->file_size / 1024, 1) }} KB)</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Footer --}}
+    <div style="margin-top:32px; padding-top:12px; border-top:1px solid #e5e7eb; text-align:center;">
+        <p style="font-size:10px; color:#999;">This report is computer-generated from {{ config('app.name', 'Clinic') }} Laboratory System. • Generated on {{ now()->format('d M Y H:i') }}</p>
+    </div>
 </div>
 @endsection
