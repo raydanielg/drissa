@@ -388,6 +388,26 @@ class ReceptionController extends Controller
         }
     }
 
+    public function cancelVisit(Request $request, Visit $visit, VisitWorkflow $flow)
+    {
+        try {
+            $flow->transition($visit, VisitStatus::Cancelled);
+            ActivityLog::log('visit_cancelled', $visit, "Cancelled visit {$visit->visit_number} from reception queue");
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => 'Visit cancelled successfully.']);
+            }
+
+            return back()->with('status', 'Visit cancelled successfully.');
+        } catch (InvalidTransitionException $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+
+            return back()->with('status', $e->getMessage());
+        }
+    }
+
     public function markInvoicePaid(Request $request, Invoice $invoice, VisitWorkflow $flow)
     {
         DB::transaction(function () use ($invoice, $flow) {
