@@ -93,6 +93,7 @@ Route::middleware('auth')->group(function () {
         Route::post('visits/{visit}/change-doctor', [ReceptionController::class, 'changeDoctor'])->name('visits.change-doctor');
         Route::post('visits/{visit}/pay', [ReceptionController::class, 'storePayment'])->name('visits.pay');
         Route::post('visits/{visit}/close', [ReceptionController::class, 'closeVisit'])->name('visits.close');
+        Route::post('visits/{visit}/cancel', [ReceptionController::class, 'cancelVisit'])->name('visits.cancel');
         Route::post('invoices/{invoice}/mark-paid', [ReceptionController::class, 'markInvoicePaid'])->name('invoices.mark-paid');
         Route::post('invoices/{invoice}/mark-unpaid', [ReceptionController::class, 'markInvoiceUnpaid'])->name('invoices.mark-unpaid');
     });
