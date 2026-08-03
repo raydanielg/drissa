@@ -74,48 +74,106 @@
 
                         {{-- Vitals --}}
                         <div class="border border-gray-100 rounded-lg overflow-hidden">
-                            <div class="bg-gray-50 px-4 py-2 border-b border-gray-100">
+                            <div class="bg-gray-50 px-4 py-2 border-b border-gray-100 flex items-center justify-between">
                                 <p class="text-xs font-semibold text-gray-700 uppercase tracking-wide">Vitals</p>
+                                <button type="button" onclick="toggleVitalsForm('{{ $visit->id }}')" class="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    {{ $visit->vitals ? 'Edit' : 'Record' }}
+                                </button>
                             </div>
-                            @if ($visit->vitals)
-                                <div class="grid grid-cols-2 gap-3 p-4 text-sm">
-                                    <div class="bg-red-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-red-500 uppercase font-medium">BP</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->blood_pressure ?? '-' }}</p>
+
+                            {{-- Vitals Display --}}
+                            <div id="vitals-display-{{ $visit->id }}">
+                                @if ($visit->vitals)
+                                    <div class="grid grid-cols-2 gap-3 p-4 text-sm">
+                                        <div class="bg-red-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-red-500 uppercase font-medium">BP</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->blood_pressure ?? '-' }}</p>
+                                        </div>
+                                        <div class="bg-orange-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-orange-500 uppercase font-medium">Temp</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->temperature ?? '-' }} °C</p>
+                                        </div>
+                                        <div class="bg-blue-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-blue-500 uppercase font-medium">Pulse</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->pulse ?? '-' }} bpm</p>
+                                        </div>
+                                        <div class="bg-emerald-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-emerald-500 uppercase font-medium">SpO2</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->oxygen_saturation ?? '-' }}%</p>
+                                        </div>
+                                        <div class="bg-purple-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-purple-500 uppercase font-medium">Weight</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->weight ?? '-' }} kg</p>
+                                        </div>
+                                        <div class="bg-teal-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-teal-500 uppercase font-medium">Height</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->height ?? '-' }} cm</p>
+                                        </div>
+                                        <div class="bg-sky-50 rounded-lg p-2.5">
+                                            <p class="text-[10px] text-sky-500 uppercase font-medium">Resp. Rate</p>
+                                            <p class="font-semibold text-gray-900">{{ $visit->vitals->respiratory_rate ?? '-' }} /min</p>
+                                        </div>
                                     </div>
-                                    <div class="bg-orange-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-orange-500 uppercase font-medium">Temp</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->temperature ?? '-' }} °C</p>
-                                    </div>
-                                    <div class="bg-blue-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-blue-500 uppercase font-medium">Pulse</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->pulse ?? '-' }} bpm</p>
-                                    </div>
-                                    <div class="bg-emerald-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-emerald-500 uppercase font-medium">SpO2</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->oxygen_saturation ?? '-' }}%</p>
-                                    </div>
-                                    <div class="bg-purple-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-purple-500 uppercase font-medium">Weight</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->weight ?? '-' }} kg</p>
-                                    </div>
-                                    <div class="bg-teal-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-teal-500 uppercase font-medium">Height</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->height ?? '-' }} cm</p>
-                                    </div>
-                                    <div class="bg-sky-50 rounded-lg p-2.5">
-                                        <p class="text-[10px] text-sky-500 uppercase font-medium">Resp. Rate</p>
-                                        <p class="font-semibold text-gray-900">{{ $visit->vitals->respiratory_rate ?? '-' }} /min</p>
-                                    </div>
-                                </div>
-                                @if ($visit->vitals->notes)
-                                    <div class="px-4 pb-3">
-                                        <p class="text-xs text-gray-600 bg-gray-50 rounded-lg p-2">{{ $visit->vitals->notes }}</p>
-                                    </div>
+                                    @if ($visit->vitals->notes)
+                                        <div class="px-4 pb-3">
+                                            <p class="text-xs text-gray-600 bg-gray-50 rounded-lg p-2">{{ $visit->vitals->notes }}</p>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="p-4 text-sm text-gray-400">No vitals recorded yet. Click "Record" to add.</div>
                                 @endif
-                            @else
-                                <div class="p-4 text-sm text-gray-400">No vitals recorded.</div>
-                            @endif
+                            </div>
+
+                            {{-- Vitals Edit Form (hidden by default) --}}
+                            <div id="vitals-form-{{ $visit->id }}" class="hidden p-4 bg-gray-50 border-t border-gray-100">
+                                <form method="POST" action="{{ route('doctor.visits.vitals', $visit) }}" class="space-y-3">
+                                    @csrf
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Blood Pressure</label>
+                                            <input type="text" name="blood_pressure" value="{{ $visit->vitals?->blood_pressure ?? '' }}" placeholder="120/80" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Temperature (°C)</label>
+                                            <input type="number" name="temperature" step="0.1" value="{{ $visit->vitals?->temperature ?? '' }}" placeholder="36.5" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Pulse (bpm)</label>
+                                            <input type="number" name="pulse" value="{{ $visit->vitals?->pulse ?? '' }}" placeholder="72" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">SpO2 (%)</label>
+                                            <input type="number" name="oxygen_saturation" step="0.1" value="{{ $visit->vitals?->oxygen_saturation ?? '' }}" placeholder="98" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Weight (kg)</label>
+                                            <input type="number" name="weight" step="0.1" value="{{ $visit->vitals?->weight ?? '' }}" placeholder="65" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Height (cm)</label>
+                                            <input type="number" name="height" step="0.1" value="{{ $visit->vitals?->height ?? '' }}" placeholder="170" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-medium text-gray-500 uppercase">Resp. Rate (/min)</label>
+                                            <input type="number" name="respiratory_rate" value="{{ $visit->vitals?->respiratory_rate ?? '' }}" placeholder="16" class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] font-medium text-gray-500 uppercase">Notes</label>
+                                        <textarea name="notes" rows="2" placeholder="Additional observations..." class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">{{ $visit->vitals?->notes ?? '' }}</textarea>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                            Save Vitals
+                                        </button>
+                                        <button type="button" onclick="toggleVitalsForm('{{ $visit->id }}')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold rounded-lg transition-colors">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
 
                         {{-- Patient Quick Links --}}
