@@ -148,6 +148,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/patients', [NurseController::class, 'patients'])->name('patients');
     });
 
+    // Appointments - accessible to admin and reception
+    Route::resource('appointments', AppointmentController::class)->middleware('redirect.role:admin|reception|doctor');
+
     // Patient Registry, Documents & History
     Route::get('patients', [PatientController::class, 'index'])->name('patients.index');
     Route::get('patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
@@ -208,7 +211,6 @@ Route::middleware('auth')->group(function () {
         Route::post('users/bulk-delete', [UserController::class, 'bulkDelete'])->name('users.bulk-delete');
         Route::post('users/bulk-deactivate', [UserController::class, 'bulkDeactivate'])->name('users.bulk-deactivate');
         Route::post('users/bulk-activate', [UserController::class, 'bulkActivate'])->name('users.bulk-activate');
-        Route::resource('appointments', AppointmentController::class);
         Route::resource('posts', PostController::class);
         Route::resource('products', ProductController::class);
         Route::resource('categories', CategoryController::class);
