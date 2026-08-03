@@ -12,6 +12,7 @@ use App\Models\Medication;
 use App\Models\Patient;
 use App\Models\Prescription;
 use App\Models\Visit;
+use App\Models\Vital;
 use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
