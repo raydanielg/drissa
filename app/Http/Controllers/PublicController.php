@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Service;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
@@ -126,9 +127,9 @@ class PublicController extends Controller
             return;
         }
 
-        $clinicName = setting('clinic_name', config('app.name', 'Uzazi Clinic'));
-        $clinicPhone = setting('clinic_phone', '+255 700 000 000');
-        $clinicAddress = setting('clinic_address', 'Dar es Salaam, Tanzania');
+        $clinicName = Setting::get('clinic_name', config('app.name', 'Uzazi Clinic'));
+        $clinicPhone = Setting::get('clinic_phone', '+255 700 000 000');
+        $clinicAddress = Setting::get('clinic_address', 'Dar es Salaam, Tanzania');
 
         $date = $appointment->scheduled_at->format('d/m/Y');
         $time = $appointment->scheduled_at->format('H:i');

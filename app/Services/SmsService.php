@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
 use App\Models\SmsLog;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -11,7 +12,7 @@ class SmsService
 {
     public static function send(string $phone, string $message, ?User $user = null, ?string $recipient = null): array
     {
-        $gateway = setting('sms_gateway', 'log');
+        $gateway = Setting::get('sms_gateway', 'log');
         $phone = self::normalizePhone($phone);
 
         $log = SmsLog::create([
@@ -55,9 +56,9 @@ class SmsService
 
     protected static function sendTwilio(string $phone, string $message): array
     {
-        $sid = setting('twilio_sid');
-        $token = setting('twilio_token');
-        $from = setting('twilio_from');
+        $sid = Setting::get('twilio_sid');
+        $token = Setting::get('twilio_token');
+        $from = Setting::get('twilio_from');
 
         if (! $sid || ! $token || ! $from) {
             return ['success' => false, 'error' => 'Twilio credentials not configured.'];
@@ -80,8 +81,8 @@ class SmsService
 
     protected static function sendHttp(string $phone, string $message): array
     {
-        $url = setting('sms_http_url');
-        $method = setting('sms_http_method', 'POST');
+        $url = Setting::get('sms_http_url');
+        $method = Setting::get('sms_http_method', 'POST');
 
         if (! $url) {
             return ['success' => false, 'error' => 'HTTP gateway URL not configured.'];
@@ -105,10 +106,10 @@ class SmsService
 
     protected static function sendNextSms(string $phone, string $message): array
     {
-        $username = setting('nextsms_username');
-        $password = setting('nextsms_password');
-        $from = setting('nextsms_from', setting('sms_sender_id', 'UZAZICLINIC'));
-        $url = setting('nextsms_url', 'https://messaging-service.co.tz/api/sms/v1/text/single');
+        $username = Setting::get('nextsms_username');
+        $password = Setting::get('nextsms_password');
+        $from = Setting::get('nextsms_from', Setting::get('sms_sender_id', 'UZAZICLINIC'));
+        $url = Setting::get('nextsms_url', 'https://messaging-service.co.tz/api/sms/v1/text/single');
 
         if (! $username || ! $password) {
             return ['success' => false, 'error' => 'NextSMS credentials not configured. Go to Settings > SMS to configure.'];
