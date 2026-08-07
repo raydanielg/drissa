@@ -151,6 +151,8 @@ Route::middleware('auth')->group(function () {
 
     // Appointments - accessible to admin and reception
     Route::resource('appointments', AppointmentController::class)->middleware('redirect.role:admin|reception|doctor');
+    Route::post('appointments/{appointment}/send-sms', [AppointmentController::class, 'sendSms'])->name('appointments.send-sms');
+    Route::post('appointments/bulk-sms', [AppointmentController::class, 'bulkSms'])->name('appointments.bulk-sms');
 
     // Patient Registry, Documents & History
     Route::get('patients', [PatientController::class, 'index'])->name('patients.index');

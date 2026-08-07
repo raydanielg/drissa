@@ -74,6 +74,10 @@
                                         {{ $d->isToday() ? 'Today' : ($d->isTomorrow() ? 'Tomorrow' : $d->format('l, d M Y')) }}
                                     </span>
                                     <span class="text-xs text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">{{ $dayAppointments->count() }} appointment{{ $dayAppointments->count() > 1 ? 's' : '' }}</span>
+                                    <button type="button" onclick="sendBulkSms('{{ $dateKey }}', {{ $dayAppointments->count() }})" class="ml-auto inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-lg transition-colors">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                                        Send SMS to All
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -173,6 +177,10 @@
                                 </td>
                                 <td class="px-6 py-3.5">
                                     <div class="flex items-center justify-end gap-1">
+                                        <button type="button" onclick="sendSingleSms('{{ route('appointments.send-sms', $appointment) }}', '{{ $appointment->patient->fullName() }}')" class="action-icon group/icon relative p-2 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors" title="Send SMS">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Send SMS</span>
+                                        </button>
                                         <button type="button" onclick="openEditAppointmentPanel('{{ route('appointments.edit', $appointment) }}')" class="action-icon group/icon relative p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.43-9.525l-9.17 9.17a2 2 0 00-.586 1.414V17a1 1 0 001 1h2.828a2 2 0 001.414-.586l9.17-9.17a2 2 0 000-2.828l-1.414-1.414a2 2 0 00-2.828 0z"/></svg>
                                             <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Edit</span>
@@ -282,6 +290,72 @@
 
 @push('scripts')
 <script>
+    // SMS sending functions
+    function sendSingleSms(url, patientName) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Send SMS?',
+            text: 'Send appointment reminder SMS to ' + patientName + '?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, send',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#059669',
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+            Swal.fire({ title: 'Sending...', didOpen: () => Swal.showLoading() });
+            fetch(url, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+            })
+            .then(r => r.json().then(data => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                Swal.fire({
+                    icon: ok && data.success ? 'success' : 'error',
+                    title: ok && data.success ? 'Sent!' : 'Failed',
+                    text: data.message || data.error || 'Unknown response',
+                    timer: 3000,
+                    showConfirmButton: true,
+                });
+            })
+            .catch(err => {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to send SMS.' });
+            });
+        });
+    }
+
+    function sendBulkSms(date, count) {
+        Swal.fire({
+            icon: 'question',
+            title: 'Send Bulk SMS?',
+            text: 'Send appointment reminder SMS to all ' + count + ' patient(s) with appointments on this day?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, send to all',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#059669',
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+            Swal.fire({ title: 'Sending ' + count + ' SMS...', didOpen: () => Swal.showLoading() });
+            fetch('{{ route("appointments.bulk-sms") }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+                body: JSON.stringify({ date: date }),
+            })
+            .then(r => r.json().then(data => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                Swal.fire({
+                    icon: ok && data.success ? 'success' : 'warning',
+                    title: ok && data.success ? 'Bulk SMS Complete' : 'Issues Found',
+                    text: data.message || data.error || 'Unknown response',
+                    timer: 5000,
+                    showConfirmButton: true,
+                });
+            })
+            .catch(err => {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to send bulk SMS.' });
+            });
+        });
+    }
+
     // Initialize Flowbite popovers
     document.addEventListener('DOMContentLoaded', function() {
         const popoverTriggers = document.querySelectorAll('[data-popover-target]');

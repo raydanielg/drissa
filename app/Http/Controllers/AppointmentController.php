@@ -155,6 +155,86 @@ class AppointmentController extends Controller
         return back()->with('status', 'Appointment cancelled.');
     }
 
+    public function sendSms(Request $request, Appointment $appointment)
+    {
+        $appointment->load('patient');
+
+        if (! $appointment->patient || ! $appointment->patient->phone) {
+            return response()->json(['success' => false, 'error' => 'Patient has no phone number.'], 422);
+        }
+
+        try {
+            $result = $this->sendAppointmentSms($appointment);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('SMS sending failed', [
+                'error' => $e->getMessage(),
+                'appointment_id' => $appointment->id,
+            ]);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+
+        if ($result && $result['success']) {
+            return response()->json(['success' => true, 'message' => 'SMS sent to ' . $appointment->patient->fullName() . '.']);
+        }
+
+        return response()->json(['success' => false, 'error' => $result['error'] ?? 'Unknown error'], 500);
+    }
+
+    public function bulkSms(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date',
+        ]);
+
+        $appointments = Appointment::with('patient')
+            ->whereDate('scheduled_at', $request->date)
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->get();
+
+        if ($appointments->isEmpty()) {
+            return response()->json(['success' => false, 'error' => 'No appointments found for this date.'], 422);
+        }
+
+        $sent = 0;
+        $failed = 0;
+        $errors = [];
+
+        foreach ($appointments as $appointment) {
+            if (! $appointment->patient || ! $appointment->patient->phone) {
+                $failed++;
+                continue;
+            }
+
+            try {
+                $result = $this->sendAppointmentSms($appointment);
+                if ($result && $result['success']) {
+                    $sent++;
+                } else {
+                    $failed++;
+                    $errors[] = $appointment->patient->fullName() . ': ' . ($result['error'] ?? 'Unknown error');
+                }
+            } catch (\Throwable $e) {
+                $failed++;
+                $errors[] = $appointment->patient->fullName() . ': ' . $e->getMessage();
+            }
+        }
+
+        $message = "SMS sent to {$sent} patient(s).";
+        if ($failed > 0) {
+            $message .= " {$failed} failed.";
+            if (count($errors) <= 3) {
+                $message .= ' ' . implode(', ', $errors);
+            }
+        }
+
+        return response()->json([
+            'success' => $sent > 0,
+            'message' => $message,
+            'sent' => $sent,
+            'failed' => $failed,
+        ]);
+    }
+
     private function sendAppointmentSms(Appointment $appointment): ?array
     {
         $patient = $appointment->patient;
