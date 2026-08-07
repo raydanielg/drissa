@@ -31,7 +31,7 @@ class SystemDefaultsSeeder extends Seeder
             ['key' => 'mail_password', 'value' => '', 'group' => 'email', 'type' => 'text'],
             ['key' => 'mail_encryption', 'value' => 'tls', 'group' => 'email', 'type' => 'text'],
 
-            ['key' => 'sms_gateway', 'value' => 'log', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_gateway', 'value' => 'nextsms', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_sender_id', 'value' => 'UZAZICLINIC', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_api_key', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_sid', 'value' => '', 'group' => 'sms', 'type' => 'text'],
@@ -50,7 +50,7 @@ class SystemDefaultsSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            Setting::firstOrCreate(['key' => $setting['key']], $setting);
+            Setting::updateOrCreate(['key' => $setting['key']], $setting);
         }
 
         EmailTemplate::firstOrCreate(

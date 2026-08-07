@@ -88,13 +88,20 @@ class AppointmentController extends Controller
         $appointment = Appointment::create($data);
         $appointment->load(['patient', 'doctor']);
 
-        $this->sendAppointmentSms($appointment);
+        $smsResult = $this->sendAppointmentSms($appointment);
 
-        if ($request->wantsJson()) {
-            return response()->json(['success' => true, 'message' => 'Appointment scheduled.', 'appointment' => $appointment]);
+        $statusMsg = 'Appointment scheduled.';
+        if ($smsResult) {
+            $statusMsg .= $smsResult['success']
+                ? ' SMS sent to patient.'
+                : ' SMS failed: ' . ($smsResult['error'] ?? 'Unknown error');
         }
 
-        return redirect()->route('appointments.index')->with('status', 'Appointment scheduled.');
+        if ($request->wantsJson()) {
+            return response()->json(['success' => true, 'message' => $statusMsg, 'appointment' => $appointment, 'sms' => $smsResult]);
+        }
+
+        return redirect()->route('appointments.index')->with('status', $statusMsg);
     }
 
     public function edit(Appointment $appointment)
@@ -136,11 +143,11 @@ class AppointmentController extends Controller
         return back()->with('status', 'Appointment cancelled.');
     }
 
-    private function sendAppointmentSms(Appointment $appointment): void
+    private function sendAppointmentSms(Appointment $appointment): ?array
     {
         $patient = $appointment->patient;
         if (! $patient || ! $patient->phone) {
-            return;
+            return null;
         }
 
         $clinicName = setting('clinic_name', config('app.name', 'Uzazi Clinic'));
@@ -158,12 +165,11 @@ class AppointmentController extends Controller
             . "Tarehe: {$date}\n"
             . "Saa: {$time}\n"
             . "MRN: {$mrn}\n"
-            . "Lugha: Swahili/English\n"
             . "Tafadhali fika dakika 15 kabla ya muda wako.\n"
             . "Anwani: {$clinicAddress}\n"
             . "Kwa maswali piga: {$clinicPhone}\n"
             . "Asante kwa kuchagua {$clinicName}.";
 
-        SmsService::send($patient->phone, $message, auth()->user(), $patient->fullName());
+        return SmsService::send($patient->phone, $message, auth()->user(), $patient->fullName());
     }
 }
