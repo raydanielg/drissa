@@ -62,9 +62,10 @@ class SystemDefaultsSeeder extends Seeder
             ]
         );
 
-        SmsTemplate::firstOrCreate(
+        SmsTemplate::updateOrCreate(
             ['name' => 'Appointment Reminder'],
             [
+                'slug' => 'appointment-reminder',
                 'type' => 'appointment',
                 'body' => 'Uzazi Clinic\nKaribu {{name}}!\nMiadi yako imewekwa kwa mafanikio.\nTarehe: {{date}}\nSaa: {{time}}\nMRN: {{mrn}}\nTafadhali fika dakika 15 kabla ya muda wako.\nKwa maswali piga: {{phone}}.\nAsante kwa kuchagua Uzazi Clinic.',
                 'is_active' => true,
