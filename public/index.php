@@ -19,7 +19,7 @@ if (!file_exists($envPath) || !file_exists($installedFile)) {
     // without needing a database connection
     if (!file_exists($envPath)) {
         $tempKey = 'base64:' . base64_encode(random_bytes(32));
-        $minimalEnv = "APP_NAME=\"Dr Issa Scientific Clinic\"\n";
+        $minimalEnv = "APP_NAME=\"Uzazi Clinic\"\n";
         $minimalEnv .= "APP_ENV=local\n";
         $minimalEnv .= "APP_KEY={$tempKey}\n";
         $minimalEnv .= "APP_DEBUG=true\n";
