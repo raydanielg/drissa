@@ -22,7 +22,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-700 mb-1">App Name</label>
-                    <input type="text" name="app_name" value="Dr Issa Scientific Clinic" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <input type="text" name="app_name" value="Uzazi Clinic" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-700 mb-1">App URL</label>

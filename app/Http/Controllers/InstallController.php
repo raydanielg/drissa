@@ -136,7 +136,7 @@ class InstallController extends Controller
 
     private function writeEnvFile(array $data): void
     {
-        $appName = $data['app_name'] ?? 'Dr Issa Scientific Clinic';
+        $appName = $data['app_name'] ?? 'Uzazi Clinic';
         $appUrl = $data['app_url'] ?? 'http://localhost';
 
         // Keep the existing APP_KEY from the temporary .env so the

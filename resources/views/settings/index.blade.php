@@ -41,11 +41,11 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">App Name</label>
-                        <input type="text" name="app_name" value="{{ $val('app_name', config('app.name')) }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all" placeholder="Dr Issa Scientific Clinic">
+                        <input type="text" name="app_name" value="{{ $val('app_name', config('app.name')) }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all" placeholder="Uzazi Clinic">
                     </div>
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Clinic Name</label>
-                        <input type="text" name="clinic_name" value="{{ $val('clinic_name', 'Dr Issa Scientific Clinic') }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all" placeholder="Dr Issa Scientific Clinic">
+                        <input type="text" name="clinic_name" value="{{ $val('clinic_name', 'Uzazi Clinic') }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all" placeholder="Uzazi Clinic">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 mb-1.5">Clinic Phone</label>

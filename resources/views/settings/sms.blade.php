@@ -64,7 +64,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1">NextSMS Username</label>
-                        <input type="text" name="nextsms_username" value="{{ $settings['nextsms_username']->value ?? '' }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="Issa Scientist">
+                        <input type="text" name="nextsms_username" value="{{ $settings['nextsms_username']->value ?? '' }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="Uzazi Clinic">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-700 mb-1">NextSMS Password</label>
@@ -136,7 +136,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Test Message</label>
-                    <input type="text" id="testMessage" value="Test SMS from Issa Scientist Clinic - Configuration working!" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <input type="text" id="testMessage" value="Test SMS from Uzazi Clinic - Configuration working!" class="w-full border-2 border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
                 </div>
             </div>
             <button type="submit" id="testSmsBtn" class="bg-gold-500 text-white text-sm font-bold px-6 py-2.5 rounded-lg hover:bg-gold-600 shadow-sm transition-all flex items-center gap-2">

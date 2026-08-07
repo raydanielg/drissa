@@ -7,7 +7,7 @@
 <section class="bg-emerald-900 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">About Us</h1>
-        <p class="mt-4 text-emerald-100/80 max-w-2xl mx-auto">Learn more about Issa Scientist Clinic Limited and our commitment to reproductive health.</p>
+        <p class="mt-4 text-emerald-100/80 max-w-2xl mx-auto">Learn more about Uzazi Clinic and our commitment to reproductive health.</p>
         <div class="mt-4 w-20 h-1 bg-gold-500 mx-auto rounded-full"></div>
     </div>
 </section>
@@ -22,7 +22,7 @@
                 <span class="text-gold-600 font-bold text-sm uppercase tracking-wider">Who We Are</span>
                 <h2 class="mt-2 text-3xl font-extrabold text-emerald-900">Trusted Reproductive Health Clinic</h2>
                 <p class="mt-4 text-gray-600 leading-relaxed">
-                    Issa Scientist Clinic Limited is a specialized reproductive health and family planning clinic delivering confidential, compassionate, and quality care. We are dedicated to empowering informed choices for individuals and families across Tanzania.
+                    Uzazi Clinic is a specialized reproductive health and family planning clinic delivering confidential, compassionate, and quality care. We are dedicated to empowering informed choices for individuals and families across Tanzania.
                 </p>
                 <p class="mt-4 text-gray-600 leading-relaxed">
                     Our team of experienced healthcare professionals provides a full range of reproductive health services in a safe, welcoming, and confidential environment. From family planning counseling to maternal care, we are here for you at every stage.

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
 
-    <title>@yield('title', config('app.name', 'Dr Issa Scientific Clinic'))</title>
+    <title>@yield('title', config('app.name', 'Uzazi Clinic'))</title>
 
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito:400,500,600,700,800,900&display=swap" rel="stylesheet">
@@ -67,10 +67,10 @@
             <div class="flex items-center justify-between h-16">
                 {{-- Logo --}}
                 <a href="{{ route('public.home') }}" class="flex items-center gap-2 flex-shrink-0">
-                    <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-10 h-10 rounded-xl object-cover shadow-md">
+                    <img src="{{ asset('logo.png') }}" alt="Uzazi Clinic" class="w-10 h-10 rounded-xl object-cover shadow-md">
                     <div class="hidden sm:block">
-                        <span class="block text-emerald-800 font-extrabold text-sm leading-tight">Issa Scientist</span>
-                        <span class="block text-gold-600 font-semibold text-[10px] leading-tight">Clinic Limited</span>
+                        <span class="block text-emerald-800 font-extrabold text-sm leading-tight">Uzazi</span>
+                        <span class="block text-gold-600 font-semibold text-[10px] leading-tight">Clinic</span>
                     </div>
                 </a>
 
@@ -139,10 +139,10 @@
                 {{-- About --}}
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-10 h-10 rounded-xl object-cover">
+                        <img src="{{ asset('logo.png') }}" alt="Uzazi Clinic" class="w-10 h-10 rounded-xl object-cover">
                         <div>
-                            <span class="block text-white font-extrabold text-sm leading-tight">Issa Scientist</span>
-                            <span class="block text-gold-400 font-semibold text-[10px] leading-tight">Clinic Limited</span>
+                            <span class="block text-white font-extrabold text-sm leading-tight">Uzazi</span>
+                            <span class="block text-gold-400 font-semibold text-[10px] leading-tight">Clinic</span>
                         </div>
                     </div>
                     <p class="text-sm text-emerald-200/80 leading-relaxed">
@@ -209,7 +209,7 @@
 
             {{-- Bottom Bar --}}
             <div class="border-t border-emerald-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <p class="text-xs text-emerald-200/60">&copy; {{ date('Y') }} Issa Scientist Clinic Limited. All rights reserved.</p>
+                <p class="text-xs text-emerald-200/60">&copy; {{ date('Y') }} Uzazi Clinic. All rights reserved.</p>
                 <div class="flex items-center gap-4 text-xs">
                     <a href="{{ route('public.home') }}" class="text-emerald-200/60 hover:text-gold-400 transition-colors">Home</a>
                     <span class="text-emerald-700">|</span>

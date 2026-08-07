@@ -158,8 +158,8 @@
     <canvas id="particleCanvas"></canvas>
 
     {{-- Background Clinic Name Watermark --}}
-    <div class="bg-clinic-name">{{ config('app.name', 'Dr Issa Clinic') }}</div>
-    <div class="bg-clinic-sub">Scientific Clinic &middot; Dar es Salaam</div>
+    <div class="bg-clinic-name">{{ config('app.name', 'Uzazi Clinic') }}</div>
+    <div class="bg-clinic-sub">Clinic &middot; Dar es Salaam</div>
 
     <div id="ajaxLoader" class="ajax-loader"></div>
 

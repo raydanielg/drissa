@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Installer') - Dr Issa Scientific Clinic</title>
+    <title>@yield('title', 'Installer') - Uzazi Clinic</title>
     <link href="https://fonts.bunny.net/css?family=Nunito:400,500,600,700,800,900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -29,8 +29,8 @@
     <div class="w-full max-w-2xl">
         {{-- Logo --}}
         <div class="text-center mb-8">
-            <img src="{{ asset('logo.png') }}" alt="Issa Scientist Clinic" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-lg mb-3">
-            <h1 class="text-2xl font-extrabold text-white">Issa Scientist Clinic</h1>
+            <img src="{{ asset('logo.png') }}" alt="Uzazi Clinic" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-lg mb-3">
+            <h1 class="text-2xl font-extrabold text-white">Uzazi Clinic</h1>
             <p class="text-emerald-200/60 text-sm">Installation Wizard</p>
         </div>
 
@@ -64,7 +64,7 @@
             @yield('content')
         </div>
 
-        <p class="text-center text-xs text-emerald-200/40 mt-6">&copy; {{ date('Y') }} Issa Scientist Clinic Limited</p>
+        <p class="text-center text-xs text-emerald-200/40 mt-6">&copy; {{ date('Y') }} Uzazi Clinic</p>
     </div>
 
     @stack('scripts')

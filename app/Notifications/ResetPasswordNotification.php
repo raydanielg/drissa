@@ -15,7 +15,7 @@ class ResetPasswordNotification extends BaseResetPassword
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
 
-        $clinicName = config('app.name', 'Dr Issa Scientific Clinic');
+        $clinicName = config('app.name', 'Uzazi Clinic');
         $expiry = config('auth.passwords.' . config('auth.defaults.passwords') . '.expire', 60);
 
         return (new MailMessage())
