@@ -29,10 +29,10 @@ class SmsDefaultsSeeder extends Seeder
         }
 
         $templates = [
-            ['name' => 'Appointment Reminder', 'type' => 'appointment', 'body' => 'Hi {{name}}, you have an appointment tomorrow at Dr Issa Scientist. Please arrive 15 minutes early.'],
-            ['name' => 'Payment Reminder', 'type' => 'payment', 'body' => 'Hi {{name}}, this is a reminder for your outstanding payment of {{amount}} at Dr Issa Scientist.'],
-            ['name' => 'Lab Results Ready', 'type' => 'lab', 'body' => 'Hi {{name}}, your lab results are ready. Please visit Dr Issa Scientist to collect them.'],
-            ['name' => 'Welcome Patient', 'type' => 'general', 'body' => 'Welcome to Dr Issa Scientist. Your MRN is {{mrn}}. Save this number for future visits.'],
+            ['name' => 'Appointment Reminder', 'type' => 'appointment', 'body' => 'Hi {{name}}, you have an appointment tomorrow at Uzazi Clinic. Please arrive 15 minutes early.'],
+            ['name' => 'Payment Reminder', 'type' => 'payment', 'body' => 'Hi {{name}}, this is a reminder for your outstanding payment of {{amount}} at Uzazi Clinic.'],
+            ['name' => 'Lab Results Ready', 'type' => 'lab', 'body' => 'Hi {{name}}, your lab results are ready. Please visit Uzazi Clinic to collect them.'],
+            ['name' => 'Welcome Patient', 'type' => 'general', 'body' => 'Welcome to Uzazi Clinic. Your MRN is {{mrn}}. Save this number for future visits.'],
         ];
 
         foreach ($templates as $template) {

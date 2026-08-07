@@ -10,7 +10,7 @@ class SmsTemplateSeeder extends Seeder
 {
     public function run(): void
     {
-        $clinic = 'Dr Issa Scientific Clinic';
+        $clinic = 'Uzazi Clinic';
 
         $templates = [
             // ── Registration ──

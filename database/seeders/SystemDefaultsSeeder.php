@@ -16,8 +16,8 @@ class SystemDefaultsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'app_name', 'value' => 'Dr Issa Scientist', 'group' => 'general', 'type' => 'text'],
-            ['key' => 'clinic_name', 'value' => 'Dr Issa Scientist Hospital', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'app_name', 'value' => 'Uzazi Clinic', 'group' => 'general', 'type' => 'text'],
+            ['key' => 'clinic_name', 'value' => 'Uzazi Clinic', 'group' => 'general', 'type' => 'text'],
             ['key' => 'clinic_phone', 'value' => '+255 700 000 000', 'group' => 'general', 'type' => 'text'],
             ['key' => 'clinic_email', 'value' => 'info@drissa.test', 'group' => 'general', 'type' => 'text'],
             ['key' => 'clinic_address', 'value' => 'Dar es Salaam, Tanzania', 'group' => 'general', 'type' => 'textarea'],
@@ -32,7 +32,7 @@ class SystemDefaultsSeeder extends Seeder
             ['key' => 'mail_encryption', 'value' => 'tls', 'group' => 'email', 'type' => 'text'],
 
             ['key' => 'sms_gateway', 'value' => 'log', 'group' => 'sms', 'type' => 'text'],
-            ['key' => 'sms_sender_id', 'value' => 'DRISSA', 'group' => 'sms', 'type' => 'text'],
+            ['key' => 'sms_sender_id', 'value' => 'UZAZICLINIC', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'sms_api_key', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_sid', 'value' => '', 'group' => 'sms', 'type' => 'text'],
             ['key' => 'twilio_token', 'value' => '', 'group' => 'sms', 'type' => 'text'],
@@ -57,7 +57,7 @@ class SystemDefaultsSeeder extends Seeder
             ['slug' => 'welcome-patient'],
             [
                 'name' => 'Welcome Patient',
-                'subject' => 'Welcome to Dr Issa Scientist',
+                'subject' => 'Welcome to Uzazi Clinic',
                 'body' => 'Dear patient, welcome to our hospital. Your MRN is {{mrn}}.',
             ]
         );
@@ -66,7 +66,7 @@ class SystemDefaultsSeeder extends Seeder
             ['name' => 'Appointment Reminder'],
             [
                 'type' => 'appointment',
-                'body' => 'Hi {{name}}, you have an appointment tomorrow at Dr Issa Scientist.',
+                'body' => 'Hi {{name}}, you have an appointment tomorrow at Uzazi Clinic.',
                 'is_active' => true,
             ]
         );
