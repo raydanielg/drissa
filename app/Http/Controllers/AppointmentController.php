@@ -88,13 +88,24 @@ class AppointmentController extends Controller
         $appointment = Appointment::create($data);
         $appointment->load(['patient', 'doctor']);
 
-        $smsResult = $this->sendAppointmentSms($appointment);
+        $smsResult = null;
+        try {
+            $smsResult = $this->sendAppointmentSms($appointment);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('SMS sending failed during appointment creation', [
+                'error' => $e->getMessage(),
+                'appointment_id' => $appointment->id,
+            ]);
+            $smsResult = ['success' => false, 'error' => $e->getMessage()];
+        }
 
         $statusMsg = 'Appointment scheduled.';
         if ($smsResult) {
             $statusMsg .= $smsResult['success']
                 ? ' SMS sent to patient.'
                 : ' SMS failed: ' . ($smsResult['error'] ?? 'Unknown error');
+        } else {
+            $statusMsg .= ' No phone number on patient record.';
         }
 
         if ($request->wantsJson()) {

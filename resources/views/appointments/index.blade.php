@@ -349,19 +349,33 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(form);
+            const submitBtn = document.getElementById('appt_submit_btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Saving...';
             fetch(action, {
                 method: 'POST',
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
             })
-            .then(r => r.json().catch(() => ({})))
+            .then(r => {
+                if (!r.ok) {
+                    return r.json().then(err => { throw err; });
+                }
+                return r.json();
+            })
             .then(data => {
-                Swal.fire({ icon: 'success', title: 'Success', text: data.message || successMessage, timer: 1500, showConfirmButton: false });
+                const icon = data.sms && !data.sms.success ? 'warning' : 'success';
+                Swal.fire({ icon: icon, title: icon === 'success' ? 'Success' : 'SMS Issue', text: data.message || successMessage, timer: 3000, showConfirmButton: true });
                 closeAppointmentSlideOver();
                 setTimeout(() => reloadPageContent(), 1000);
             })
             .catch(err => {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to save appointment.' });
+                const msg = err?.message || (typeof err === 'string' ? err : 'Failed to save appointment.');
+                Swal.fire({ icon: 'error', title: 'Error', text: msg });
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Save Appointment';
             });
         });
     }
