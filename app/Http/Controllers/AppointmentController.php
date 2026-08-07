@@ -253,14 +253,10 @@ class AppointmentController extends Controller
 
         $message = "Uzazi Clinic\n"
             . "Karibu {$patientName}!\n"
-            . "Miadi yako imewekwa kwa mafanikio.\n"
-            . "Tarehe: {$date}\n"
-            . "Saa: {$time}\n"
+            . "Your appointment: {$date} at {$time}\n"
             . "MRN: {$mrn}\n"
-            . "Tafadhali fika dakika 15 kabla ya muda wako.\n"
-            . "Anwani: {$clinicAddress}\n"
-            . "Kwa maswali piga: {$clinicPhone}\n"
-            . "Asante kwa kuchagua {$clinicName}.";
+            . "Tafadhali fika 15 min mapema.\n"
+            . "Kwa maswali: {$clinicPhone}";
 
         return SmsService::send($patient->phone, $message, auth()->user(), $patient->fullName());
     }

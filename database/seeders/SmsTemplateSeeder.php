@@ -32,19 +32,19 @@ class SmsTemplateSeeder extends Seeder
                 'name' => 'Appointment Reminder (Swahili)',
                 'type' => 'appointment',
                 'subject' => 'Kumbusho la Miadi',
-                'body' => "Uzazi Clinic\nKaribu {{name}}!\nMiadi yako imewekwa kwa mafanikio.\nTarehe: {{date}}\nSaa: {{time}}\nMRN: {{mrn}}\nTafadhali fika dakika 15 kabla ya muda wako.\nKwa bahati mbaya unashindwa kuja, tujulishe mapema {{phone}}.\nAsante kwa kuchagua {{clinic}}.",
+                'body' => "Uzazi Clinic\nKaribu {{name}}!\nYour appointment: {{date}} at {{time}}\nMRN: {{mrn}}\nTafadhali fika 15 min mapema.\nKwa maswali: {{phone}}",
             ],
             [
                 'name' => 'Appointment Reminder (English)',
                 'type' => 'appointment',
                 'subject' => 'Appointment Reminder',
-                'body' => "Uzazi Clinic\nHello {{name}}!\nYour appointment has been scheduled successfully.\nDate: {{date}}\nTime: {{time}}\nMRN: {{mrn}}\nPlease arrive 15 minutes early.\nIf you cannot make it, please call {{phone}}.\nThank you for choosing {{clinic}}.",
+                'body' => "Uzazi Clinic\nHello {{name}}!\nYour appointment: {{date}} at {{time}}\nMRN: {{mrn}}\nPlease arrive 15 min early.\nQuestions? Call {{phone}}",
             ],
             [
                 'name' => 'Appointment Confirmation',
                 'type' => 'appointment',
                 'subject' => 'Miadi Imethibitishwa',
-                'body' => "Uzazi Clinic\nHabari {{name}}, miadi yako ya {{date}} saa {{time}} imethibitishwa.\nMRN: {{mrn}}\nTunakutegemea. Tafadhali fika dakika 15 kabla.\nAsante kwa kuchagua {{clinic}}.",
+                'body' => "Uzazi Clinic\nHabari {{name}}, appointment yako ya {{date}} saa {{time}} imethibitishwa.\nMRN: {{mrn}}\nTafadhali fika 15 min mapema.",
             ],
             [
                 'name' => 'Appointment Cancellation',
