@@ -29,10 +29,10 @@ class SmsDefaultsSeeder extends Seeder
         }
 
         $templates = [
-            ['name' => 'Appointment Reminder', 'type' => 'appointment', 'body' => 'Hi {{name}}, you have an appointment tomorrow at Uzazi Clinic. Please arrive 15 minutes early.'],
+            ['name' => 'Appointment Reminder', 'type' => 'appointment', 'body' => 'Uzazi Clinic\nKaribu {{name}}!\nMiadi yako imewekwa kwa mafanikio.\nTarehe: {{date}}\nSaa: {{time}}\nMRN: {{mrn}}\nTafadhali fika dakika 15 kabla ya muda wako.\nKwa maswali piga: {{phone}}.\nAsante kwa kuchagua Uzazi Clinic.'],
             ['name' => 'Payment Reminder', 'type' => 'payment', 'body' => 'Hi {{name}}, this is a reminder for your outstanding payment of {{amount}} at Uzazi Clinic.'],
             ['name' => 'Lab Results Ready', 'type' => 'lab', 'body' => 'Hi {{name}}, your lab results are ready. Please visit Uzazi Clinic to collect them.'],
-            ['name' => 'Welcome Patient', 'type' => 'general', 'body' => 'Welcome to Uzazi Clinic. Your MRN is {{mrn}}. Save this number for future visits.'],
+            ['name' => 'Welcome Patient', 'type' => 'general', 'body' => 'Uzazi Clinic\nKaribu {{name}}!\nUmesajiliwa kwa mafanikio.\nMRN yako ni: {{mrn}}\nHifadhi namba hii kwa matumizi ya baadaye.\nKwa maswali piga: {{phone}}.\nAsante kwa kuchagua Uzazi Clinic.'],
         ];
 
         foreach ($templates as $template) {

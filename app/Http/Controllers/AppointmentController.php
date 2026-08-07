@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\User;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
@@ -87,6 +88,8 @@ class AppointmentController extends Controller
         $appointment = Appointment::create($data);
         $appointment->load(['patient', 'doctor']);
 
+        $this->sendAppointmentSms($appointment);
+
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => 'Appointment scheduled.', 'appointment' => $appointment]);
         }
@@ -131,5 +134,36 @@ class AppointmentController extends Controller
     {
         $appointment->delete();
         return back()->with('status', 'Appointment cancelled.');
+    }
+
+    private function sendAppointmentSms(Appointment $appointment): void
+    {
+        $patient = $appointment->patient;
+        if (! $patient || ! $patient->phone) {
+            return;
+        }
+
+        $clinicName = setting('clinic_name', config('app.name', 'Uzazi Clinic'));
+        $clinicPhone = setting('clinic_phone', '+255 700 000 000');
+        $clinicAddress = setting('clinic_address', 'Dar es Salaam, Tanzania');
+
+        $date = $appointment->scheduled_at->format('d/m/Y');
+        $time = $appointment->scheduled_at->format('H:i');
+        $patientName = $patient->first_name ?? 'Mteja';
+        $mrn = $patient->mrn ?? 'Haijulikani';
+
+        $message = "Uzazi Clinic\n"
+            . "Karibu {$patientName}!\n"
+            . "Miadi yako imewekwa kwa mafanikio.\n"
+            . "Tarehe: {$date}\n"
+            . "Saa: {$time}\n"
+            . "MRN: {$mrn}\n"
+            . "Lugha: Swahili/English\n"
+            . "Tafadhali fika dakika 15 kabla ya muda wako.\n"
+            . "Anwani: {$clinicAddress}\n"
+            . "Kwa maswali piga: {$clinicPhone}\n"
+            . "Asante kwa kuchagua {$clinicName}.";
+
+        SmsService::send($patient->phone, $message, auth()->user(), $patient->fullName());
     }
 }

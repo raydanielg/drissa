@@ -66,7 +66,7 @@ class SystemDefaultsSeeder extends Seeder
             ['name' => 'Appointment Reminder'],
             [
                 'type' => 'appointment',
-                'body' => 'Hi {{name}}, you have an appointment tomorrow at Uzazi Clinic.',
+                'body' => 'Uzazi Clinic\nKaribu {{name}}!\nMiadi yako imewekwa kwa mafanikio.\nTarehe: {{date}}\nSaa: {{time}}\nMRN: {{mrn}}\nTafadhali fika dakika 15 kabla ya muda wako.\nKwa maswali piga: {{phone}}.\nAsante kwa kuchagua Uzazi Clinic.',
                 'is_active' => true,
             ]
         );

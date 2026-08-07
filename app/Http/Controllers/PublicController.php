@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\User;
+use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -77,13 +78,15 @@ class PublicController extends Controller
 
         $scheduledAt = $data['preferred_date'] . ' ' . $data['preferred_time'] . ':00';
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'patient_id' => $patient->id,
             'scheduled_at' => $scheduledAt,
             'status' => 'scheduled',
             'type' => 'general',
             'notes' => $data['service_type'] . ': ' . ($data['reason'] ?? ''),
         ]);
+
+        $this->sendAppointmentSms($appointment, $patient);
 
         return redirect()->route('public.appointments')->with('success', 'Appointment booked successfully! Our team will confirm your visit via SMS.');
     }
@@ -115,5 +118,34 @@ class PublicController extends Controller
         ]);
 
         return redirect()->route('public.contact')->with('success', 'Message sent! We will get back to you soon.');
+    }
+
+    private function sendAppointmentSms(Appointment $appointment, Patient $patient): void
+    {
+        if (! $patient->phone) {
+            return;
+        }
+
+        $clinicName = setting('clinic_name', config('app.name', 'Uzazi Clinic'));
+        $clinicPhone = setting('clinic_phone', '+255 700 000 000');
+        $clinicAddress = setting('clinic_address', 'Dar es Salaam, Tanzania');
+
+        $date = $appointment->scheduled_at->format('d/m/Y');
+        $time = $appointment->scheduled_at->format('H:i');
+        $patientName = $patient->first_name ?? 'Mteja';
+        $mrn = $patient->mrn ?? 'Haijulikani';
+
+        $message = "Uzazi Clinic\n"
+            . "Karibu {$patientName}!\n"
+            . "Miadi yako imewekwa kwa mafanikio.\n"
+            . "Tarehe: {$date}\n"
+            . "Saa: {$time}\n"
+            . "MRN: {$mrn}\n"
+            . "Tafadhali fika dakika 15 kabla ya muda wako.\n"
+            . "Anwani: {$clinicAddress}\n"
+            . "Kwa maswali piga: {$clinicPhone}\n"
+            . "Asante kwa kuchagua {$clinicName}.";
+
+        SmsService::send($patient->phone, $message, null, $patient->fullName());
     }
 }
