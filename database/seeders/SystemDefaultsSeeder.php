@@ -67,7 +67,7 @@ class SystemDefaultsSeeder extends Seeder
             [
                 'slug' => 'appointment-reminder',
                 'type' => 'appointment',
-                'body' => 'Uzazi Clinic\nKaribu {{name}}!\nYour appointment: {{date}} at {{time}}\nMRN: {{mrn}}\nTafadhali fika 15 min mapema.\nKwa maswali: {{phone}}',
+                'body' => 'Karibu {{name}}!\nYour appointment: {{date}} at {{time}}\nMRN: {{mrn}}\nTafadhali fika 15 min mapema.\nKwa maswali: {{phone}}',
                 'is_active' => true,
             ]
         );

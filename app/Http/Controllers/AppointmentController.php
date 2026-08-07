@@ -244,15 +244,13 @@ class AppointmentController extends Controller
 
         $clinicName = Setting::get('clinic_name', config('app.name', 'Uzazi Clinic'));
         $clinicPhone = Setting::get('clinic_phone', '+255 700 000 000');
-        $clinicAddress = Setting::get('clinic_address', 'Dar es Salaam, Tanzania');
 
         $date = $appointment->scheduled_at->format('d/m/Y');
         $time = $appointment->scheduled_at->format('H:i');
         $patientName = $patient->first_name ?? 'Mteja';
         $mrn = $patient->mrn ?? 'Haijulikani';
 
-        $message = "Uzazi Clinic\n"
-            . "Karibu {$patientName}!\n"
+        $message = "Karibu {$patientName}!\n"
             . "Your appointment: {$date} at {$time}\n"
             . "MRN: {$mrn}\n"
             . "Tafadhali fika 15 min mapema.\n"
