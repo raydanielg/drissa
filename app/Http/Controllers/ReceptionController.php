@@ -219,7 +219,8 @@ class ReceptionController extends Controller
                 : back()->withErrors(['name' => 'First and last name are required.'])->withInput();
         }
 
-        $data['mrn'] = 'MRN-' . now()->format('Y') . '-' . str_pad(Patient::count() + 1, 5, '0', STR_PAD_LEFT);
+        $latestId = Patient::withTrashed()->max('id') ?? 0;
+        $data['mrn'] = 'MRN-' . now()->format('Y') . '-' . str_pad($latestId + 1, 5, '0', STR_PAD_LEFT);
 
         $patient = Patient::create($data);
 
