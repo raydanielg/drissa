@@ -718,6 +718,67 @@
             updateBadge();
             setInterval(updateBadge, 10000);
         })();
+
+        // Global call notification polling (reception & admin on any page)
+        @if(auth()->user()->isReception() || auth()->user()->isAdmin())
+        (function() {
+            let lastCallCheck = new Date().toISOString();
+            let shownNotificationIds = new Set();
+            const alarmSound = new Audio('{{ asset("mixkit-alarm-tone-996.wav") }}');
+            alarmSound.volume = 0.7;
+
+            // Create floating notification element
+            const notifContainer = document.createElement('div');
+            notifContainer.id = 'globalCallNotif';
+            notifContainer.className = 'fixed top-4 right-4 z-[9999] hidden';
+            notifContainer.innerHTML = `
+                <div class="bg-amber-50 border-2 border-amber-400 rounded-xl shadow-2xl p-4 max-w-sm animate-fade">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-amber-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-amber-900" id="globalCallNotifTitle"></p>
+                            <p class="text-xs text-amber-700 mt-0.5" id="globalCallNotifText"></p>
+                        </div>
+                        <button onclick="document.getElementById('globalCallNotif').classList.add('hidden')" class="text-amber-400 hover:text-amber-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(notifContainer);
+
+            async function pollCallNotifications() {
+                try {
+                    const res = await fetch('{{ route("reception.call-notifications") }}?since=' + encodeURIComponent(lastCallCheck), {
+                        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                        credentials: 'same-origin'
+                    });
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    lastCallCheck = data.server_time;
+
+                    const newNotifs = (data.notifications || []).filter(n => !shownNotificationIds.has(n.id));
+                    if (newNotifs.length > 0) {
+                        newNotifs.forEach(n => shownNotificationIds.add(n.id));
+                        const latest = newNotifs[0];
+                        document.getElementById('globalCallNotifTitle').textContent = 'Dr. ' + latest.doctor_name + ' is calling ' + latest.patient_name;
+                        document.getElementById('globalCallNotifText').textContent = 'Visit #' + latest.visit_number + ' - Please direct the patient. Called at ' + latest.time;
+                        notifContainer.classList.remove('hidden');
+
+                        alarmSound.currentTime = 0;
+                        alarmSound.play().catch(e => console.log('Audio blocked:', e));
+
+                        setTimeout(() => notifContainer.classList.add('hidden'), 30000);
+                    }
+                } catch (e) { console.error('Call poll failed', e); }
+            }
+
+            setTimeout(pollCallNotifications, 3000);
+            setInterval(pollCallNotifications, 10000);
+        })();
+        @endif
     </script>
     @stack('scripts')
 </body>
