@@ -9,6 +9,22 @@
         <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm animate-fade">{{ session('status') }}</div>
     @endif
 
+    {{-- Call Notification Banner --}}
+    <div id="callNotificationBanner" class="hidden p-4 rounded-xl bg-amber-50 border-2 border-amber-300 animate-fade">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-amber-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-sm font-bold text-amber-900" id="callNotificationTitle">Patient Called</p>
+                <p class="text-xs text-amber-700" id="callNotificationText"></p>
+            </div>
+            <button onclick="dismissCallNotification()" class="text-amber-500 hover:text-amber-700 p-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </div>
+
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -920,6 +936,46 @@
     }
 
     setInterval(refreshStats, 30000);
+
+    // Call notification polling
+    let lastCallCheck = new Date().toISOString();
+    let shownNotificationIds = new Set();
+    const alarmSound = new Audio('{{ asset("mixkit-alarm-tone-996.wav") }}');
+    alarmSound.volume = 0.7;
+
+    function dismissCallNotification() {
+        document.getElementById('callNotificationBanner').classList.add('hidden');
+    }
+
+    async function pollCallNotifications() {
+        try {
+            const res = await fetch('{{ route("reception.call-notifications") }}?since=' + encodeURIComponent(lastCallCheck), {
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }
+            });
+            const data = await res.json();
+            lastCallCheck = data.server_time;
+
+            const newNotifications = data.notifications.filter(n => !shownNotificationIds.has(n.id));
+            if (newNotifications.length > 0) {
+                newNotifications.forEach(n => shownNotificationIds.add(n.id));
+                const latest = newNotifications[0];
+                const banner = document.getElementById('callNotificationBanner');
+                document.getElementById('callNotificationTitle').textContent = 'Dr. ' + latest.doctor_name + ' is calling ' + latest.patient_name;
+                document.getElementById('callNotificationText').textContent = 'Visit #' + latest.visit_number + ' - Please direct the patient to the doctor\'s room. Called at ' + latest.time;
+                banner.classList.remove('hidden');
+
+                // Play sound
+                alarmSound.currentTime = 0;
+                alarmSound.play().catch(e => console.log('Audio play blocked:', e));
+
+                // Auto-dismiss after 30 seconds
+                setTimeout(() => banner.classList.add('hidden'), 30000);
+            }
+        } catch (e) { console.error('Call notification poll failed', e); }
+    }
+
+    setInterval(pollCallNotifications, 10000);
+    setTimeout(pollCallNotifications, 3000);
 
     // Cancel visit with confirmation
     function cancelVisit(visitId, visitNumber) {

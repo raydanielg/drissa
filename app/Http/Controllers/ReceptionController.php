@@ -155,6 +155,29 @@ class ReceptionController extends Controller
         ));
     }
 
+    public function callNotifications(Request $request)
+    {
+        $since = $request->get('since', now()->subMinutes(5)->toDateTimeString());
+
+        $visits = Visit::with(['patient', 'doctor'])
+            ->where('status', VisitStatus::WithDoctor->value)
+            ->where('updated_at', '>=', $since)
+            ->whereDate('registered_at', today())
+            ->get()
+            ->map(fn ($v) => [
+                'id' => $v->id,
+                'visit_number' => $v->visit_number,
+                'patient_name' => $v->patient?->fullName(),
+                'doctor_name' => $v->doctor?->name ?? 'Unassigned',
+                'time' => $v->updated_at->format('H:i'),
+            ]);
+
+        return response()->json([
+            'notifications' => $visits,
+            'server_time' => now()->toDateTimeString(),
+        ]);
+    }
+
     public function stats()
     {
         $visitTrend = collect();

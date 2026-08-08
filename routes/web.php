@@ -87,6 +87,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/queue', [ReceptionController::class, 'queue'])->name('queue');
         Route::get('/payments', [ReceptionController::class, 'payments'])->name('payments');
         Route::get('/stats', [ReceptionController::class, 'stats'])->name('stats');
+        Route::get('/call-notifications', [ReceptionController::class, 'callNotifications'])->name('call-notifications');
         Route::post('patients', [ReceptionController::class, 'storePatient'])->name('patients.store');
         Route::post('visits', [ReceptionController::class, 'storeVisit'])->name('visits.store');
         Route::post('visits/{visit}/assign', [ReceptionController::class, 'assignDoctor'])->name('visits.assign');

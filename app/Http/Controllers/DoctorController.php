@@ -180,7 +180,13 @@ class DoctorController extends Controller
     public function callNext(Visit $visit, VisitWorkflow $flow)
     {
         $flow->transition($visit, VisitStatus::WithDoctor);
-        return back()->with('status', 'Patient called in.');
+        ActivityLog::log('patient_called', $visit, "Doctor called patient {$visit->patient->fullName()} for visit {$visit->visit_number}");
+
+        if (request()->wantsJson()) {
+            return response()->json(['success' => true, 'message' => 'Patient called in. Reception has been notified.']);
+        }
+
+        return back()->with('status', 'Patient called in. Reception has been notified.');
     }
 
     public function markNoShow(Visit $visit, VisitWorkflow $flow)
