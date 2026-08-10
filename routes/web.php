@@ -174,6 +174,7 @@ Route::middleware('auth')->group(function () {
     Route::post('appointments/bulk-sms', [AppointmentController::class, 'bulkSms'])->name('appointments.bulk-sms');
 
     // Patient Registry, Documents & History
+    Route::get('patients/search', [PatientController::class, 'ajaxSearch'])->name('patients.ajax-search');
     Route::get('patients', [PatientController::class, 'index'])->name('patients.index');
     Route::get('patients/{patient}', [PatientController::class, 'show'])->name('patients.show');
     Route::get('patients/{patient}/edit', [PatientController::class, 'edit'])->name('patients.edit');

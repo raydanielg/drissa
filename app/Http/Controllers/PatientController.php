@@ -72,4 +72,29 @@ class PatientController extends Controller
         $patient->delete();
         return redirect()->route('patients.index')->with('status', 'Patient deleted successfully.');
     }
+
+    public function ajaxSearch(Request $request)
+    {
+        $search = $request->get('q');
+        $patients = Patient::where(function($q) use ($search) {
+            $q->where('first_name', 'like', "%{$search}%")
+              ->orWhere('last_name', 'like', "%{$search}%")
+              ->orWhere('mrn', 'like', "%{$search}%")
+              ->orWhere('phone', 'like', "%{$search}%");
+        })
+        ->latest()
+        ->limit(10)
+        ->get()
+        ->map(function($patient) {
+            return [
+                'id' => $patient->id,
+                'text' => $patient->fullName() . " (" . $patient->mrn . ")",
+                'phone' => $patient->phone,
+                'gender' => $patient->gender,
+                'age' => $patient->date_of_birth ? $patient->date_of_birth->age : 'N/A'
+            ];
+        });
+
+        return response()->json($patients);
+    }
 }

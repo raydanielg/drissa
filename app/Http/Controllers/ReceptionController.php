@@ -141,17 +141,10 @@ class ReceptionController extends Controller
 
         $doctors = User::role('doctor')->get();
         $patientsList = Patient::orderBy('first_name')->get();
-        $patientSearchData = $patientsList->map(fn ($patient) => [
-            'id' => $patient->id,
-            'name' => $patient->fullName(),
-            'mrn' => $patient->mrn,
-            'phone' => $patient->phone,
-            'url' => route('patients.show', $patient),
-        ])->values();
 
         return view('reception.queue', compact(
             'allQueues', 'registeredQueue', 'waitingForDoctorQueue', 'withDoctorQueue',
-            'doctors', 'patientsList', 'patientSearchData'
+            'doctors', 'patientsList'
         ));
     }
 

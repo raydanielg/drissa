@@ -453,15 +453,36 @@
             </div>
             <form id="openVisitForm" method="POST" action="{{ route('reception.visits.store') }}" class="space-y-4">
                 @csrf
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Patient</label>
-                    <input type="text" id="openVisitPatientSearch" placeholder="Search patient by name, phone or MRN..." class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mb-1">
-                    <select name="patient_id" id="openVisitPatientSelect" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
-                        <option value="">Select patient</option>
-                        @foreach ($patientsList as $patient)
-                            <option value="{{ $patient->id }}" data-search="{{ strtolower($patient->fullName() . ' ' . ($patient->phone ?? '') . ' ' . $patient->mrn) }}">{{ $patient->fullName() }} ({{ $patient->mrn }})</option>
-                        @endforeach
-                    </select>
+                <div class="relative" id="patientSearchContainer">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Patient</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <input type="text" id="patientSearchInput" autocomplete="off" class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all" placeholder="Search by name, MRN or phone...">
+                        <input type="hidden" name="patient_id" id="selectedPatientId" required>
+                        
+                        {{-- Selected Patient Indicator --}}
+                        <div id="selectedPatientIndicator" class="hidden absolute inset-y-0 left-0 right-10 flex items-center pl-3 bg-emerald-50 rounded-lg pointer-events-none">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-white text-[10px] font-bold" id="indicatorInitial"></div>
+                                <span class="text-sm font-medium text-emerald-800" id="indicatorName"></span>
+                                <span class="text-xs text-emerald-600" id="indicatorMRN"></span>
+                            </div>
+                        </div>
+                        
+                        <button type="button" id="clearPatientBtn" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    
+                    {{-- Search Results Dropdown --}}
+                    <div id="patientSearchResults" class="hidden absolute z-[60] left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-64 overflow-y-auto overflow-x-hidden animate-fade">
+                        <div class="p-4 text-center text-gray-500 text-sm" id="searchPlaceholder">Start typing to search...</div>
+                        <div class="p-4 text-center text-gray-500 text-sm hidden" id="searchLoading">Searching...</div>
+                        <div class="p-4 text-center text-gray-500 text-sm hidden" id="noResults">No patients found</div>
+                        <div class="divide-y divide-gray-50" id="resultsList"></div>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-gray-700 mb-1">Visit Type</label>
@@ -722,8 +743,119 @@
     // Modal helpers
     function openRegisterPatientModal() { document.getElementById('registerPatientModal').classList.remove('hidden'); }
     function closeRegisterPatientModal() { document.getElementById('registerPatientModal').classList.add('hidden'); }
-    function openOpenVisitModal() { document.getElementById('openVisitModal').classList.remove('hidden'); }
-    function closeOpenVisitModal() { document.getElementById('openVisitModal').classList.add('hidden'); }
+    function openOpenVisitModal() { 
+        document.getElementById('openVisitModal').classList.remove('hidden'); 
+        setTimeout(() => document.getElementById('patientSearchInput').focus(), 100);
+    }
+    function closeOpenVisitModal() { 
+        document.getElementById('openVisitModal').classList.add('hidden'); 
+        clearPatientSelection();
+    }
+
+    // Patient AJAX Search Logic
+    const searchInput = document.getElementById('patientSearchInput');
+    const resultsDropdown = document.getElementById('patientSearchResults');
+    const resultsList = document.getElementById('resultsList');
+    const searchLoading = document.getElementById('searchLoading');
+    const searchPlaceholder = document.getElementById('searchPlaceholder');
+    const noResults = document.getElementById('noResults');
+    const selectedPatientId = document.getElementById('selectedPatientId');
+    const selectedPatientIndicator = document.getElementById('selectedPatientIndicator');
+    const clearPatientBtn = document.getElementById('clearPatientBtn');
+    const indicatorInitial = document.getElementById('indicatorInitial');
+    const indicatorName = document.getElementById('indicatorName');
+    const indicatorMRN = document.getElementById('indicatorMRN');
+
+    let searchTimeout = null;
+
+    function clearPatientSelection() {
+        if (!selectedPatientId) return;
+        selectedPatientId.value = '';
+        searchInput.value = '';
+        searchInput.classList.remove('hidden');
+        selectedPatientIndicator.classList.add('hidden');
+        clearPatientBtn.classList.add('hidden');
+        resultsDropdown.classList.add('hidden');
+    }
+
+    clearPatientBtn?.addEventListener('click', clearPatientSelection);
+
+    searchInput?.addEventListener('input', function(e) {
+        const query = e.target.value.trim();
+        
+        if (query.length === 0) {
+            resultsDropdown.classList.add('hidden');
+            return;
+        }
+
+        resultsDropdown.classList.remove('hidden');
+        resultsList.innerHTML = '';
+        searchPlaceholder.classList.add('hidden');
+        searchLoading.classList.remove('hidden');
+        noResults.classList.add('hidden');
+
+        if (searchTimeout) clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+            fetch(`{{ route('patients.ajax-search') }}?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    searchLoading.classList.add('hidden');
+                    
+                    if (data.length === 0) {
+                        noResults.classList.remove('hidden');
+                        return;
+                    }
+
+                    data.forEach(patient => {
+                        const row = document.createElement('button');
+                        row.type = 'button';
+                        row.className = 'w-full text-left p-3 hover:bg-emerald-50 transition-colors flex items-center justify-between group border-b border-gray-50 last:border-0';
+                        row.innerHTML = `
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-bold text-xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                    ${patient.text.charAt(0)}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">${patient.text}</p>
+                                    <p class="text-[10px] text-gray-500">${patient.phone || 'No phone'} • ${patient.gender} • ${patient.age} yrs</p>
+                                </div>
+                            </div>
+                            <svg class="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        `;
+                        
+                        row.addEventListener('click', () => {
+                            selectPatient(patient);
+                        });
+                        
+                        resultsList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    searchLoading.classList.add('hidden');
+                });
+        }, 300);
+    });
+
+    function selectPatient(patient) {
+        selectedPatientId.value = patient.id;
+        indicatorName.textContent = patient.text.split(' (')[0];
+        indicatorMRN.textContent = `(${patient.text.split(' (')[1]}`;
+        indicatorInitial.textContent = patient.text.charAt(0);
+        
+        searchInput.classList.add('hidden');
+        selectedPatientIndicator.classList.remove('hidden');
+        clearPatientBtn.classList.remove('hidden');
+        resultsDropdown.classList.add('hidden');
+    }
+
+    // Close dropdown on click outside
+    document.addEventListener('click', function(e) {
+        if (!document.getElementById('patientSearchContainer')?.contains(e.target)) {
+            resultsDropdown?.classList.add('hidden');
+        }
+    });
 
     // Payment modal
     function openPaymentModal(visitId, visitNumber, patientName, total, paid, balance) {
@@ -828,16 +960,6 @@
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
             document.querySelectorAll('.queue-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
-        });
-    });
-
-    // Patient search in open visit modal
-    document.getElementById('openVisitPatientSearch')?.addEventListener('input', function() {
-        const q = this.value.toLowerCase();
-        const select = document.getElementById('openVisitPatientSelect');
-        Array.from(select.querySelectorAll('option')).forEach(opt => {
-            if (!opt.value) { opt.style.display = 'block'; return; }
-            opt.style.display = (opt.dataset.search || '').includes(q) ? 'block' : 'none';
         });
     });
 
