@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Invoice;
 use App\Models\Patient;
+use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\User;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -21,7 +24,7 @@ class AppointmentController extends Controller
         $filter = $request->get('filter', 'today');
         $date = $request->get('date');
 
-        $query = Appointment::with(['patient', 'doctor']);
+        $query = Appointment::with(['patient', 'doctor', 'invoice']);
 
         if ($date) {
             $query->whereDate('scheduled_at', $date);
@@ -83,11 +86,61 @@ class AppointmentController extends Controller
             'type' => 'required|in:general,followup,emergency',
             'status' => 'required|in:scheduled,confirmed,completed,cancelled,no_show',
             'notes' => 'nullable|string',
+            'collect_payment' => 'nullable|in:1',
+            'payment_amount' => 'nullable|numeric|min:0',
+            'payment_method' => 'nullable|in:cash,card,mobile_money,insurance',
         ]);
 
         $data['scheduled_at'] = $request->appointment_date . ' ' . $request->start_time . ':00';
-        $appointment = Appointment::create($data);
-        $appointment->load(['patient', 'doctor']);
+        unset($data['collect_payment'], $data['payment_amount'], $data['payment_method']);
+
+        DB::transaction(function () use ($request, &$data) {
+            $appointment = Appointment::create($data);
+            $appointment->load(['patient', 'doctor']);
+
+            // Create invoice and record payment if requested
+            if ($request->has('collect_payment') && $request->collect_payment == '1') {
+                $consultationFee = (float) Setting::get('consultation_fee', 10000);
+                $paymentAmount = (float) ($request->payment_amount ?? $consultationFee);
+                $paymentMethod = $request->payment_method ?? 'cash';
+
+                $invoice = Invoice::create([
+                    'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::withTrashed()->max('id') + 1, 6, '0', STR_PAD_LEFT),
+                    'visit_id' => null,
+                    'patient_id' => $appointment->patient_id,
+                    'total' => $consultationFee,
+                    'paid' => 0,
+                    'status' => 'unpaid',
+                ]);
+
+                $invoice->items()->create([
+                    'description' => 'Consultation Fee',
+                    'quantity' => 1,
+                    'unit_price' => $consultationFee,
+                    'line_total' => $consultationFee,
+                ]);
+
+                Payment::create([
+                    'invoice_id' => $invoice->id,
+                    'received_by' => auth()->id(),
+                    'amount' => $paymentAmount,
+                    'method' => $paymentMethod,
+                ]);
+
+                $totalPaid = $invoice->payments()->sum('amount');
+                $invoice->update([
+                    'paid' => $totalPaid,
+                    'status' => $totalPaid >= $invoice->total ? 'paid' : ($totalPaid > 0 ? 'partial' : 'unpaid'),
+                ]);
+
+                $appointment->update(['invoice_id' => $invoice->id]);
+            }
+
+            $this->appointment = $appointment;
+        });
+
+        $appointment = $this->appointment;
+        $appointment->load(['patient', 'doctor', 'invoice']);
 
         $smsResult = null;
         try {
@@ -101,6 +154,14 @@ class AppointmentController extends Controller
         }
 
         $statusMsg = 'Appointment scheduled.';
+        if ($appointment->invoice) {
+            $invoice = $appointment->invoice;
+            if ($invoice->status === 'paid') {
+                $statusMsg .= ' Payment of ' . number_format($invoice->paid) . ' TSh collected.';
+            } elseif ($invoice->status === 'partial') {
+                $statusMsg .= ' Partial payment of ' . number_format($invoice->paid) . ' TSh collected. Balance: ' . number_format($invoice->total - $invoice->paid) . ' TSh.';
+            }
+        }
         if ($smsResult) {
             $statusMsg .= $smsResult['success']
                 ? ' SMS sent to patient.'
@@ -250,11 +311,11 @@ class AppointmentController extends Controller
         $patientName = $patient->first_name ?? 'Mteja';
         $mrn = $patient->mrn ?? 'Haijulikani';
 
-        $message = "Karibu {$patientName}!\n"
-            . "Your appointment: {$date} at {$time}\n"
-            . "MRN: {$mrn}\n"
-            . "Tafadhali fika 15 min mapema.\n"
-            . "Kwa maswali: {$clinicPhone}";
+        $message = "Hello {$patientName}, Karibu UZAZI CLINIC\n"
+            . "Appointment Yako Ni: {$date} Saa {$time}\n"
+            . "ID yako ni {$mrn}\n"
+            . "Tafadhali fika On Time.\n"
+            . "Kwa maswali Piga {$clinicPhone}";
 
         return SmsService::send($patient->phone, $message, auth()->user(), $patient->fullName());
     }

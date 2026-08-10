@@ -484,6 +484,13 @@
                     <label class="block text-xs font-medium text-gray-700 mb-1">Chief Complaint</label>
                     <textarea name="chief_complaint" placeholder="Chief complaint" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" rows="3"></textarea>
                 </div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-emerald-700">Consultation Fee</p>
+                        <p class="text-xs text-emerald-600">Collect this amount from the patient</p>
+                    </div>
+                    <p class="text-lg font-bold text-emerald-700">{{ number_format(\App\Models\Setting::get('consultation_fee', 10000)) }} TSh</p>
+                </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeOpenVisitModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
                     <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700">Open Visit</button>

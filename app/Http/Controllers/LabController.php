@@ -8,6 +8,7 @@ use App\Models\LabAttachment;
 use App\Models\LabOrder;
 use App\Models\LabOrderItem;
 use App\Models\LabResult;
+use App\Models\Patient;
 use App\Models\Visit;
 use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
@@ -124,5 +125,40 @@ class LabController extends Controller
         $order->load(['visit.patient', 'items.labTest', 'results.labOrderItem', 'attachments', 'doctor', 'labTech']);
 
         return view('lab.results', compact('order'));
+    }
+
+    public function history(Request $request)
+    {
+        $query = Patient::withCount(['labOrders as total_orders' => fn($q) => $q->where('status', 'completed')])
+            ->having('total_orders', '>', 0)
+            ->orderByDesc('total_orders');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('mrn', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        $patients = $query->paginate(20);
+
+        return view('lab.history', compact('patients'));
+    }
+
+    public function patientHistory(Patient $patient)
+    {
+        $orders = LabOrder::with(['visit', 'items.labTest', 'results.labOrderItem', 'attachments', 'doctor', 'labTech'])
+            ->whereHas('visit', fn($q) => $q->where('patient_id', $patient->id))
+            ->latest()
+            ->get();
+
+        $totalTests = $orders->flatMap->items->count();
+        $completedOrders = $orders->where('status', 'completed');
+        $abnormalResults = $completedOrders->flatMap->results->whereNotIn('flag', ['normal'])->count();
+
+        return view('lab.patient-history', compact('patient', 'orders', 'totalTests', 'completedOrders', 'abnormalResults'));
     }
 }

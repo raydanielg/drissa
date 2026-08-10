@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LabOrder;
 use App\Models\Patient;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,17 @@ class PatientHistoryController extends Controller
 
     public function show(Patient $patient)
     {
-        $patient->load(['visits.doctor', 'clinicalRecords.doctor', 'appointments.doctor', 'documents']);
+        $patient->load([
+            'visits.doctor',
+            'clinicalRecords.doctor',
+            'appointments.doctor',
+            'documents',
+        ]);
+
+        $labOrders = LabOrder::with(['visit', 'items.labTest', 'items.results', 'attachments', 'doctor', 'labTech'])
+            ->whereHas('visit', fn($q) => $q->where('patient_id', $patient->id))
+            ->latest()
+            ->get();
 
         $timeline = collect()
             ->merge($patient->visits->map(fn($v) => [
@@ -30,6 +41,15 @@ class PatientHistoryController extends Controller
                 'title' => 'Clinical Record',
                 'subtitle' => 'Diagnosis: ' . Str::limit($r->diagnosis, 40),
                 'link' => route('clinical-records.show', $r),
+            ]))
+            ->merge($labOrders->map(fn($o) => [
+                'date' => $o->completed_at ?? $o->created_at,
+                'type' => 'lab',
+                'title' => 'Lab Order #' . $o->id . ' - ' . $o->items->pluck('labTest.name')->implode(', '),
+                'subtitle' => $o->status === 'completed'
+                    ? $o->items->flatMap->results->whereNotIn('flag', ['normal'])->count() . ' abnormal results'
+                    : 'Status: ' . ucfirst($o->status),
+                'link' => route('lab.orders.show', $o),
             ]))
             ->merge($patient->appointments->map(fn($a) => [
                 'date' => $a->scheduled_at,
@@ -48,6 +68,10 @@ class PatientHistoryController extends Controller
             ->sortByDesc('date')
             ->values();
 
-        return view('patients.history', compact('patient', 'timeline'));
+        $totalTests = $labOrders->flatMap->items->count();
+        $completedOrders = $labOrders->where('status', 'completed');
+        $abnormalResults = $completedOrders->flatMap->results->whereNotIn('flag', ['normal'])->count();
+
+        return view('patients.history', compact('patient', 'timeline', 'labOrders', 'totalTests', 'completedOrders', 'abnormalResults'));
     }
 }

@@ -21,8 +21,24 @@
             <input type="text" name="unit" value="{{ $labTest->unit }}" class="w-full border rounded-lg px-3 py-2 text-sm">
         </div>
         <div class="sm:col-span-2">
-            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range</label>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (General)</label>
             <input type="text" name="reference_range" value="{{ $labTest->reference_range }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Male)</label>
+            <input type="text" name="reference_range_male" value="{{ $labTest->reference_range_male }}" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 3.5-5.5">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Female)</label>
+            <input type="text" name="reference_range_female" value="{{ $labTest->reference_range_female }}" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 3.0-5.0">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Pregnant)</label>
+            <input type="text" name="reference_range_pregnant" value="{{ $labTest->reference_range_pregnant }}" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 2.5-4.5">
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Safe Days)</label>
+            <input type="text" name="reference_range_safe" value="{{ $labTest->reference_range_safe }}" class="w-full border rounded-lg px-3 py-2 text-sm" placeholder="e.g. 3.0-5.0">
         </div>
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Price</label>

@@ -66,7 +66,7 @@
                         <th class="px-6 py-3">Name</th>
                         <th class="px-6 py-3">Code</th>
                         <th class="px-6 py-3">Unit</th>
-                        <th class="px-6 py-3">Reference Range</th>
+                        <th class="px-6 py-3">Reference Ranges</th>
                         <th class="px-6 py-3">Price</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-right">Actions</th>
@@ -78,7 +78,28 @@
                             <td class="px-6 py-3.5 font-medium text-gray-900">{{ $test->name }}</td>
                             <td class="px-6 py-3.5 text-gray-700">{{ $test->code ?? '-' }}</td>
                             <td class="px-6 py-3.5 text-gray-700">{{ $test->unit ?? '-' }}</td>
-                            <td class="px-6 py-3.5 text-gray-700">{{ $test->reference_range ?? '-' }}</td>
+                            <td class="px-6 py-3.5">
+                                <div class="space-y-0.5">
+                                    @if($test->reference_range)
+                                        <div class="text-xs text-gray-700"><span class="text-gray-400">Gen:</span> {{ $test->reference_range }}</div>
+                                    @endif
+                                    @if($test->reference_range_male)
+                                        <div class="text-xs text-gray-700"><span class="text-blue-500">M:</span> {{ $test->reference_range_male }}</div>
+                                    @endif
+                                    @if($test->reference_range_female)
+                                        <div class="text-xs text-gray-700"><span class="text-pink-500">F:</span> {{ $test->reference_range_female }}</div>
+                                    @endif
+                                    @if($test->reference_range_pregnant)
+                                        <div class="text-xs text-gray-700"><span class="text-purple-500">Preg:</span> {{ $test->reference_range_pregnant }}</div>
+                                    @endif
+                                    @if($test->reference_range_safe)
+                                        <div class="text-xs text-gray-700"><span class="text-emerald-500">Safe:</span> {{ $test->reference_range_safe }}</div>
+                                    @endif
+                                    @if(!$test->reference_range && !$test->reference_range_male && !$test->reference_range_female && !$test->reference_range_pregnant && !$test->reference_range_safe)
+                                        <span class="text-gray-400">-</span>
+                                    @endif
+                                </div>
+                            </td>
                             <td class="px-6 py-3.5 text-gray-700 font-medium">TSh {{ number_format($test->price, 2) }}</td>
                             <td class="px-6 py-3.5">
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium {{ $test->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700' }}">
@@ -157,8 +178,24 @@
                 <input type="text" name="unit" id="lt_unit" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
             <div class="col-span-2">
-                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range</label>
-                <input type="text" name="reference_range" id="lt_reference_range" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (General)</label>
+                <input type="text" name="reference_range" id="lt_reference_range" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g. 4.0-11.0">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Male)</label>
+                <input type="text" name="reference_range_male" id="lt_reference_range_male" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g. 3.5-5.5">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Female)</label>
+                <input type="text" name="reference_range_female" id="lt_reference_range_female" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g. 3.0-5.0">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Pregnant)</label>
+                <input type="text" name="reference_range_pregnant" id="lt_reference_range_pregnant" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g. 2.5-4.5">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Reference Range (Safe Days)</label>
+                <input type="text" name="reference_range_safe" id="lt_reference_range_safe" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" placeholder="e.g. 3.0-5.0">
             </div>
             <div class="col-span-2 sm:col-span-1">
                 <label class="block text-xs font-medium text-gray-700 mb-1">Price <span class="text-red-500">*</span></label>
@@ -337,6 +374,10 @@
         document.getElementById('lt_code').value = '';
         document.getElementById('lt_unit').value = '';
         document.getElementById('lt_reference_range').value = '';
+        document.getElementById('lt_reference_range_male').value = '';
+        document.getElementById('lt_reference_range_female').value = '';
+        document.getElementById('lt_reference_range_pregnant').value = '';
+        document.getElementById('lt_reference_range_safe').value = '';
         document.getElementById('lt_price').value = '';
         document.getElementById('lt_is_active').checked = true;
         document.getElementById('lt_description').value = '';
@@ -362,6 +403,10 @@
             document.getElementById('lt_code').value = test.code || '';
             document.getElementById('lt_unit').value = test.unit || '';
             document.getElementById('lt_reference_range').value = test.reference_range || '';
+            document.getElementById('lt_reference_range_male').value = test.reference_range_male || '';
+            document.getElementById('lt_reference_range_female').value = test.reference_range_female || '';
+            document.getElementById('lt_reference_range_pregnant').value = test.reference_range_pregnant || '';
+            document.getElementById('lt_reference_range_safe').value = test.reference_range_safe || '';
             document.getElementById('lt_price').value = test.price;
             document.getElementById('lt_is_active').checked = test.is_active;
             document.getElementById('lt_description').value = test.description || '';

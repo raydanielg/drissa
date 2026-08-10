@@ -135,11 +135,11 @@ class PublicController extends Controller
         $patientName = $patient->first_name ?? 'Mteja';
         $mrn = $patient->mrn ?? 'Haijulikani';
 
-        $message = "Karibu {$patientName}!\n"
-            . "Your appointment: {$date} at {$time}\n"
-            . "MRN: {$mrn}\n"
-            . "Tafadhali fika 15 min mapema.\n"
-            . "Kwa maswali: {$clinicPhone}";
+        $message = "Hello {$patientName}, Karibu UZAZI CLINIC\n"
+            . "Appointment Yako Ni: {$date} Saa {$time}\n"
+            . "ID yako ni {$mrn}\n"
+            . "Tafadhali fika On Time.\n"
+            . "Kwa maswali Piga {$clinicPhone}";
 
         SmsService::send($patient->phone, $message, null, $patient->fullName());
     }

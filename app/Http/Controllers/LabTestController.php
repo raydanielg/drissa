@@ -31,9 +31,18 @@ class LabTestController extends Controller
             'description' => 'nullable|string',
             'unit' => 'nullable|string|max:50',
             'reference_range' => 'nullable|string|max:255',
+            'reference_range_male' => 'nullable|string|max:255',
+            'reference_range_female' => 'nullable|string|max:255',
+            'reference_range_pregnant' => 'nullable|string|max:255',
+            'reference_range_safe' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'is_active' => 'boolean',
         ]);
+
+        $data['reference_range_male'] = $data['reference_range_male'] ?? null;
+        $data['reference_range_female'] = $data['reference_range_female'] ?? null;
+        $data['reference_range_pregnant'] = $data['reference_range_pregnant'] ?? null;
+        $data['reference_range_safe'] = $data['reference_range_safe'] ?? null;
 
         $data['is_active'] = $request->boolean('is_active', true);
         $test = LabTest::create($data);
@@ -61,9 +70,18 @@ class LabTestController extends Controller
             'description' => 'nullable|string',
             'unit' => 'nullable|string|max:50',
             'reference_range' => 'nullable|string|max:255',
+            'reference_range_male' => 'nullable|string|max:255',
+            'reference_range_female' => 'nullable|string|max:255',
+            'reference_range_pregnant' => 'nullable|string|max:255',
+            'reference_range_safe' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'is_active' => 'boolean',
         ]);
+
+        $data['reference_range_male'] = $data['reference_range_male'] ?? null;
+        $data['reference_range_female'] = $data['reference_range_female'] ?? null;
+        $data['reference_range_pregnant'] = $data['reference_range_pregnant'] ?? null;
+        $data['reference_range_safe'] = $data['reference_range_safe'] ?? null;
 
         $data['is_active'] = $request->boolean('is_active', true);
         $labTest->update($data);

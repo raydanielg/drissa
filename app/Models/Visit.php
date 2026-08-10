@@ -75,4 +75,9 @@ class Visit extends Model
     {
         return $this->hasOne(ClinicalRecord::class);
     }
+
+    public function ultrasoundOrders()
+    {
+        return $this->hasMany(UltrasoundOrder::class);
+    }
 }

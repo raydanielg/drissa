@@ -181,13 +181,40 @@
                                             <input type="hidden" name="results[{{ $index }}][lab_order_item_id]" value="{{ $item->id }}">
 
                                             {{-- Parameter rows --}}
+                                            @php
+                                                $patient = $order->visit->patient;
+                                                $isFemale = $patient && $patient->gender === 'female';
+                                                $refRange = $item->labTest?->reference_range ?? '';
+                                                if ($isFemale && $item->labTest?->reference_range_female) {
+                                                    $refRange = $item->labTest->reference_range_female;
+                                                } elseif (!$isFemale && $item->labTest?->reference_range_male) {
+                                                    $refRange = $item->labTest->reference_range_male;
+                                                }
+                                            @endphp
                                             <div class="space-y-2" id="param-rows-{{ $item->id }}">
                                                 <div class="grid grid-cols-12 gap-2 items-center">
                                                     <input type="text" name="results[{{ $index }}][parameter]" placeholder="Parameter (e.g. Hemoglobin)" class="col-span-4 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
                                                     <input type="text" name="results[{{ $index }}][value]" placeholder="Result value" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
                                                     <input type="text" name="results[{{ $index }}][unit]" placeholder="Unit" value="{{ $item->labTest?->unit ?? '' }}" class="col-span-2 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                                    <input type="text" name="results[{{ $index }}][reference_range]" placeholder="Ref range" value="{{ $item->labTest?->reference_range ?? '' }}" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                    <input type="text" name="results[{{ $index }}][reference_range]" placeholder="Ref range" value="{{ $refRange }}" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                                                 </div>
+                                                @if($isFemale && ($item->labTest?->reference_range_female || $item->labTest?->reference_range_pregnant || $item->labTest?->reference_range_safe))
+                                                <div class="flex flex-wrap gap-1.5 text-[10px]">
+                                                    @if($item->labTest?->reference_range_female)
+                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_female }}'" class="px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100">F: {{ $item->labTest->reference_range_female }}</button>
+                                                    @endif
+                                                    @if($item->labTest?->reference_range_pregnant)
+                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_pregnant }}'" class="px-2 py-0.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200 hover:bg-purple-100">Preg: {{ $item->labTest->reference_range_pregnant }}</button>
+                                                    @endif
+                                                    @if($item->labTest?->reference_range_safe)
+                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_safe }}'" class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100">Safe: {{ $item->labTest->reference_range_safe }}</button>
+                                                    @endif
+                                                </div>
+                                                @elseif(!$isFemale && $item->labTest?->reference_range_male)
+                                                <div class="flex flex-wrap gap-1.5 text-[10px]">
+                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_male }}'" class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100">M: {{ $item->labTest->reference_range_male }}</button>
+                                                </div>
+                                                @endif
                                                 <div class="flex items-center gap-2">
                                                     <select name="results[{{ $index }}][flag]" class="border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                                                         <option value="normal">🟢 Normal</option>
@@ -275,6 +302,10 @@
                                     <td class="px-6 py-3 text-xs text-gray-500">{{ $order->completed_at?->diffForHumans() }}</td>
                                     <td class="px-6 py-3">
                                         <div class="flex items-center gap-2">
+                                            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-medium rounded-lg transition-colors" title="View patient lab history">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                History
+                                            </a>
                                             <a href="{{ route('lab.orders.show', $order) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                                 View

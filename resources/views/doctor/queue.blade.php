@@ -264,6 +264,36 @@
                                 </div>
                             </form>
 
+                            {{-- Ultrasound Order --}}
+                            <form method="POST" action="{{ route('doctor.visits.ultrasound', $visit) }}" class="w-full bg-purple-50 border border-purple-100 rounded-lg p-4 space-y-3">
+                                @csrf
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="w-7 h-7 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-900">Order Ultrasound</p>
+                                </div>
+                                @if($ultrasoundServices->isNotEmpty())
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                    @foreach($ultrasoundServices as $service)
+                                        <label class="flex items-center gap-2 p-2 bg-white border border-purple-100 rounded-lg cursor-pointer hover:bg-purple-50 transition-colors">
+                                            <input type="checkbox" name="service_ids[]" value="{{ $service->id }}" class="rounded border-gray-300 text-purple-600 focus:ring-purple-500">
+                                            <span class="text-xs text-gray-700">{{ $service->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <textarea name="notes" placeholder="Clinical notes for ultrasound" class="w-full border border-purple-200 rounded-lg px-3 py-2 text-xs focus:border-purple-500 focus:ring-purple-500" rows="2"></textarea>
+                                <div class="flex justify-end">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg transition-colors">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        Send to Ultrasound
+                                    </button>
+                                </div>
+                                @else
+                                <p class="text-xs text-gray-500 py-2">No ultrasound services configured. <a href="{{ route('ultrasound-services.create') }}" class="text-purple-600 hover:text-purple-700">Add services</a></p>
+                                @endif
+                            </form>
+
                             {{-- Prescription --}}
                             <form method="POST" action="{{ route('doctor.visits.prescribe', $visit) }}" class="w-full bg-violet-50 border border-violet-100 rounded-lg p-4 space-y-3">
                                 @csrf
@@ -310,38 +340,306 @@
                 </div>
 
                 {{-- Previous Activity Section --}}
-                @if ($visit->prescriptions->isNotEmpty() || $visit->labOrders->isNotEmpty())
-                    <div class="mt-6 border-t border-gray-100 pt-4">
-                        <p class="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-3">Previous Activity</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            @if ($visit->labOrders->isNotEmpty())
-                                <div class="bg-sky-50 rounded-lg p-3">
-                                    <p class="text-xs font-semibold text-sky-700 mb-2">Lab Orders</p>
-                                    <ul class="space-y-1">
-                                        @foreach ($visit->labOrders as $order)
-                                            <li class="text-xs text-gray-700 flex items-center gap-1">
-                                                <span class="w-1.5 h-1.5 rounded-full {{ $order->status === 'completed' ? 'bg-emerald-500' : 'bg-amber-500' }}"></span>
-                                                Order #{{ $order->id }} — {{ $order->items->pluck('labTest.name')->implode(', ') }}
-                                                <span class="text-[10px] text-gray-500">({{ $order->status }})</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            @if ($visit->prescriptions->isNotEmpty())
-                                <div class="bg-violet-50 rounded-lg p-3">
-                                    <p class="text-xs font-semibold text-violet-700 mb-2">Prescriptions</p>
-                                    <ul class="space-y-1">
-                                        @foreach ($visit->prescriptions as $prescription)
-                                            <li class="text-xs text-gray-700">
-                                                {{ $prescription->items->pluck('medication.name')->implode(', ') }}
-                                                <span class="text-[10px] text-gray-500">— {{ $prescription->created_at->format('M d, H:i') }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                @php
+                    $hasActivity = $visit->prescriptions->isNotEmpty()
+                        || $visit->labOrders->isNotEmpty()
+                        || $visit->ultrasoundOrders->isNotEmpty()
+                        || $visit->consultation
+                        || $visit->vitals;
+                    $previousVisits = $visit->patient->visits->filter(fn($v) => $v->id !== $visit->id);
+                @endphp
+                @if ($hasActivity || $previousVisits->isNotEmpty())
+                    <div class="mt-6 border-t-2 border-gray-100 pt-5">
+                        <div class="flex items-center gap-2 mb-4">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <p class="text-sm font-bold text-gray-800">Previous Activity</p>
+                            <span class="text-xs text-gray-400">- History ya mgonjwa</span>
+                            <a href="{{ route('patients.history', $visit->patient) }}" class="ml-auto inline-flex items-center gap-1 px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-semibold rounded-lg transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                Full History
+                            </a>
                         </div>
+
+                        {{-- Current Visit Activity --}}
+                        @if ($hasActivity)
+                        <div class="mb-5">
+                            <p class="text-xs font-semibold text-emerald-700 mb-3 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                Current Visit - {{ $visit->registered_at->format('M d, Y H:i') }}
+                            </p>
+                            <div class="space-y-3 ml-3 border-l-2 border-emerald-100 pl-4">
+                                {{-- Vitals --}}
+                                @if ($visit->vitals)
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-teal-500 border-2 border-white"></span>
+                                        <div class="bg-teal-50 rounded-lg p-3 border border-teal-100">
+                                            <p class="text-xs font-semibold text-teal-700 mb-1.5 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                                Vitals
+                                            </p>
+                                            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-700">
+                                                @if($visit->vitals->temperature)<span><strong>Temp:</strong> {{ $visit->vitals->temperature }}°C</span>@endif
+                                                @if($visit->vitals->blood_pressure)<span><strong>BP:</strong> {{ $visit->vitals->blood_pressure }}</span>@endif
+                                                @if($visit->vitals->pulse)<span><strong>Pulse:</strong> {{ $visit->vitals->pulse }} bpm</span>@endif
+                                                @if($visit->vitals->weight)<span><strong>Wt:</strong> {{ $visit->vitals->weight }} kg</span>@endif
+                                                @if($visit->vitals->height)<span><strong>Ht:</strong> {{ $visit->vitals->height }} cm</span>@endif
+                                                @if($visit->vitals->respiratory_rate)<span><strong>RR:</strong> {{ $visit->vitals->respiratory_rate }}</span>@endif
+                                                @if($visit->vitals->oxygen_saturation)<span><strong>SpO2:</strong> {{ $visit->vitals->oxygen_saturation }}%</span>@endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- Consultation --}}
+                                @if ($visit->consultation)
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white"></span>
+                                        <div class="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
+                                            <p class="text-xs font-semibold text-indigo-700 mb-1.5 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                                Consultation
+                                            </p>
+                                            <div class="space-y-1.5 text-xs text-gray-700">
+                                                @if($visit->consultation->history)<p><strong>History:</strong> {{ $visit->consultation->history }}</p>@endif
+                                                @if($visit->consultation->examination)<p><strong>Examination:</strong> {{ $visit->consultation->examination }}</p>@endif
+                                                @if($visit->consultation->diagnosis)<p><strong>Diagnosis:</strong> {{ $visit->consultation->diagnosis }}</p>@endif
+                                                @if($visit->consultation->notes)<p><strong>Notes:</strong> {{ $visit->consultation->notes }}</p>@endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- Lab Orders with Results --}}
+                                @if ($visit->labOrders->isNotEmpty())
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-sky-500 border-2 border-white"></span>
+                                        <div class="bg-sky-50 rounded-lg p-3 border border-sky-100">
+                                            <p class="text-xs font-semibold text-sky-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                                                Lab Tests
+                                            </p>
+                                            @foreach ($visit->labOrders as $order)
+                                                <div class="mb-2 last:mb-0">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="text-xs font-medium text-gray-700">Order #{{ $order->id }}</span>
+                                                        <span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $order->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">{{ $order->status }}</span>
+                                                    </div>
+                                                    {{-- Test badges --}}
+                                                    <div class="flex flex-wrap gap-1 mb-1.5">
+                                                        @foreach ($order->items as $item)
+                                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium bg-sky-100 text-sky-700">{{ $item->labTest?->name ?? 'Unknown' }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                    {{-- Results table --}}
+                                                    @if($order->results->isNotEmpty())
+                                                        @php $groupedResults = $order->results->groupBy('lab_order_item_id'); @endphp
+                                                        @foreach ($groupedResults as $itemId => $results)
+                                                            @php $testItem = $order->items->firstWhere('id', $itemId); @endphp
+                                                            <div class="bg-white rounded-lg border border-sky-100 overflow-hidden mb-1.5 last:mb-0">
+                                                                <div class="px-3 py-1.5 bg-sky-50/50 border-b border-sky-100">
+                                                                    <span class="text-xs font-semibold text-gray-800">{{ $testItem?->labTest?->name ?? 'Unknown' }}</span>
+                                                                </div>
+                                                                <table class="w-full text-xs">
+                                                                    <thead class="text-gray-500">
+                                                                        <tr>
+                                                                            <th class="px-3 py-1.5 text-left font-medium">Parameter</th>
+                                                                            <th class="px-3 py-1.5 text-left font-medium">Result</th>
+                                                                            <th class="px-3 py-1.5 text-left font-medium">Unit</th>
+                                                                            <th class="px-3 py-1.5 text-left font-medium">Ref</th>
+                                                                            <th class="px-3 py-1.5 text-left font-medium">Flag</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody class="divide-y divide-gray-50">
+                                                                        @foreach ($results as $result)
+                                                                            @php
+                                                                                $flagBg = match($result->flag) {
+                                                                                    'normal' => 'bg-emerald-50 text-emerald-700',
+                                                                                    'high', 'low' => 'bg-amber-50 text-amber-700',
+                                                                                    'critical' => 'bg-red-50 text-red-700',
+                                                                                    default => 'bg-gray-50 text-gray-700',
+                                                                                };
+                                                                                $valColor = $result->flag === 'critical' ? 'text-red-600' : ($result->flag !== 'normal' ? 'text-amber-600' : 'text-gray-900');
+                                                                            @endphp
+                                                                            <tr>
+                                                                                <td class="px-3 py-1.5 font-medium text-gray-800">{{ $result->parameter }}</td>
+                                                                                <td class="px-3 py-1.5 font-bold {{ $valColor }}">{{ $result->value }}</td>
+                                                                                <td class="px-3 py-1.5 text-gray-600">{{ $result->unit ?? '-' }}</td>
+                                                                                <td class="px-3 py-1.5 text-gray-500">{{ $result->reference_range ?? '-' }}</td>
+                                                                                <td class="px-3 py-1.5"><span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $flagBg }}">{{ ucfirst($result->flag) }}</span></td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- Ultrasound Orders --}}
+                                @if ($visit->ultrasoundOrders->isNotEmpty())
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-cyan-500 border-2 border-white"></span>
+                                        <div class="bg-cyan-50 rounded-lg p-3 border border-cyan-100">
+                                            <p class="text-xs font-semibold text-cyan-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h8M8 14h5"/></svg>
+                                                Ultrasound
+                                            </p>
+                                            @foreach ($visit->ultrasoundOrders as $usOrder)
+                                                <div class="mb-2 last:mb-0">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="text-xs font-medium text-gray-700">Order #{{ $usOrder->id }}</span>
+                                                        <span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $usOrder->status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">{{ $usOrder->status }}</span>
+                                                    </div>
+                                                    <div class="flex flex-wrap gap-1 mb-1">
+                                                        @foreach ($usOrder->items as $item)
+                                                            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium bg-cyan-100 text-cyan-700">{{ $item->ultrasoundService?->name ?? 'Unknown' }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                    @if($usOrder->findings)
+                                                        <p class="text-xs text-gray-700 mt-1"><strong>Findings:</strong> {{ $usOrder->findings }}</p>
+                                                    @endif
+                                                    @if($usOrder->impression)
+                                                        <p class="text-xs text-gray-700"><strong>Impression:</strong> {{ $usOrder->impression }}</p>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
+                                {{-- Prescriptions --}}
+                                @if ($visit->prescriptions->isNotEmpty())
+                                    <div class="relative">
+                                        <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-violet-500 border-2 border-white"></span>
+                                        <div class="bg-violet-50 rounded-lg p-3 border border-violet-100">
+                                            <p class="text-xs font-semibold text-violet-700 mb-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                                                Prescriptions
+                                            </p>
+                                            @foreach ($visit->prescriptions as $prescription)
+                                                <div class="mb-2 last:mb-0">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="text-xs font-medium text-gray-700">Rx #{{ $prescription->id }}</span>
+                                                        <span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $prescription->status === 'dispensed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">{{ $prescription->status }}</span>
+                                                    </div>
+                                                    <ul class="space-y-0.5">
+                                                        @foreach ($prescription->items as $item)
+                                                            <li class="text-xs text-gray-700 flex items-center gap-1.5">
+                                                                <span class="w-1 h-1 rounded-full bg-violet-400"></span>
+                                                                <strong>{{ $item->medication?->name ?? 'Unknown' }}</strong> - {{ $item->dosage }} {{ $item->frequency }} x{{ $item->quantity }}
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+
+                        {{-- Previous Visits --}}
+                        @if ($previousVisits->isNotEmpty())
+                            <div>
+                                <p class="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    Past Visits ({{ $previousVisits->count() }})
+                                </p>
+                                <div class="space-y-3 ml-3 border-l-2 border-gray-100 pl-4">
+                                    @foreach ($previousVisits as $prevVisit)
+                                        <div class="relative">
+                                            <span class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-gray-400 border-2 border-white"></span>
+                                            <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                                                <div class="flex items-center justify-between mb-2">
+                                                    <span class="text-xs font-semibold text-gray-700">{{ $prevVisit->registered_at->format('M d, Y') }}</span>
+                                                    <span class="text-[10px] text-gray-400">{{ $prevVisit->visit_number }}</span>
+                                                </div>
+
+                                                {{-- Previous vitals --}}
+                                                @if($prevVisit->vitals)
+                                                    <div class="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-gray-600 mb-1.5">
+                                                        @if($prevVisit->vitals->temperature)<span>Temp: {{ $prevVisit->vitals->temperature }}°C</span>@endif
+                                                        @if($prevVisit->vitals->blood_pressure)<span>BP: {{ $prevVisit->vitals->blood_pressure }}</span>@endif
+                                                        @if($prevVisit->vitals->weight)<span>Wt: {{ $prevVisit->vitals->weight }}kg</span>@endif
+                                                        @if($prevVisit->vitals->pulse)<span>Pulse: {{ $prevVisit->vitals->pulse }}</span>@endif
+                                                    </div>
+                                                @endif
+
+                                                {{-- Previous diagnosis --}}
+                                                @if($prevVisit->consultation?->diagnosis)
+                                                    <p class="text-[11px] text-gray-700 mb-1.5"><strong>Dx:</strong> {{ $prevVisit->consultation->diagnosis }}</p>
+                                                @endif
+
+                                                {{-- Previous lab results --}}
+                                                @if($prevVisit->labOrders->isNotEmpty())
+                                                    @foreach($prevVisit->labOrders as $prevOrder)
+                                                        @if($prevOrder->results->isNotEmpty())
+                                                            <div class="mb-1.5">
+                                                                <div class="flex items-center gap-1 mb-0.5">
+                                                                    <span class="text-[10px] font-semibold text-sky-700">Lab #{{ $prevOrder->id }}</span>
+                                                                    @foreach($prevOrder->items as $item)
+                                                                        <span class="inline-flex px-1.5 py-0 rounded-full text-[9px] font-medium bg-sky-100 text-sky-700">{{ $item->labTest?->name }}</span>
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="bg-white rounded border border-gray-100 overflow-hidden">
+                                                                    <table class="w-full text-[10px]">
+                                                                        <tbody class="divide-y divide-gray-50">
+                                                                            @foreach($prevOrder->results as $result)
+                                                                                @php
+                                                                                    $flagBg = match($result->flag) {
+                                                                                        'normal' => 'bg-emerald-50 text-emerald-700',
+                                                                                        'high', 'low' => 'bg-amber-50 text-amber-700',
+                                                                                        'critical' => 'bg-red-50 text-red-700',
+                                                                                        default => 'bg-gray-50 text-gray-700',
+                                                                                    };
+                                                                                @endphp
+                                                                                <tr>
+                                                                                    <td class="px-2 py-1 font-medium text-gray-700">{{ $result->parameter }}</td>
+                                                                                    <td class="px-2 py-1 font-bold {{ $result->flag === 'critical' ? 'text-red-600' : ($result->flag !== 'normal' ? 'text-amber-600' : 'text-gray-900') }}">{{ $result->value }}</td>
+                                                                                    <td class="px-2 py-1 text-gray-500">{{ $result->unit ?? '' }}</td>
+                                                                                    <td class="px-2 py-1"><span class="inline-flex px-1 py-0 rounded text-[9px] font-medium {{ $flagBg }}">{{ ucfirst($result->flag) }}</span></td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+
+                                                {{-- Previous ultrasound --}}
+                                                @if($prevVisit->ultrasoundOrders->isNotEmpty())
+                                                    <div class="flex flex-wrap gap-1 mb-1">
+                                                        @foreach($prevVisit->ultrasoundOrders as $usOrder)
+                                                            @foreach($usOrder->items as $item)
+                                                                <span class="inline-flex px-1.5 py-0 rounded-full text-[9px] font-medium bg-cyan-100 text-cyan-700">{{ $item->ultrasoundService?->name }}</span>
+                                                            @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+
+                                                {{-- Previous prescriptions --}}
+                                                @if($prevVisit->prescriptions->isNotEmpty())
+                                                    <div class="flex flex-wrap gap-1">
+                                                        @foreach($prevVisit->prescriptions as $prevRx)
+                                                            @foreach($prevRx->items as $item)
+                                                                <span class="inline-flex px-1.5 py-0 rounded-full text-[9px] font-medium bg-violet-100 text-violet-700">{{ $item->medication?->name }}</span>
+                                                            @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 @endif
             </div>

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\ClinicalRecord;
+use App\Models\ClinicalRecordAttachment;
 use App\Models\Patient;
 use App\Models\User;
 use App\Models\Visit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ClinicalRecordController extends Controller
 {
@@ -53,9 +55,24 @@ class ClinicalRecordController extends Controller
             'notes' => 'nullable|string',
             'prescription' => 'nullable|string',
             'record_date' => 'required|date',
+            'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240',
         ]);
 
         $record = ClinicalRecord::create($data);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('clinical-records', 'public');
+                ClinicalRecordAttachment::create([
+                    'clinical_record_id' => $record->id,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'mime_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                    'uploaded_by' => auth()->id(),
+                ]);
+            }
+        }
 
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => 'Clinical record saved.', 'record' => $record]);
@@ -66,7 +83,7 @@ class ClinicalRecordController extends Controller
 
     public function show(ClinicalRecord $clinicalRecord)
     {
-        $clinicalRecord->load(['patient', 'doctor', 'visit', 'appointment']);
+        $clinicalRecord->load(['patient', 'doctor', 'visit', 'appointment', 'attachments']);
         return view('clinical_records.show', compact('clinicalRecord'));
     }
 
@@ -93,9 +110,24 @@ class ClinicalRecordController extends Controller
             'notes' => 'nullable|string',
             'prescription' => 'nullable|string',
             'record_date' => 'required|date',
+            'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx|max:10240',
         ]);
 
         $clinicalRecord->update($data);
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('clinical-records', 'public');
+                ClinicalRecordAttachment::create([
+                    'clinical_record_id' => $clinicalRecord->id,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'mime_type' => $file->getMimeType(),
+                    'file_size' => $file->getSize(),
+                    'uploaded_by' => auth()->id(),
+                ]);
+            }
+        }
 
         return redirect()->route('clinical-records.index')->with('status', 'Clinical record updated.');
     }

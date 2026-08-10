@@ -13,6 +13,8 @@ use App\Models\Patient;
 use App\Models\Prescription;
 use App\Models\Visit;
 use App\Models\Vital;
+use App\Models\UltrasoundOrder;
+use App\Models\UltrasoundService;
 use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -132,12 +134,19 @@ class DoctorController extends Controller
     public function queue()
     {
         $visits = Visit::with([
-                'patient',
+                'patient.visits' => function ($q) {
+                    $q->where('status', \App\Enums\VisitStatus::Completed->value)
+                      ->orWhere('status', \App\Enums\VisitStatus::LabCompleted->value)
+                      ->with(['labOrders.items.labTest', 'labOrders.results', 'prescriptions.items.medication', 'consultation', 'vitals', 'ultrasoundOrders.items.service'])
+                      ->latest('registered_at')
+                      ->limit(5);
+                },
                 'vitals',
                 'consultation',
                 'labOrders.items.labTest',
                 'labOrders.results',
                 'prescriptions.items.medication',
+                'ultrasoundOrders.items.service',
             ])
             ->where('doctor_id', auth()->id())
             ->whereIn('status', [
@@ -148,9 +157,10 @@ class DoctorController extends Controller
             ->get();
 
         $labTests = LabTest::where('is_active', true)->get();
+        $ultrasoundServices = UltrasoundService::where('is_active', true)->get();
         $medications = Medication::where('is_active', true)->get();
 
-        return view('doctor.queue', compact('visits', 'labTests', 'medications'));
+        return view('doctor.queue', compact('visits', 'labTests', 'ultrasoundServices', 'medications'));
     }
 
     public function labResults()
@@ -168,6 +178,26 @@ class DoctorController extends Controller
         $medications = Medication::where('is_active', true)->get();
 
         return view('doctor.lab-results', compact('visits', 'medications'));
+    }
+
+    public function patientLabHistory(Patient $patient)
+    {
+        $labOrders = LabOrder::with(['visit', 'items.labTest', 'items.results', 'attachments', 'doctor', 'labTech'])
+            ->whereHas('visit', fn($q) => $q->where('patient_id', $patient->id))
+            ->latest()
+            ->get();
+
+        $totalTests = $labOrders->flatMap->items->count();
+        $completedOrders = $labOrders->where('status', 'completed');
+        $abnormalResults = $completedOrders->flatMap->results->whereNotIn('flag', ['normal'])->count();
+
+        $visits = Visit::with(['consultation', 'vitals', 'prescriptions.items.medication', 'ultrasoundOrders.items.service'])
+            ->where('patient_id', $patient->id)
+            ->latest('registered_at')
+            ->limit(10)
+            ->get();
+
+        return view('doctor.patient-history', compact('patient', 'labOrders', 'totalTests', 'completedOrders', 'abnormalResults', 'visits'));
     }
 
     public function returnFromLab(Visit $visit, VisitWorkflow $flow)
@@ -241,6 +271,30 @@ class DoctorController extends Controller
         ActivityLog::log('lab_ordered', $visit, "Ordered lab tests for visit {$visit->visit_number}");
 
         return back()->with('status', 'Lab tests ordered.');
+    }
+
+    public function orderUltrasound(Request $request, Visit $visit)
+    {
+        $data = $request->validate([
+            'service_ids' => 'required|array',
+            'service_ids.*' => 'exists:ultrasound_services,id',
+            'notes' => 'nullable|string',
+        ]);
+
+        $order = UltrasoundOrder::create([
+            'visit_id' => $visit->id,
+            'patient_id' => $visit->patient_id,
+            'ordered_by' => auth()->id(),
+            'clinical_notes' => $data['notes'] ?? null,
+        ]);
+
+        foreach ($data['service_ids'] as $serviceId) {
+            $order->items()->create(['ultrasound_service_id' => $serviceId]);
+        }
+
+        ActivityLog::log('ultrasound_ordered', $visit, "Ordered ultrasound for visit {$visit->visit_number}");
+
+        return back()->with('status', 'Ultrasound ordered.');
     }
 
     public function prescribe(Request $request, Visit $visit, VisitWorkflow $flow)

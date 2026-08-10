@@ -34,6 +34,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SmsController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UltrasoundController;
+use App\Http\Controllers\UltrasoundServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -106,10 +108,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [DoctorController::class, 'reports'])->name('reports');
         Route::get('/', [DoctorController::class, 'queue'])->name('queue');
         Route::get('lab-results', [DoctorController::class, 'labResults'])->name('lab-results');
+        Route::get('patients/{patient}/history', [DoctorController::class, 'patientLabHistory'])->name('patients.history');
         Route::post('visits/{visit}/call', [DoctorController::class, 'callNext'])->name('visits.call');
         Route::post('visits/{visit}/no-show', [DoctorController::class, 'markNoShow'])->name('visits.no-show');
         Route::post('visits/{visit}/consult', [DoctorController::class, 'saveConsultation'])->name('visits.consult');
         Route::post('visits/{visit}/lab', [DoctorController::class, 'orderLab'])->name('visits.lab');
+        Route::post('visits/{visit}/ultrasound', [DoctorController::class, 'orderUltrasound'])->name('visits.ultrasound');
         Route::post('visits/{visit}/lab-return', [DoctorController::class, 'returnFromLab'])->name('visits.lab-return');
         Route::post('visits/{visit}/prescribe', [DoctorController::class, 'prescribe'])->name('visits.prescribe');
         Route::post('visits/{visit}/vitals', [DoctorController::class, 'saveVitals'])->name('visits.vitals');
@@ -125,9 +129,23 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('lab')->name('lab.')->group(function () {
             Route::get('/', [LabController::class, 'queue'])->name('queue');
+            Route::get('history', [LabController::class, 'history'])->name('history');
+            Route::get('history/{patient}', [LabController::class, 'patientHistory'])->name('patient-history');
             Route::get('orders/{order}/results', [LabController::class, 'showResults'])->name('orders.show');
             Route::post('orders/{order}/start', [LabController::class, 'startProcessing'])->name('orders.start');
             Route::post('orders/{order}/results', [LabController::class, 'submitResults'])->name('orders.results');
+        });
+    });
+
+    // Ultrasound
+    Route::middleware('redirect.role:lab|admin')->group(function () {
+        Route::resource('ultrasound-services', UltrasoundServiceController::class);
+
+        Route::prefix('ultrasound')->name('ultrasound.')->group(function () {
+            Route::get('/', [UltrasoundController::class, 'queue'])->name('queue');
+            Route::get('orders/{order}/results', [UltrasoundController::class, 'showResults'])->name('orders.show');
+            Route::post('orders/{order}/start', [UltrasoundController::class, 'startProcessing'])->name('orders.start');
+            Route::post('orders/{order}/results', [UltrasoundController::class, 'submitResults'])->name('orders.results');
         });
     });
 

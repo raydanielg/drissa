@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-    <form method="POST" action="{{ route('clinical-records.update', $clinicalRecord) }}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form method="POST" action="{{ route('clinical-records.update', $clinicalRecord) }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @csrf
         @method('PUT')
         <div class="md:col-span-2">
@@ -69,6 +69,11 @@
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Record Date</label>
             <input type="date" name="record_date" value="{{ $clinicalRecord->record_date->format('Y-m-d') }}" class="w-full border rounded-lg px-3 py-2 text-sm" required>
+        </div>
+        <div class="md:col-span-2 pt-4">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Add Attachments</label>
+            <input type="file" name="attachments[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm">
+            <p class="text-xs text-gray-400 mt-1">Upload additional files (PDF, Images, Documents) - Max 10MB each</p>
         </div>
         <div class="md:col-span-2 pt-4">
             <button type="submit" class="bg-emerald-600 text-white text-sm font-medium px-5 py-2 rounded-lg hover:bg-emerald-700">Update Clinical Record</button>

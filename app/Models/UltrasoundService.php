@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LabTest extends Model
+class UltrasoundService extends Model
 {
     use HasFactory;
 
@@ -13,13 +13,12 @@ class LabTest extends Model
         'name',
         'code',
         'description',
-        'unit',
-        'reference_range',
-        'reference_range_male',
-        'reference_range_female',
-        'reference_range_pregnant',
-        'reference_range_safe',
         'price',
         'is_active',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 }

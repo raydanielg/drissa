@@ -38,4 +38,9 @@ class ClinicalRecord extends Model
     {
         return $this->belongsTo(Appointment::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(ClinicalRecordAttachment::class);
+    }
 }

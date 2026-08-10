@@ -16,7 +16,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('clinical-records.store') }}" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+    <form method="POST" action="{{ route('clinical-records.store') }}" enctype="multipart/form-data" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         @csrf
 
         {{-- Patient & Source Section --}}
@@ -130,6 +130,18 @@
                 <label class="block text-xs font-medium text-gray-700 mb-1.5">Notes</label>
                 <textarea name="notes" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" rows="3" placeholder="Additional notes..."></textarea>
             </div>
+        </div>
+
+        {{-- Attachments Section --}}
+        <div class="px-6 py-5 border-y border-gray-100 bg-gray-50/50">
+            <h3 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+                Attachments
+            </h3>
+            <p class="text-xs text-gray-500 mt-0.5">Upload files (PDF, Images, Documents) - Max 10MB each</p>
+        </div>
+        <div class="p-6">
+            <input type="file" name="attachments[]" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
         </div>
 
         {{-- Footer Actions --}}

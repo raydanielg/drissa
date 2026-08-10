@@ -16,6 +16,7 @@
     @media print {
         #printReport { display: block; }
     }
+    .result-card { page-break-inside: avoid; }
 </style>
 @endpush
 
@@ -31,10 +32,16 @@
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             Back to Lab Queue
         </a>
-        <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-            Print / Preview
-        </button>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-semibold rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Patient History
+            </a>
+            <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print / Preview
+            </button>
+        </div>
     </div>
 
     {{-- Order Header Card --}}
@@ -67,6 +74,9 @@
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Patient</p>
                 <p class="text-sm font-semibold text-gray-800 mt-0.5">{{ $order->visit->patient->fullName() }}</p>
+                @if($order->visit->patient?->gender)
+                <p class="text-xs text-gray-500">{{ ucfirst($order->visit->patient->gender) }}</p>
+                @endif
             </div>
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Ordered By</p>
@@ -96,40 +106,59 @@
     @foreach ($order->items as $item)
         @php
             $itemResults = $order->results->where('lab_order_item_id', $item->id);
+            $abnormalCount = $itemResults->whereNotIn('flag', ['normal'])->count();
         @endphp
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-violet-100 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        <div class="result-card bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            {{-- Test Header --}}
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900">{{ $item->labTest?->name ?? 'Unknown Test' }}</h3>
+                        <p class="text-xs text-gray-400">{{ $itemResults->count() }} parameter(s) • {{ $item->labTest?->unit ?? '' }}</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-sm font-bold text-gray-900">{{ $item->labTest?->name ?? 'Unknown Test' }}</h3>
-                    <p class="text-xs text-gray-400">{{ $itemResults->count() }} parameter(s) measured</p>
-                </div>
-            </div>
-            <div class="overflow-x-auto">
-                @if ($itemResults->isEmpty())
-                    <div class="px-6 py-6 text-center text-sm text-gray-400">No results recorded for this test</div>
+                @if($abnormalCount > 0)
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        {{ $abnormalCount }} Abnormal
+                    </span>
                 @else
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        All Normal
+                    </span>
+                @endif
+            </div>
+
+            {{-- Results Table --}}
+            @if ($itemResults->isEmpty())
+                <div class="px-6 py-8 text-center text-sm text-gray-400">No results recorded for this test</div>
+            @else
+                <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                        <thead class="bg-gray-50/80 text-xs uppercase text-gray-500">
                             <tr>
-                                <th class="px-6 py-3">Parameter</th>
-                                <th class="px-6 py-3">Value</th>
-                                <th class="px-6 py-3">Unit</th>
-                                <th class="px-6 py-3">Reference Range</th>
-                                <th class="px-6 py-3">Flag</th>
+                                <th class="px-6 py-3 font-semibold">Parameter</th>
+                                <th class="px-6 py-3 font-semibold">Result</th>
+                                <th class="px-6 py-3 font-semibold">Unit</th>
+                                <th class="px-6 py-3 font-semibold">Reference Range</th>
+                                <th class="px-6 py-3 font-semibold">Flag</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-100">
                             @foreach ($itemResults as $result)
                                 @php $style = $flagStyles[$result->flag] ?? $flagStyles['normal']; @endphp
-                                <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors">
-                                    <td class="px-6 py-3 font-medium text-gray-800">{{ $result->parameter }}</td>
-                                    <td class="px-6 py-3 font-bold text-gray-900">{{ $result->value }}</td>
-                                    <td class="px-6 py-3 text-gray-600">{{ $result->unit ?? '-' }}</td>
-                                    <td class="px-6 py-3 text-gray-500 text-xs">{{ $result->reference_range ?? '-' }}</td>
-                                    <td class="px-6 py-3">
+                                <tr class="hover:bg-gray-50/30 transition-colors">
+                                    <td class="px-6 py-3.5 font-medium text-gray-800">{{ $result->parameter }}</td>
+                                    <td class="px-6 py-3.5">
+                                        <span class="text-base font-bold {{ $result->flag === 'critical' ? 'text-red-600' : ($result->flag !== 'normal' ? 'text-amber-600' : 'text-gray-900') }}">{{ $result->value }}</span>
+                                    </td>
+                                    <td class="px-6 py-3.5 text-gray-600">{{ $result->unit ?? '-' }}</td>
+                                    <td class="px-6 py-3.5 text-gray-500 text-xs">{{ $result->reference_range ?? '-' }}</td>
+                                    <td class="px-6 py-3.5">
                                         <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $style['bg'] }} {{ $style['text'] }} border {{ $style['border'] }}">
                                             {{ $style['icon'] }} {{ $style['label'] }}
                                         </span>
@@ -138,8 +167,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                @endif
-            </div>
+                </div>
+            @endif
         </div>
     @endforeach
 
@@ -196,8 +225,8 @@
     {{-- Results per Test --}}
     @foreach ($order->items as $item)
         @php $itemResults = $order->results->where('lab_order_item_id', $item->id); @endphp
-        <div style="margin-bottom:20px;">
-            <h2 style="font-size:13px; font-weight:700; color:#024938; border-bottom:2px solid #024938; padding-bottom:4px; margin-bottom:8px;">
+        <div style="margin-bottom:24px; page-break-inside:avoid;">
+            <h2 style="font-size:14px; font-weight:700; color:#024938; border-bottom:2px solid #024938; padding-bottom:6px; margin-bottom:10px;">
                 {{ $item->labTest?->name ?? 'Unknown Test' }}
             </h2>
             @if ($itemResults->isEmpty())
@@ -206,11 +235,11 @@
                 <table style="width:100%; font-size:11px; border-collapse:collapse;">
                     <thead>
                         <tr style="background:#f3f4f6;">
-                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Parameter</th>
-                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Value</th>
-                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Unit</th>
-                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Reference Range</th>
-                            <th style="text-align:left; padding:6px 8px; border:1px solid #e5e7eb;">Flag</th>
+                            <th style="text-align:left; padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">Parameter</th>
+                            <th style="text-align:left; padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">Result</th>
+                            <th style="text-align:left; padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">Unit</th>
+                            <th style="text-align:left; padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">Reference Range</th>
+                            <th style="text-align:left; padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">Flag</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -232,11 +261,11 @@
                                 };
                             @endphp
                             <tr>
-                                <td style="padding:6px 8px; border:1px solid #e5e7eb; font-weight:600;">{{ $result->parameter }}</td>
-                                <td style="padding:6px 8px; border:1px solid #e5e7eb; font-weight:700;">{{ $result->value }}</td>
-                                <td style="padding:6px 8px; border:1px solid #e5e7eb;">{{ $result->unit ?? '-' }}</td>
-                                <td style="padding:6px 8px; border:1px solid #e5e7eb; color:#666;">{{ $result->reference_range ?? '-' }}</td>
-                                <td style="padding:6px 8px; border:1px solid #e5e7eb; color:{{ $flagColor }}; font-weight:700;">{{ $flagLabel }}</td>
+                                <td style="padding:8px 10px; border:1px solid #e5e7eb; font-weight:600;">{{ $result->parameter }}</td>
+                                <td style="padding:8px 10px; border:1px solid #e5e7eb; font-weight:700; font-size:13px; color:{{ $flagColor }};">{{ $result->value }}</td>
+                                <td style="padding:8px 10px; border:1px solid #e5e7eb;">{{ $result->unit ?? '-' }}</td>
+                                <td style="padding:8px 10px; border:1px solid #e5e7eb; color:#666;">{{ $result->reference_range ?? '-' }}</td>
+                                <td style="padding:8px 10px; border:1px solid #e5e7eb; color:{{ $flagColor }}; font-weight:700;">{{ $flagLabel }}</td>
                             </tr>
                         @endforeach
                     </tbody>

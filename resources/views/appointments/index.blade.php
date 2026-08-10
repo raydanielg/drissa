@@ -174,6 +174,19 @@
                                         <span class="w-1.5 h-1.5 rounded-full {{ $config[1] }}"></span>
                                         {{ str_replace('_', ' ', $appointment->status) }}
                                     </span>
+                                    @if($appointment->invoice)
+                                        @php
+                                            $invConfig = [
+                                                'paid' => ['bg-emerald-100 text-emerald-700'],
+                                                'partial' => ['bg-amber-100 text-amber-700'],
+                                                'unpaid' => ['bg-red-100 text-red-700'],
+                                            ];
+                                            $invStyle = $invConfig[$appointment->invoice->status] ?? ['bg-gray-100 text-gray-700'];
+                                        @endphp
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium {{ $invStyle[0] }}">
+                                            {{ $appointment->invoice->status === 'paid' ? 'Paid' : ($appointment->invoice->status === 'partial' ? 'Partial' : 'Unpaid') }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-3.5">
                                     <div class="flex items-center justify-end gap-1">
@@ -280,6 +293,36 @@
                 <label class="block text-xs font-medium text-gray-700 mb-1">Notes</label>
                 <textarea name="notes" id="appt_notes" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
             </div>
+            <div class="col-span-2 bg-emerald-50 border border-emerald-200 rounded-lg p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-emerald-700">Consultation Fee</p>
+                        <p class="text-xs text-emerald-600">Patient must pay to confirm appointment</p>
+                    </div>
+                    <p class="text-lg font-bold text-emerald-700" id="appt_fee_display">{{ number_format(\App\Models\Setting::get('consultation_fee', 10000)) }} TSh</p>
+                </div>
+                <div class="flex items-center gap-3 pt-2 border-t border-emerald-200">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" name="collect_payment" id="appt_collect_payment" value="1" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                        <span class="text-xs font-medium text-gray-700">Collect payment now</span>
+                    </label>
+                </div>
+                <div id="appt_payment_fields" class="grid grid-cols-2 gap-3">
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Amount</label>
+                        <input type="number" name="payment_amount" id="appt_payment_amount" value="{{ \App\Models\Setting::get('consultation_fee', 10000) }}" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Payment Method</label>
+                        <select name="payment_method" id="appt_payment_method" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white">
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                            <option value="mobile_money">Mobile Money</option>
+                            <option value="insurance">Insurance</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="flex justify-end gap-2 pt-4 border-t border-gray-100 mt-4">
             <button type="button" onclick="closeAppointmentSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
@@ -290,6 +333,16 @@
 
 @push('scripts')
 <script>
+    // Toggle payment fields based on checkbox
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.id === 'appt_collect_payment') {
+            const fields = document.getElementById('appt_payment_fields');
+            if (fields) {
+                fields.style.display = e.target.checked ? 'grid' : 'none';
+            }
+        }
+    });
+
     // SMS sending functions
     function sendSingleSms(url, patientName) {
         Swal.fire({

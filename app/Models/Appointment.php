@@ -16,6 +16,7 @@ class Appointment extends Model
         'status',
         'notes',
         'type',
+        'invoice_id',
     ];
 
     protected $casts = [
@@ -35,5 +36,10 @@ class Appointment extends Model
     public function doctor()
     {
         return $this->belongsTo(User::class, 'doctor_id');
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

@@ -52,6 +52,11 @@ class Patient extends Model
         return $this->hasMany(Appointment::class)->latest('scheduled_at');
     }
 
+    public function labOrders()
+    {
+        return $this->hasManyThrough(LabOrder::class, Visit::class)->latest();
+    }
+
     public function fullName(): string
     {
         return "{$this->first_name} {$this->last_name}";
