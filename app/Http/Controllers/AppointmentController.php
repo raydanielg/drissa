@@ -105,7 +105,7 @@ class AppointmentController extends Controller
                 $paymentMethod = $request->payment_method ?? 'cash';
 
                 $invoice = Invoice::create([
-                    'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::withTrashed()->max('id') + 1, 6, '0', STR_PAD_LEFT),
+                    'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::max('id') + 1, 6, '0', STR_PAD_LEFT),
                     'visit_id' => null,
                     'patient_id' => $appointment->patient_id,
                     'total' => $consultationFee,
