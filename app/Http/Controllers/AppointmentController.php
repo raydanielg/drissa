@@ -24,7 +24,7 @@ class AppointmentController extends Controller
         $filter = $request->get('filter', 'today');
         $date = $request->get('date');
 
-        $query = Appointment::with(['patient', 'doctor', 'invoice']);
+        $query = Appointment::with(['patient' => fn($q) => $q->withTrashed(), 'doctor', 'invoice']);
 
         if ($date) {
             $query->whereDate('scheduled_at', $date);
