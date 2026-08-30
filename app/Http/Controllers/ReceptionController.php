@@ -347,13 +347,16 @@ class ReceptionController extends Controller
             'amount' => 'required|numeric|min:0',
             'method' => 'required|in:cash,card,mobile_money,insurance',
             'reference' => 'nullable|string|max:255',
+            'consultation_fee' => 'nullable|numeric|min:0',
         ]);
 
-        DB::transaction(function () use ($visit, $data, $flow) {
+        DB::transaction(function () use ($visit, $data, $request, $flow) {
             $invoice = $visit->invoice;
 
             if (! $invoice) {
-                $total = (float) Setting::get('consultation_fee', 10000);
+                $total = $request->filled('consultation_fee')
+                    ? (float) $data['consultation_fee']
+                    : (float) Setting::get('consultation_fee', 10000);
                 $invoice = Invoice::create([
                     'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
                     'visit_id' => $visit->id,
@@ -361,6 +364,13 @@ class ReceptionController extends Controller
                     'total' => $total,
                     'paid' => 0,
                     'status' => 'unpaid',
+                ]);
+
+                $invoice->items()->create([
+                    'description' => 'Consultation Fee',
+                    'quantity' => 1,
+                    'unit_price' => $total,
+                    'line_total' => $total,
                 ]);
             }
 
