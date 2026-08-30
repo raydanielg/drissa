@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class AdminDoctorController extends Controller
 {
@@ -58,7 +57,6 @@ class AdminDoctorController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        $data['password'] = Hash::make($data['password']);
         $data['is_active'] = true;
 
         $doctor = User::create($data);
@@ -153,7 +151,7 @@ class AdminDoctorController extends Controller
         // Auto-generate random password
         $newPassword = strtoupper(substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'), 0, 8));
 
-        $doctor->update(['password' => Hash::make($newPassword)]);
+        $doctor->update(['password' => $newPassword]);
 
         // Send email notification
         \Mail::to($doctor->email)->send(new \App\Mail\PasswordResetNotification($doctor, $newPassword));

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
@@ -30,9 +29,7 @@ class ProfileController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
+        if (! $request->filled('password')) {
             unset($data['password']);
         }
 

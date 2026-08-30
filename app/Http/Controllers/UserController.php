@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -56,7 +55,6 @@ class UserController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        $data['password'] = Hash::make($data['password']);
         $data['is_active'] = $request->boolean('is_active', true);
 
         $user = User::create($data);
@@ -92,7 +90,7 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->input('password'));
+            $data['password'] = $request->input('password');
         }
 
         $data['is_active'] = $request->boolean('is_active', true);

@@ -257,6 +257,7 @@ class ReceptionController extends Controller
             'doctor_id' => 'nullable|exists:users,id',
             'chief_complaint' => 'nullable|string',
             'type' => 'required|in:outpatient,emergency,followup',
+            'consultation_fee' => 'nullable|numeric|min:0',
         ]);
 
         $visit = Visit::create([
@@ -270,8 +271,10 @@ class ReceptionController extends Controller
             'registered_at' => now(),
         ]);
 
-        // Auto-create invoice with consultation fee
-        $consultationFee = (float) Setting::get('consultation_fee', 10000);
+        // Auto-create invoice with consultation fee (use provided value or default from settings)
+        $consultationFee = $request->filled('consultation_fee')
+            ? (float) $data['consultation_fee']
+            : (float) Setting::get('consultation_fee', 10000);
         $invoice = Invoice::create([
             'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
             'visit_id' => $visit->id,
