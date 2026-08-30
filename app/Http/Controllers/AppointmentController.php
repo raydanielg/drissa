@@ -100,7 +100,7 @@ class AppointmentController extends Controller
 
             // Create invoice and record payment if requested
             if ($request->has('collect_payment') && $request->collect_payment == '1') {
-                $consultationFee = (float) Setting::get('consultation_fee', 10000);
+                $consultationFee = (float) ($request->payment_amount ?? Setting::get('consultation_fee', 10000));
                 $paymentAmount = (float) ($request->payment_amount ?? $consultationFee);
                 $paymentMethod = $request->payment_method ?? 'cash';
 

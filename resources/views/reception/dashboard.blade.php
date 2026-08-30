@@ -505,12 +505,17 @@
                     <label class="block text-xs font-medium text-gray-700 mb-1">Chief Complaint</label>
                     <textarea name="chief_complaint" placeholder="Chief complaint" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" rows="3"></textarea>
                 </div>
-                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-medium text-emerald-700">Consultation Fee</p>
-                        <p class="text-xs text-emerald-600">Collect this amount from the patient</p>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <p class="text-xs font-medium text-emerald-700">Consultation Fee</p>
+                            <p class="text-xs text-emerald-600">Adjust amount if needed, then collect from patient</p>
+                        </div>
                     </div>
-                    <p class="text-lg font-bold text-emerald-700">{{ number_format(\App\Models\Setting::get('consultation_fee', 10000)) }} TSh</p>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-emerald-700">TSh</span>
+                        <input type="number" name="consultation_fee" value="{{ \App\Models\Setting::get('consultation_fee', 10000) }}" min="0" step="1000" class="w-full pl-12 pr-4 py-2.5 border border-emerald-300 rounded-lg text-sm font-semibold text-emerald-800 bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all" placeholder="10000">
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeOpenVisitModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>

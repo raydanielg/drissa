@@ -294,12 +294,13 @@
                 <textarea name="notes" id="appt_notes" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"></textarea>
             </div>
             <div class="col-span-2 bg-emerald-50 border border-emerald-200 rounded-lg p-4 space-y-3">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-medium text-emerald-700">Consultation Fee</p>
-                        <p class="text-xs text-emerald-600">Patient must pay to confirm appointment</p>
-                    </div>
-                    <p class="text-lg font-bold text-emerald-700" id="appt_fee_display">{{ number_format(\App\Models\Setting::get('consultation_fee', 10000)) }} TSh</p>
+                <div>
+                    <p class="text-xs font-medium text-emerald-700 mb-1">Consultation Fee</p>
+                    <p class="text-xs text-emerald-600">Adjust amount if needed, then collect from patient</p>
+                </div>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-emerald-700">TSh</span>
+                    <input type="number" name="payment_amount" id="appt_payment_amount" value="{{ \App\Models\Setting::get('consultation_fee', 10000) }}" min="0" step="1000" class="w-full pl-12 pr-4 py-2.5 border border-emerald-300 rounded-lg text-sm font-semibold text-emerald-800 bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all" placeholder="10000">
                 </div>
                 <div class="flex items-center gap-3 pt-2 border-t border-emerald-200">
                     <label class="flex items-center gap-2 cursor-pointer">
@@ -308,10 +309,6 @@
                     </label>
                 </div>
                 <div id="appt_payment_fields" class="grid grid-cols-2 gap-3">
-                    <div class="col-span-2 sm:col-span-1">
-                        <label class="block text-xs font-medium text-gray-700 mb-1">Amount</label>
-                        <input type="number" name="payment_amount" id="appt_payment_amount" value="{{ \App\Models\Setting::get('consultation_fee', 10000) }}" min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                    </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label class="block text-xs font-medium text-gray-700 mb-1">Payment Method</label>
                         <select name="payment_method" id="appt_payment_method" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white">
