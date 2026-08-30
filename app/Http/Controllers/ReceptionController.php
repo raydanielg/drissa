@@ -350,7 +350,9 @@ class ReceptionController extends Controller
             'consultation_fee' => 'nullable|numeric|min:0',
         ]);
 
-        DB::transaction(function () use ($visit, $data, $request, $flow) {
+        $invoice = $visit->invoice;
+
+        DB::transaction(function () use ($visit, $data, $request, $flow, &$invoice) {
             $invoice = $visit->invoice;
 
             if (! $invoice) {
