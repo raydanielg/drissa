@@ -30,7 +30,7 @@ class PatientDocument extends Model
 
     public function fileUrl(): string
     {
-        return asset('storage/' . $this->file_path);
+        return route('file.serve', $this->file_path);
     }
 
     public function formattedSize(): string
