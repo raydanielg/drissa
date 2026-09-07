@@ -293,8 +293,18 @@ class ReceptionController extends Controller
 
         ActivityLog::log('visit_created', $visit, "Created visit {$visit->visit_number} with consultation fee TSh {$consultationFee}");
 
+        $message = "Visit {$visit->visit_number} created. Collect consultation fee before sending to doctor.";
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'visit' => $visit->fresh(['patient', 'doctor']),
+            ]);
+        }
+
         return redirect()->route('reception.dashboard')
-            ->with('status', "Visit {$visit->visit_number} created. Collect consultation fee before sending to doctor.");
+            ->with('status', $message);
     }
 
     public function assignDoctor(Request $request, Visit $visit, VisitWorkflow $flow)
