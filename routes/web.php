@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
 | Installer Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/storage/{path}', [FileController::class, 'serve'])->where('path', '.*')->name('file.serve')->middleware('auth');
+Route::get('/files/{path}', [FileController::class, 'serve'])->where('path', '.*')->name('file.serve')->middleware('auth');
 
 Route::get('/install', [InstallController::class, 'welcome'])->name('install.welcome');
 Route::get('/install/database', [InstallController::class, 'database'])->name('install.database');
