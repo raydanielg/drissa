@@ -138,7 +138,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Ultrasound
-    Route::middleware('redirect.role:lab|admin')->group(function () {
+    Route::middleware('redirect.role:ultrasound|lab|admin')->group(function () {
         Route::resource('ultrasound-services', UltrasoundServiceController::class);
 
         Route::prefix('ultrasound')->name('ultrasound.')->group(function () {

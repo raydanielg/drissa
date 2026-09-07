@@ -55,6 +55,11 @@ class RedirectIfWrongRole
                 ->with('status', 'Redirected to your nurse dashboard.');
         }
 
+        if ($user->isUltrasound()) {
+            return redirect()->route('ultrasound.queue')
+                ->with('status', 'Redirected to your ultrasound dashboard.');
+        }
+
         return redirect()->route('profile')
             ->with('status', 'Redirected to your profile.');
     }

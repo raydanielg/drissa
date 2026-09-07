@@ -229,7 +229,7 @@
             @endif
 
             {{-- Ultrasound Workspace --}}
-            @if(auth()->user()->isLab() || auth()->user()->isAdmin())
+            @if(auth()->user()->isLab() || auth()->user()->isUltrasound() || auth()->user()->isAdmin())
             <div class="sidebar-group">
                 <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-gold-400 font-bold">Ultrasound Workspace</span></div>
                 <a href="{{ route('ultrasound.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('ultrasound.queue') ? 'active' : '' }} transition-all mb-1">
