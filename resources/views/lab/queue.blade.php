@@ -151,99 +151,150 @@
                                 </div>
                             </div>
 
-                            {{-- Results Entry Form --}}
-                            <div class="mt-4 pl-14">
-                                <form method="POST" action="{{ route('lab.orders.results', $order) }}" enctype="multipart/form-data" class="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-4">
-                                    @csrf
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6"/></svg>
-                                        <p class="text-xs font-bold text-gray-700 uppercase tracking-wide">Enter Lab Results</p>
-                                    </div>
+                            {{-- Results Entry: Per-test forms --}}
+                            <div class="mt-4 pl-14 space-y-4">
+                                @php
+                                    $processingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'items.results', 'labTech'])
+            ->where('status', 'processing')
+            ->latest()
+            ->get();
+                                    $patient = $order->visit->patient;
+                                    $isFemale = $patient && $patient->gender === 'female';
+                                    $completedCount = 0;
+                                    $totalItems = $order->items->count();
+                                @endphp
 
+                                @foreach ($order->items as $index => $item)
                                     @php
-                                        $flagColors = [
-                                            'normal' => 'text-emerald-700 bg-emerald-50 border-emerald-200',
-                                            'high' => 'text-amber-700 bg-amber-50 border-amber-200',
-                                            'low' => 'text-amber-700 bg-amber-50 border-amber-200',
-                                            'critical' => 'text-red-700 bg-red-50 border-red-200',
-                                        ];
+                                        $hasResults = $item->results->isNotEmpty();
+                                        if ($hasResults) $completedCount++;
+                                        $refRange = $item->labTest?->reference_range ?? '';
+                                        if ($isFemale && $item->labTest?->reference_range_female) {
+                                            $refRange = $item->labTest->reference_range_female;
+                                        } elseif (!$isFemale && $item->labTest?->reference_range_male) {
+                                            $refRange = $item->labTest->reference_range_male;
+                                        }
                                     @endphp
 
-                                    @foreach ($order->items as $index => $item)
-                                        <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-3">
+                                    <div class="bg-white border rounded-xl p-4 {{ $hasResults ? 'border-emerald-200 bg-emerald-50/30' : 'border-gray-200' }}">
+                                        <div class="flex items-center justify-between mb-3">
                                             <div class="flex items-center gap-2">
-                                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-violet-100 text-violet-700 text-xs font-bold">{{ $index + 1 }}</span>
+                                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full {{ $hasResults ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700' }} text-xs font-bold">{{ $index + 1 }}</span>
                                                 <span class="text-sm font-semibold text-gray-800">{{ $item->labTest?->name ?? 'Unknown Test' }}</span>
                                                 @if ($item->labTest?->unit)
                                                     <span class="text-xs text-gray-400">Unit: {{ $item->labTest->unit }}</span>
                                                 @endif
                                             </div>
-                                            <input type="hidden" name="results[{{ $index }}][lab_order_item_id]" value="{{ $item->id }}">
+                                            @if ($hasResults)
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                    Result Submitted
+                                                </span>
+                                            @endif
+                                        </div>
 
-                                            {{-- Parameter rows --}}
-                                            @php
-                                                $patient = $order->visit->patient;
-                                                $isFemale = $patient && $patient->gender === 'female';
-                                                $refRange = $item->labTest?->reference_range ?? '';
-                                                if ($isFemale && $item->labTest?->reference_range_female) {
-                                                    $refRange = $item->labTest->reference_range_female;
-                                                } elseif (!$isFemale && $item->labTest?->reference_range_male) {
-                                                    $refRange = $item->labTest->reference_range_male;
-                                                }
-                                            @endphp
-                                            <div class="space-y-2" id="param-rows-{{ $item->id }}">
+                                        @if ($hasResults)
+                                            {{-- Show submitted results --}}
+                                            <div class="overflow-hidden rounded-lg border border-emerald-100">
+                                                <table class="w-full text-xs">
+                                                    <thead class="bg-emerald-50/50 text-gray-500">
+                                                        <tr>
+                                                            <th class="px-3 py-2 text-left font-medium">Parameter</th>
+                                                            <th class="px-3 py-2 text-left font-medium">Value</th>
+                                                            <th class="px-3 py-2 text-left font-medium">Unit</th>
+                                                            <th class="px-3 py-2 text-left font-medium">Ref Range</th>
+                                                            <th class="px-3 py-2 text-left font-medium">Flag</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-gray-50">
+                                                        @foreach ($item->results as $result)
+                                                            @php
+                                                                $flagBg = match($result->flag) {
+                                                                    'normal' => 'bg-emerald-50 text-emerald-700',
+                                                                    'high', 'low' => 'bg-amber-50 text-amber-700',
+                                                                    'critical' => 'bg-red-50 text-red-700',
+                                                                    default => 'bg-gray-50 text-gray-700',
+                                                                };
+                                                            @endphp
+                                                            <tr>
+                                                                <td class="px-3 py-2 font-medium text-gray-800">{{ $result->parameter }}</td>
+                                                                <td class="px-3 py-2 font-bold text-gray-900">{{ $result->value }}</td>
+                                                                <td class="px-3 py-2 text-gray-500">{{ $result->unit ?? '-' }}</td>
+                                                                <td class="px-3 py-2 text-gray-500">{{ $result->reference_range ?? '-' }}</td>
+                                                                <td class="px-3 py-2"><span class="inline-flex px-1.5 py-0.5 rounded-full text-[10px] font-medium {{ $flagBg }}">{{ ucfirst($result->flag) }}</span></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            {{-- Per-test result entry form --}}
+                                            <form method="POST" action="{{ route('lab.orders.items.result', [$order, $item]) }}" class="space-y-3">
+                                                @csrf
                                                 <div class="grid grid-cols-12 gap-2 items-center">
-                                                    <input type="text" name="results[{{ $index }}][parameter]" placeholder="Parameter (e.g. Hemoglobin)" class="col-span-4 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                                    <input type="text" name="results[{{ $index }}][value]" placeholder="Result value" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
-                                                    <input type="text" name="results[{{ $index }}][unit]" placeholder="Unit" value="{{ $item->labTest?->unit ?? '' }}" class="col-span-2 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                                    <input type="text" name="results[{{ $index }}][reference_range]" placeholder="Ref range" value="{{ $refRange }}" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                    <input type="text" name="parameter" placeholder="Parameter (e.g. Hemoglobin)" class="col-span-4 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                                    <input type="text" name="value" placeholder="Result value" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" required>
+                                                    <input type="text" name="unit" placeholder="Unit" value="{{ $item->labTest?->unit ?? '' }}" class="col-span-2 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                    <input type="text" name="reference_range" placeholder="Ref range" value="{{ $refRange }}" class="col-span-3 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                                                 </div>
                                                 @if($isFemale && ($item->labTest?->reference_range_female || $item->labTest?->reference_range_pregnant || $item->labTest?->reference_range_safe))
                                                 <div class="flex flex-wrap gap-1.5 text-[10px]">
                                                     @if($item->labTest?->reference_range_female)
-                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_female }}'" class="px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100">F: {{ $item->labTest->reference_range_female }}</button>
+                                                    <button type="button" onclick="this.closest('form').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_female }}'" class="px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 border border-pink-200 hover:bg-pink-100">F: {{ $item->labTest->reference_range_female }}</button>
                                                     @endif
                                                     @if($item->labTest?->reference_range_pregnant)
-                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_pregnant }}'" class="px-2 py-0.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200 hover:bg-purple-100">Preg: {{ $item->labTest->reference_range_pregnant }}</button>
+                                                    <button type="button" onclick="this.closest('form').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_pregnant }}'" class="px-2 py-0.5 rounded-full bg-purple-50 text-purple-600 border border-purple-200 hover:bg-purple-100">Preg: {{ $item->labTest->reference_range_pregnant }}</button>
                                                     @endif
                                                     @if($item->labTest?->reference_range_safe)
-                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_safe }}'" class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100">Safe: {{ $item->labTest->reference_range_safe }}</button>
+                                                    <button type="button" onclick="this.closest('form').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_safe }}'" class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-100">Safe: {{ $item->labTest->reference_range_safe }}</button>
                                                     @endif
                                                 </div>
                                                 @elseif(!$isFemale && $item->labTest?->reference_range_male)
                                                 <div class="flex flex-wrap gap-1.5 text-[10px]">
-                                                    <button type="button" onclick="this.closest('.space-y-2').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_male }}'" class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100">M: {{ $item->labTest->reference_range_male }}</button>
+                                                    <button type="button" onclick="this.closest('form').querySelector('input[placeholder=Ref range]').value='{{ $item->labTest->reference_range_male }}'" class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100">M: {{ $item->labTest->reference_range_male }}</button>
                                                 </div>
                                                 @endif
-                                                <div class="flex items-center gap-2">
-                                                    <select name="results[{{ $index }}][flag]" class="border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                <div class="flex items-center justify-between">
+                                                    <select name="flag" class="border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                                                         <option value="normal">🟢 Normal</option>
                                                         <option value="high">🟡 High</option>
                                                         <option value="low">🟡 Low</option>
                                                         <option value="critical">🔴 Critical</option>
                                                     </select>
+                                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                        Submit Result
+                                                    </button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                    {{-- File Upload --}}
-                                    <div class="border-2 border-dashed border-gray-200 rounded-lg p-4 hover:border-emerald-400 transition-colors">
-                                        <label class="flex items-center gap-3 cursor-pointer">
-                                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                                            <div>
-                                                <p class="text-xs font-medium text-gray-700">Attach Report (PDF, Image)</p>
-                                                <p class="text-xs text-gray-400">Optional — Max 5MB</p>
-                                            </div>
-                                            <input type="file" name="report" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                                        </label>
+                                            </form>
+                                        @endif
                                     </div>
+                                @endforeach
 
-                                    <div class="flex justify-end">
-                                        <button type="submit" class="inline-flex items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                            Submit All Results
-                                        </button>
+                                {{-- Progress bar --}}
+                                @php $progress = $totalItems > 0 ? round(($completedCount / $totalItems) * 100) : 0; @endphp
+                                <div class="bg-gray-50 border border-gray-200 rounded-xl p-3">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-semibold text-gray-700">Progress: {{ $completedCount }}/{{ $totalItems }} tests completed</span>
+                                        <span class="text-xs font-bold {{ $progress == 100 ? 'text-emerald-600' : 'text-amber-600' }}">{{ $progress }}%</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-500 {{ $progress == 100 ? 'bg-emerald-500' : 'bg-amber-500' }}" style="width: {{ $progress }}%"></div>
+                                    </div>
+                                </div>
+
+                                {{-- File Upload (for all at once) --}}
+                                <form method="POST" action="{{ route('lab.orders.results', $order) }}" enctype="multipart/form-data" class="border-2 border-dashed border-gray-200 rounded-lg p-4 hover:border-emerald-400 transition-colors">
+                                    @csrf
+                                    <div class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                        <div class="flex-1">
+                                            <p class="text-xs font-medium text-gray-700">Attach Report (PDF, Image)</p>
+                                            <p class="text-xs text-gray-400">Optional — Max 5MB</p>
+                                        </div>
+                                        <input type="file" name="report" class="hidden" accept=".pdf,.jpg,.jpeg,.png" id="report-{{ $order->id }}">
+                                        <label for="report-{{ $order->id }}" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-lg cursor-pointer transition-colors">Choose File</label>
+                                        <button type="submit" class="px-4 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold rounded-lg transition-colors" onclick="return confirm('Upload attachment only? Results are submitted per test above.')">Upload</button>
                                     </div>
                                 </form>
                             </div>
