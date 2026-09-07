@@ -10,6 +10,9 @@ enum VisitStatus: string
     case WaitingForLab = 'waiting_for_lab';
     case InLab = 'in_lab';
     case LabCompleted = 'lab_completed';
+    case WaitingForUltrasound = 'waiting_for_ultrasound';
+    case InUltrasound = 'in_ultrasound';
+    case UltrasoundCompleted = 'ultrasound_completed';
     case WaitingForPharmacy = 'waiting_for_pharmacy';
     case InPharmacy = 'in_pharmacy';
     case PharmacyCompleted = 'pharmacy_completed';
@@ -22,10 +25,13 @@ enum VisitStatus: string
         return match ($this) {
             self::Registered => [self::WaitingForDoctor, self::WaitingForPayment, self::Cancelled],
             self::WaitingForDoctor => [self::WithDoctor, self::Cancelled],
-            self::WithDoctor => [self::WaitingForLab, self::WaitingForPharmacy, self::Completed, self::Cancelled],
+            self::WithDoctor => [self::WaitingForLab, self::WaitingForUltrasound, self::WaitingForPharmacy, self::Completed, self::Cancelled],
             self::WaitingForLab => [self::InLab],
             self::InLab => [self::LabCompleted],
             self::LabCompleted => [self::WithDoctor],
+            self::WaitingForUltrasound => [self::InUltrasound, self::WithDoctor],
+            self::InUltrasound => [self::UltrasoundCompleted],
+            self::UltrasoundCompleted => [self::WithDoctor],
             self::WaitingForPharmacy => [self::InPharmacy, self::WaitingForPayment],
             self::InPharmacy => [self::PharmacyCompleted, self::WaitingForPayment],
             self::PharmacyCompleted => [self::Completed, self::WaitingForPayment],
@@ -43,6 +49,9 @@ enum VisitStatus: string
             self::WaitingForLab => 'Waiting for Lab',
             self::InLab => 'In Lab',
             self::LabCompleted => 'Lab Completed',
+            self::WaitingForUltrasound => 'Waiting for Ultrasound',
+            self::InUltrasound => 'In Ultrasound',
+            self::UltrasoundCompleted => 'Ultrasound Completed',
             self::WaitingForPharmacy => 'Waiting for Pharmacy',
             self::InPharmacy => 'In Pharmacy',
             self::PharmacyCompleted => 'Pharmacy Completed',
