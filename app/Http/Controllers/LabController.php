@@ -29,7 +29,7 @@ class LabController extends Controller
             ->latest()
             ->get();
 
-        $processingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'labTech'])
+        $processingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'items.results', 'labTech'])
             ->where('status', 'processing')
             ->latest()
             ->get();

@@ -154,10 +154,6 @@
                             {{-- Results Entry: Per-test forms --}}
                             <div class="mt-4 pl-14 space-y-4">
                                 @php
-                                    $processingOrders = LabOrder::with(['visit.patient', 'items.labTest', 'items.results', 'labTech'])
-            ->where('status', 'processing')
-            ->latest()
-            ->get();
                                     $patient = $order->visit->patient;
                                     $isFemale = $patient && $patient->gender === 'female';
                                     $completedCount = 0;
