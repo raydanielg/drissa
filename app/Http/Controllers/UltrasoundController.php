@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VisitStatus;
 use App\Models\ActivityLog;
 use App\Models\UltrasoundAttachment;
 use App\Models\UltrasoundOrder;
 use App\Models\UltrasoundOrderItem;
 use App\Models\UltrasoundService;
 use App\Models\Visit;
+use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -47,7 +49,7 @@ class UltrasoundController extends Controller
         return view('ultrasound.queue', compact('pendingOrders', 'processingOrders', 'completedOrders', 'stats'));
     }
 
-    public function startProcessing(UltrasoundOrder $order)
+    public function startProcessing(UltrasoundOrder $order, VisitWorkflow $flow)
     {
         if ($order->status !== 'pending') {
             return back()->with('error', 'This order is already being processed or completed.');
@@ -58,12 +60,16 @@ class UltrasoundController extends Controller
             'processed_by' => auth()->id(),
         ]);
 
+        if ($order->visit) {
+            $flow->transition($order->visit, VisitStatus::InUltrasound);
+        }
+
         ActivityLog::log('ultrasound_processing_started', $order->visit ?? $order->patient, "Started processing ultrasound order #{$order->id}");
 
         return back()->with('status', 'Processing started for Order #' . $order->id);
     }
 
-    public function submitResults(Request $request, UltrasoundOrder $order)
+    public function submitResults(Request $request, UltrasoundOrder $order, VisitWorkflow $flow)
     {
         $data = $request->validate([
             'findings' => 'nullable|string',
@@ -71,7 +77,7 @@ class UltrasoundController extends Controller
             'attachments.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,dicom|max:10240',
         ]);
 
-        DB::transaction(function () use ($order, $data, $request) {
+        DB::transaction(function () use ($order, $data, $request, $flow) {
             $order->update([
                 'status' => 'completed',
                 'completed_at' => now(),
@@ -92,6 +98,10 @@ class UltrasoundController extends Controller
                         'uploaded_by' => auth()->id(),
                     ]);
                 }
+            }
+
+            if ($order->visit) {
+                $flow->transition($order->visit, VisitStatus::UltrasoundCompleted);
             }
         });
 

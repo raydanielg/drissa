@@ -273,7 +273,7 @@ class DoctorController extends Controller
         return back()->with('status', 'Lab tests ordered.');
     }
 
-    public function orderUltrasound(Request $request, Visit $visit)
+    public function orderUltrasound(Request $request, Visit $visit, VisitWorkflow $flow)
     {
         $data = $request->validate([
             'service_ids' => 'required|array',
@@ -291,6 +291,8 @@ class DoctorController extends Controller
         foreach ($data['service_ids'] as $serviceId) {
             $order->items()->create(['ultrasound_service_id' => $serviceId]);
         }
+
+        $flow->transition($visit, VisitStatus::WaitingForUltrasound);
 
         ActivityLog::log('ultrasound_ordered', $visit, "Ordered ultrasound for visit {$visit->visit_number}");
 
