@@ -16,9 +16,12 @@
             <p class="text-sm text-gray-500 mt-1">Manage patients currently assigned to you.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('doctor.lab-results') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
+            <a href="{{ route('doctor.lab-results') }}" class="relative inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                Lab Results
+                Results
+                @if($pendingResultsCount > 0)
+                    <span class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-md animate-pulse">{{ $pendingResultsCount }}</span>
+                @endif
             </a>
         </div>
     </div>
@@ -650,9 +653,12 @@
                 <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <h3 class="text-base font-semibold text-gray-900">No patients in queue</h3>
-            <p class="text-sm text-gray-500 mt-1">Your waiting list is clear. Check Lab Results for patients returning from lab.</p>
+            <p class="text-sm text-gray-500 mt-1">Your waiting list is clear. Check Results for patients returning from lab or ultrasound.</p>
             <a href="{{ route('doctor.lab-results') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-                View Lab Results
+                View Results
+                @if($pendingResultsCount > 0)
+                    <span class="bg-red-500 text-white text-[10px] font-bold rounded-full px-2 py-0.5 ml-1">{{ $pendingResultsCount }}</span>
+                @endif
             </a>
         </div>
     @endforelse

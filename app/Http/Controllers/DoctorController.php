@@ -160,7 +160,18 @@ class DoctorController extends Controller
         $ultrasoundServices = UltrasoundService::where('is_active', true)->get();
         $medications = Medication::where('is_active', true)->get();
 
-        return view('doctor.queue', compact('visits', 'labTests', 'ultrasoundServices', 'medications'));
+        $pendingResultsCount = Visit::where('doctor_id', auth()->id())
+            ->whereIn('status', [
+                VisitStatus::LabCompleted->value,
+                VisitStatus::UltrasoundCompleted->value,
+                VisitStatus::WaitingForLab->value,
+                VisitStatus::InLab->value,
+                VisitStatus::WaitingForUltrasound->value,
+                VisitStatus::InUltrasound->value,
+            ])
+            ->count();
+
+        return view('doctor.queue', compact('visits', 'labTests', 'ultrasoundServices', 'medications', 'pendingResultsCount'));
     }
 
     public function labResults()
@@ -205,9 +216,17 @@ class DoctorController extends Controller
 
     public function returnFromLab(Visit $visit, VisitWorkflow $flow)
     {
+        $wasUltrasound = $visit->status === VisitStatus::UltrasoundCompleted->value;
+
         $flow->transition($visit, VisitStatus::WithDoctor);
+
+        if ($wasUltrasound) {
+            ActivityLog::log('ultrasound_review_started', $visit, "Doctor started reviewing ultrasound results for visit {$visit->visit_number}");
+            return redirect()->route('doctor.lab-results')->with('status', 'Patient returned for review. Ultrasound results are available below.');
+        }
+
         ActivityLog::log('lab_review_started', $visit, "Doctor started reviewing lab results for visit {$visit->visit_number}");
-        return redirect()->route('doctor.lab-results')->with('status', 'Patient returned for review. Please write the prescription.');
+        return redirect()->route('doctor.lab-results')->with('status', 'Patient returned for review. Lab results are available below.');
     }
 
     public function callNext(Visit $visit, VisitWorkflow $flow)
