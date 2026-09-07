@@ -77,6 +77,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Patient</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Services</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ordered By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Visit Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Action</th>
                     </tr>
@@ -94,6 +95,21 @@
                             @endforeach
                         </td>
                         <td class="px-6 py-3.5 text-sm text-gray-700">{{ $order->doctor?->name ?? 'N/A' }}</td>
+                        <td class="px-6 py-3.5">
+                            @if($order->visit)
+                                @if($order->visit->status === 'waiting_for_ultrasound')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Waiting</span>
+                                @elseif($order->visit->status === 'in_ultrasound')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">In Scan</span>
+                                @elseif($order->visit->status === 'ultrasound_completed')
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Completed</span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{{ $order->visit->status }}</span>
+                                @endif
+                            @else
+                                <span class="text-xs text-gray-400">N/A</span>
+                            @endif
+                        </td>
                         <td class="px-6 py-3.5 text-xs text-gray-500">{{ $order->clinical_notes ?? '-' }}</td>
                         <td class="px-6 py-3.5 text-right">
                             <form method="POST" action="{{ route('ultrasound.orders.start', $order) }}" class="inline">
