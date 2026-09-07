@@ -70,26 +70,35 @@ class LabController extends Controller
     public function submitResults(Request $request, LabOrder $order, VisitWorkflow $flow)
     {
         $data = $request->validate([
-            'results' => 'required|array',
-            'results.*.lab_order_item_id' => 'required|exists:lab_order_items,id',
-            'results.*.parameter' => 'required|string',
-            'results.*.value' => 'required|string',
+            'results' => 'nullable|array',
+            'results.*.lab_order_item_id' => 'required_with:results|exists:lab_order_items,id',
+            'results.*.parameter' => 'required_with:results|string',
+            'results.*.value' => 'required_with:results|string',
             'results.*.unit' => 'nullable|string',
             'results.*.reference_range' => 'nullable|string',
-            'results.*.flag' => 'required|in:normal,high,low,critical',
+            'results.*.flag' => 'required_with:results|in:normal,high,low,critical',
             'report' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
-        DB::transaction(function () use ($order, $data, $request) {
-            foreach ($data['results'] as $item) {
-                LabResult::create([
-                    'lab_order_item_id' => $item['lab_order_item_id'],
-                    'parameter' => $item['parameter'],
-                    'value' => $item['value'],
-                    'unit' => $item['unit'] ?? null,
-                    'reference_range' => $item['reference_range'] ?? null,
-                    'flag' => $item['flag'],
-                ]);
+        $hasResults = !empty($data['results']);
+        $hasFile = $request->hasFile('report');
+
+        if (!$hasResults && !$hasFile) {
+            return back()->with('error', 'Please provide results or attach a file.');
+        }
+
+        DB::transaction(function () use ($order, $data, $request, $hasResults) {
+            if ($hasResults) {
+                foreach ($data['results'] as $item) {
+                    LabResult::create([
+                        'lab_order_item_id' => $item['lab_order_item_id'],
+                        'parameter' => $item['parameter'],
+                        'value' => $item['value'],
+                        'unit' => $item['unit'] ?? null,
+                        'reference_range' => $item['reference_range'] ?? null,
+                        'flag' => $item['flag'],
+                    ]);
+                }
             }
 
             if ($request->hasFile('report')) {
@@ -106,18 +115,25 @@ class LabController extends Controller
                 ]);
             }
 
-            $order->update([
-                'processed_by' => auth()->id(),
-                'status' => 'completed',
-                'completed_at' => now(),
-            ]);
+            if ($hasResults) {
+                $order->update([
+                    'processed_by' => auth()->id(),
+                    'status' => 'completed',
+                    'completed_at' => now(),
+                ]);
+            } else {
+                $order->update(['processed_by' => auth()->id()]);
+            }
         });
 
-        $flow->transition($order->visit, VisitStatus::LabCompleted);
+        if ($hasResults) {
+            $flow->transition($order->visit, VisitStatus::LabCompleted);
+            ActivityLog::log('lab_results_submitted', $order->visit, "Submitted lab results for visit {$order->visit->visit_number}");
+            return back()->with('status', 'Lab results submitted successfully. Results sent back to doctor.');
+        }
 
-        ActivityLog::log('lab_results_submitted', $order->visit, "Submitted lab results for visit {$order->visit->visit_number}");
-
-        return back()->with('status', 'Lab results submitted successfully. Results sent back to doctor.');
+        ActivityLog::log('lab_attachment_uploaded', $order->visit, "Uploaded report attachment for order #{$order->id}");
+        return back()->with('status', 'Report attached successfully.');
     }
 
     public function submitSingleResult(Request $request, LabOrder $order, LabOrderItem $item, VisitWorkflow $flow)
