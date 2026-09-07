@@ -265,20 +265,39 @@
         form.action = action;
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            const btn = document.getElementById('user_submit_btn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
             const formData = new FormData(form);
             fetch(action, {
                 method: 'POST',
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
             })
-            .then(r => r.json().catch(() => ({})))
-            .then(data => {
-                Swal.fire({ icon: 'success', title: 'Success', text: data.message || successMessage, timer: 1500, showConfirmButton: false });
-                closeUserSlideOver();
-                setTimeout(() => location.reload(), 1000);
+            .then(r => r.json().then(data => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    Swal.fire({ icon: 'success', title: 'Success', text: data.message || successMessage, timer: 1500, showConfirmButton: false });
+                    closeUserSlideOver();
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    let errorMsg = data.message || 'Failed to save staff.';
+                    if (data.errors) {
+                        errorMsg = Object.values(data.errors).flat().join('\n');
+                    }
+                    Swal.fire({ icon: 'error', title: 'Validation Error', text: errorMsg });
+                }
+                btn.disabled = false;
+                btn.textContent = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
             })
-            .catch(err => {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to save staff.' });
+            .catch(() => {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Failed to save staff. Please try again.' });
+                btn.disabled = false;
+                btn.textContent = originalText;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
             });
         });
     }
