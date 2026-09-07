@@ -137,6 +137,7 @@ Route::middleware('auth')->group(function () {
             Route::get('orders/{order}/results', [LabController::class, 'showResults'])->name('orders.show');
             Route::post('orders/{order}/start', [LabController::class, 'startProcessing'])->name('orders.start');
             Route::post('orders/{order}/results', [LabController::class, 'submitResults'])->name('orders.results');
+            Route::post('orders/{order}/items/{item}/result', [LabController::class, 'submitSingleResult'])->name('orders.items.result');
         });
     });
 

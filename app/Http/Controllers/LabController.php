@@ -120,6 +120,46 @@ class LabController extends Controller
         return back()->with('status', 'Lab results submitted successfully. Results sent back to doctor.');
     }
 
+    public function submitSingleResult(Request $request, LabOrder $order, LabOrderItem $item, VisitWorkflow $flow)
+    {
+        if ($item->lab_order_id !== $order->id) {
+            return back()->with('error', 'This test item does not belong to this order.');
+        }
+
+        $data = $request->validate([
+            'parameter' => 'required|string',
+            'value' => 'required|string',
+            'unit' => 'nullable|string',
+            'reference_range' => 'nullable|string',
+            'flag' => 'required|in:normal,high,low,critical',
+        ]);
+
+        LabResult::create([
+            'lab_order_item_id' => $item->id,
+            'parameter' => $data['parameter'],
+            'value' => $data['value'],
+            'unit' => $data['unit'] ?? null,
+            'reference_range' => $data['reference_range'] ?? null,
+            'flag' => $data['flag'],
+        ]);
+
+        ActivityLog::log('lab_result_entered', $order->visit, "Entered result for {$item->labTest?->name} on order #{$order->id}");
+
+        $allItemsHaveResults = $order->items()->with('results')->get()->every(fn ($i) => $i->results->isNotEmpty());
+
+        if ($allItemsHaveResults) {
+            $order->update([
+                'status' => 'completed',
+                'completed_at' => now(),
+            ]);
+            $flow->transition($order->visit, VisitStatus::LabCompleted);
+            ActivityLog::log('lab_results_completed', $order->visit, "All lab results completed for visit {$order->visit->visit_number}");
+            return back()->with('status', 'Result saved. All tests completed — order sent to doctor.');
+        }
+
+        return back()->with('status', 'Result saved for ' . ($item->labTest?->name ?? 'test') . '. Remaining tests still pending.');
+    }
+
     public function showResults(LabOrder $order)
     {
         $order->load(['visit.patient', 'items.labTest', 'results.labOrderItem', 'attachments', 'doctor', 'labTech']);
