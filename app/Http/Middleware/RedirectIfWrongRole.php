@@ -56,7 +56,7 @@ class RedirectIfWrongRole
         }
 
         if ($user->isUltrasound()) {
-            return redirect()->route('ultrasound.queue')
+            return redirect()->route('ultrasound.dashboard')
                 ->with('status', 'Redirected to your ultrasound dashboard.');
         }
 

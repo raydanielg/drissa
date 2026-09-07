@@ -60,6 +60,10 @@ class LoginController extends Controller
             return redirect()->route('nurse.dashboard');
         }
 
+        if ($user->isUltrasound()) {
+            return redirect()->route('ultrasound.dashboard');
+        }
+
         return redirect()->route('dashboard');
     }
 }

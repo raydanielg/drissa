@@ -142,6 +142,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('ultrasound-services', UltrasoundServiceController::class);
 
         Route::prefix('ultrasound')->name('ultrasound.')->group(function () {
+            Route::get('/dashboard', [UltrasoundController::class, 'dashboard'])->name('dashboard');
             Route::get('/', [UltrasoundController::class, 'queue'])->name('queue');
             Route::get('orders/{order}/results', [UltrasoundController::class, 'showResults'])->name('orders.show');
             Route::post('orders/{order}/start', [UltrasoundController::class, 'startProcessing'])->name('orders.start');

@@ -21,6 +21,32 @@ class UltrasoundController extends Controller
         $this->middleware('auth');
     }
 
+    public function dashboard()
+    {
+        $today = today();
+
+        $pendingCount = UltrasoundOrder::where('status', 'pending')->count();
+        $processingCount = UltrasoundOrder::where('status', 'processing')->count();
+        $completedToday = UltrasoundOrder::where('status', 'completed')
+            ->whereDate('completed_at', $today)
+            ->count();
+        $totalToday = UltrasoundOrder::whereDate('created_at', $today)->count();
+
+        $recentOrders = UltrasoundOrder::with(['patient', 'visit', 'items.ultrasoundService', 'doctor', 'ultrasoundTech'])
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $stats = [
+            'pending' => $pendingCount,
+            'processing' => $processingCount,
+            'completed_today' => $completedToday,
+            'total_today' => $totalToday,
+        ];
+
+        return view('ultrasound.dashboard', compact('stats', 'recentOrders'));
+    }
+
     public function queue()
     {
         $pendingOrders = UltrasoundOrder::with(['patient', 'visit', 'items.ultrasoundService', 'doctor'])
