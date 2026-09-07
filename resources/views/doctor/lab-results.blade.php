@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Lab Results - ' . config('app.name', 'Laravel'))
-@section('page_title', 'Lab Results')
+@section('title', 'Results - ' . config('app.name', 'Laravel'))
+@section('page_title', 'Lab & Ultrasound Results')
 
 @section('content')
 <div class="space-y-6">
@@ -18,7 +18,39 @@
         ];
     @endphp
 
-    @forelse ($visits as $visit)
+    @php
+        $labStatuses = [
+            \App\Enums\VisitStatus::WaitingForLab->value,
+            \App\Enums\VisitStatus::InLab->value,
+            \App\Enums\VisitStatus::LabCompleted->value,
+        ];
+        $ultrasoundStatuses = [
+            \App\Enums\VisitStatus::WaitingForUltrasound->value,
+            \App\Enums\VisitStatus::InUltrasound->value,
+            \App\Enums\VisitStatus::UltrasoundCompleted->value,
+        ];
+        $filter = request('filter', 'all');
+        $filteredVisits = $visits->filter(function($visit) use ($filter, $labStatuses, $ultrasoundStatuses) {
+            if ($filter === 'lab') return in_array($visit->status, $labStatuses);
+            if ($filter === 'ultrasound') return in_array($visit->status, $ultrasoundStatuses);
+            return true;
+        });
+    @endphp
+
+    {{-- Filter Tabs --}}
+    <div class="flex items-center gap-2">
+        <a href="{{ route('doctor.lab-results') }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $filter === 'all' ? 'bg-purple-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }}">
+            All ({{ $visits->count() }})
+        </a>
+        <a href="{{ route('doctor.lab-results', ['filter' => 'lab']) }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $filter === 'lab' ? 'bg-sky-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }}">
+            Lab ({{ $visits->filter(fn($v) => in_array($v->status, $labStatuses))->count() }})
+        </a>
+        <a href="{{ route('doctor.lab-results', ['filter' => 'ultrasound']) }}" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ $filter === 'ultrasound' ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50' }}">
+            Ultrasound ({{ $visits->filter(fn($v) => in_array($v->status, $ultrasoundStatuses))->count() }})
+        </a>
+    </div>
+
+    @forelse ($filteredVisits as $visit)
         @php
             $statusClass = match($visit->status) {
                 \App\Enums\VisitStatus::WaitingForLab->value => 'bg-amber-100 text-amber-700',
@@ -281,7 +313,10 @@
     @empty
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-12 text-center">
             <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-            <p class="text-sm text-gray-400">No patients in lab queue</p>
+            <p class="text-sm text-gray-400">No results pending. All patients are in your queue.</p>
+            <a href="{{ route('doctor.queue') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors">
+                Back to Queue
+            </a>
         </div>
     @endforelse
 </div>

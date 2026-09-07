@@ -161,7 +161,7 @@
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
                         </span>
                     </div>
-                    <span>Lab Results</span>
+                    <span>Results</span>
                 </a>
                 <a href="{{ route('doctor.patients') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-100 text-sm font-medium {{ request()->routeIs('doctor.patients') or request()->routeIs('doctor.patients.history') or request()->routeIs('patients.history') ? 'bg-emerald-700/60 text-white shadow-md' : 'hover:bg-emerald-700/40' }} transition-all mb-1">
                     <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
