@@ -25,6 +25,9 @@ class UserController extends Controller
             'inactive' => User::where('is_active', false)->count(),
             'doctors' => User::role('doctor')->count(),
             'reception' => User::role('reception')->count(),
+            'lab' => User::role('lab')->count(),
+            'pharmacy' => User::role('pharmacy')->count(),
+            'ultrasound' => User::role('ultrasound')->count(),
             'admin' => User::role('admin')->count(),
         ];
 

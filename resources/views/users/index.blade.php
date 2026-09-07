@@ -34,7 +34,7 @@
     </div>
 
     {{-- KPI Cards --}}
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-4">
         @php
             $statConfig = [
                 ['key' => 'total', 'label' => 'Total Staff', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z', 'from' => 'blue-500', 'to' => 'blue-700', 'border' => 'blue-400', 'text' => 'blue-100', 'sub' => 'blue-200'],
@@ -42,6 +42,9 @@
                 ['key' => 'inactive', 'label' => 'Inactive', 'icon' => 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z', 'from' => 'red-500', 'to' => 'red-700', 'border' => 'red-400', 'text' => 'red-100', 'sub' => 'red-200'],
                 ['key' => 'doctors', 'label' => 'Doctors', 'icon' => 'M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z', 'from' => 'purple-500', 'to' => 'purple-700', 'border' => 'purple-400', 'text' => 'purple-100', 'sub' => 'purple-200'],
                 ['key' => 'reception', 'label' => 'Reception', 'icon' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4', 'from' => 'cyan-500', 'to' => 'cyan-700', 'border' => 'cyan-400', 'text' => 'cyan-100', 'sub' => 'cyan-200'],
+                ['key' => 'lab', 'label' => 'Lab', 'icon' => 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', 'from' => 'pink-500', 'to' => 'pink-700', 'border' => 'pink-400', 'text' => 'pink-100', 'sub' => 'pink-200'],
+                ['key' => 'pharmacy', 'label' => 'Pharmacy', 'icon' => 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', 'from' => 'teal-500', 'to' => 'teal-700', 'border' => 'teal-400', 'text' => 'teal-100', 'sub' => 'teal-200'],
+                ['key' => 'ultrasound', 'label' => 'Ultrasound', 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', 'from' => 'indigo-500', 'to' => 'indigo-700', 'border' => 'indigo-400', 'text' => 'indigo-100', 'sub' => 'indigo-200'],
                 ['key' => 'admin', 'label' => 'Admin', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'from' => 'amber-500', 'to' => 'amber-700', 'border' => 'amber-400', 'text' => 'amber-100', 'sub' => 'amber-200'],
             ];
         @endphp
@@ -96,9 +99,22 @@
                             <td class="px-6 py-3.5 text-gray-700 text-xs">{{ $user->email }}</td>
                             <td class="px-6 py-3.5 text-gray-700 text-xs">{{ $user->phone ?? '-' }}</td>
                             <td class="px-6 py-3.5">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium {{ $user->hasRole('doctor') ? 'bg-purple-100 text-purple-700' : ($user->hasRole('reception') ? 'bg-cyan-100 text-cyan-700' : 'bg-amber-100 text-amber-700') }}">
-                                    <span class="w-1.5 h-1.5 rounded-full {{ $user->hasRole('doctor') ? 'bg-purple-500' : ($user->hasRole('reception') ? 'bg-cyan-500' : 'bg-amber-500') }}"></span>
-                                    {{ ucfirst($user->roles->first()?->name ?? 'none') }}
+                                @php
+                                    $roleName = $user->roles->first()?->name ?? 'none';
+                                    $roleColors = [
+                                        'admin' => ['bg' => 'bg-amber-100', 'text' => 'text-amber-700', 'dot' => 'bg-amber-500'],
+                                        'doctor' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-700', 'dot' => 'bg-purple-500'],
+                                        'reception' => ['bg' => 'bg-cyan-100', 'text' => 'text-cyan-700', 'dot' => 'bg-cyan-500'],
+                                        'lab' => ['bg' => 'bg-pink-100', 'text' => 'text-pink-700', 'dot' => 'bg-pink-500'],
+                                        'pharmacy' => ['bg' => 'bg-teal-100', 'text' => 'text-teal-700', 'dot' => 'bg-teal-500'],
+                                        'nurse' => ['bg' => 'bg-rose-100', 'text' => 'text-rose-700', 'dot' => 'bg-rose-500'],
+                                        'ultrasound' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-700', 'dot' => 'bg-indigo-500'],
+                                    ];
+                                    $rc = $roleColors[$roleName] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-700', 'dot' => 'bg-gray-500'];
+                                @endphp
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium {{ $rc['bg'] }} {{ $rc['text'] }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $rc['dot'] }}"></span>
+                                    {{ ucfirst($roleName) }}
                                 </span>
                             </td>
                             <td class="px-6 py-3.5">
@@ -127,7 +143,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="px-6 py-10 text-center text-gray-400">
+                        <tr><td colspan="7" class="px-6 py-10 text-center text-gray-400">
                             <div class="flex flex-col items-center gap-2">
                                 <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                 <p>No staff found</p>
@@ -232,6 +248,10 @@
             userContent.innerHTML = '';
             document.body.style.overflow = '';
         }, 300);
+    }
+
+    function ucfirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     function populateRoleSelect(roles) {
