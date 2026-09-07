@@ -158,6 +158,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [PharmacyController::class, 'queue'])->name('queue');
         Route::get('/inventory', [PharmacyController::class, 'inventory'])->name('inventory');
         Route::post('/medications', [PharmacyController::class, 'storeMedication'])->name('medications.store');
+        Route::get('/medications/{medication}/edit', [PharmacyController::class, 'editMedication'])->name('medications.edit');
         Route::put('/medications/{medication}', [PharmacyController::class, 'updateMedication'])->name('medications.update');
         Route::delete('/medications/{medication}', [PharmacyController::class, 'deleteMedication'])->name('medications.destroy');
         Route::get('/history', [PharmacyController::class, 'prescriptionHistory'])->name('history');
