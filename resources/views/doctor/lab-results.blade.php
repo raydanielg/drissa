@@ -24,6 +24,9 @@
                 \App\Enums\VisitStatus::WaitingForLab->value => 'bg-amber-100 text-amber-700',
                 \App\Enums\VisitStatus::InLab->value => 'bg-sky-100 text-sky-700',
                 \App\Enums\VisitStatus::LabCompleted->value => 'bg-emerald-100 text-emerald-700',
+                \App\Enums\VisitStatus::WaitingForUltrasound->value => 'bg-amber-100 text-amber-700',
+                \App\Enums\VisitStatus::InUltrasound->value => 'bg-sky-100 text-sky-700',
+                \App\Enums\VisitStatus::UltrasoundCompleted->value => 'bg-emerald-100 text-emerald-700',
                 default => 'bg-gray-100 text-gray-700',
             };
         @endphp

@@ -165,12 +165,15 @@ class DoctorController extends Controller
 
     public function labResults()
     {
-        $visits = Visit::with(['patient', 'vitals', 'labOrders.items.labTest', 'labOrders.results', 'labOrders.attachments'])
+        $visits = Visit::with(['patient', 'vitals', 'labOrders.items.labTest', 'labOrders.results', 'labOrders.attachments', 'ultrasoundOrders.items.ultrasoundService', 'ultrasoundOrders.attachments'])
             ->where('doctor_id', auth()->id())
             ->whereIn('status', [
                 VisitStatus::WaitingForLab->value,
                 VisitStatus::InLab->value,
                 VisitStatus::LabCompleted->value,
+                VisitStatus::WaitingForUltrasound->value,
+                VisitStatus::InUltrasound->value,
+                VisitStatus::UltrasoundCompleted->value,
             ])
             ->orderBy('registered_at')
             ->get();
