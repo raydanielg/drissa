@@ -129,7 +129,7 @@ class LabController extends Controller
 
     public function history(Request $request)
     {
-        $query = Patient::withCount(['labOrders as total_orders' => fn($q) => $q->where('status', 'completed')])
+        $query = Patient::withCount(['labOrders as total_orders' => fn($q) => $q->where('lab_orders.status', 'completed')])
             ->having('total_orders', '>', 0)
             ->orderByDesc('total_orders');
 
