@@ -184,7 +184,69 @@
                 @endforelse
             </div>
 
-            {{-- Prescription Form (if with doctor) --}}
+            {{-- Ultrasound Orders --}}
+            @if ($visit->ultrasoundOrders->isNotEmpty())
+                <div class="divide-y divide-gray-100 border-t border-gray-100">
+                    @foreach ($visit->ultrasoundOrders as $usOrder)
+                        <div class="p-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-gray-700">Ultrasound Order #{{ $usOrder->id }}</span>
+                                    <span class="text-xs text-gray-400">•</span>
+                                    <span class="text-xs text-gray-500">{{ $usOrder->created_at->format('M d, Y H:i') }}</span>
+                                    @if($usOrder->status === 'completed')
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-700">Completed</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-700">{{ ucfirst($usOrder->status) }}</span>
+                                    @endif
+                                </div>
+                                @if($usOrder->status === 'completed')
+                                    <a href="{{ route('ultrasound.orders.show', $usOrder) }}" target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 font-medium inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                        Full Report
+                                    </a>
+                                @endif
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 mb-3">
+                                @foreach ($usOrder->items as $item)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-purple-700 border border-purple-100">{{ $item->ultrasoundService?->name ?? 'Unknown' }}</span>
+                                @endforeach
+                            </div>
+                            @if ($usOrder->status === 'completed')
+                                <div class="space-y-2">
+                                    @if ($usOrder->findings)
+                                        <div>
+                                            <p class="text-[10px] font-semibold text-gray-500 uppercase">Findings</p>
+                                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $usOrder->findings }}</p>
+                                        </div>
+                                    @endif
+                                    @if ($usOrder->impression)
+                                        <div>
+                                            <p class="text-[10px] font-semibold text-gray-500 uppercase">Impression</p>
+                                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $usOrder->impression }}</p>
+                                        </div>
+                                    @endif
+                                </div>
+                                @if ($usOrder->attachments->isNotEmpty())
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        @foreach ($usOrder->attachments as $attachment)
+                                            <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-medium transition-colors">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                                {{ $attachment->file_name }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            @else
+                                <div class="flex items-center gap-2 text-xs text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
+                                    <svg class="w-3.5 h-3.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    Waiting for ultrasound results...
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
             @if ($visit->status === \App\Enums\VisitStatus::WithDoctor->value)
                 <div class="px-5 pb-5">
                     <form method="POST" action="{{ route('doctor.visits.prescribe', $visit) }}" class="border rounded-xl p-4 bg-gray-50/50">
