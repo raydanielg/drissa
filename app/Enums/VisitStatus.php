@@ -26,9 +26,9 @@ enum VisitStatus: string
             self::WaitingForLab => [self::InLab],
             self::InLab => [self::LabCompleted],
             self::LabCompleted => [self::WithDoctor],
-            self::WaitingForPharmacy => [self::InPharmacy],
-            self::InPharmacy => [self::PharmacyCompleted],
-            self::PharmacyCompleted => [self::Completed],
+            self::WaitingForPharmacy => [self::InPharmacy, self::WaitingForPayment],
+            self::InPharmacy => [self::PharmacyCompleted, self::WaitingForPayment],
+            self::PharmacyCompleted => [self::Completed, self::WaitingForPayment],
             self::WaitingForPayment => [self::WaitingForDoctor, self::Completed],
             default => [],
         };
