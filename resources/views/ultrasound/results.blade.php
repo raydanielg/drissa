@@ -72,7 +72,7 @@
                             <p class="text-sm font-medium text-gray-900 truncate">{{ $attachment->file_name }}</p>
                             <p class="text-xs text-gray-500">{{ number_format($attachment->file_size / 1024, 1) }} KB</p>
                         </div>
-                        <a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">View</a>
+                        <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">View</a>
                     </div>
                 @endforeach
             </div>

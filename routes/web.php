@@ -11,6 +11,7 @@ use App\Http\Controllers\ClinicalRecordController;
 use App\Http\Controllers\ClinicRoomController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\InvoiceController;
@@ -44,6 +45,8 @@ use Illuminate\Support\Facades\Route;
 | Installer Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/storage/{path}', [FileController::class, 'serve'])->where('path', '.*')->name('file.serve')->middleware('auth');
+
 Route::get('/install', [InstallController::class, 'welcome'])->name('install.welcome');
 Route::get('/install/database', [InstallController::class, 'database'])->name('install.database');
 Route::post('/install/process', [InstallController::class, 'process'])->name('install.process');
