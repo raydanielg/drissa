@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,14 +14,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call([
+            // Core: roles must exist before users can be assigned to them
+            RoleSeeder::class,
+            UserSeeder::class,
 
-        User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'name' => 'Test User',
-                'password' => bcrypt('password'),
-            ]
-        );
+            // Organizational structure
+            DepartmentSeeder::class,
+            ShiftSeeder::class,
+            ClinicRoomSeeder::class,
+
+            // Inventory & services
+            CategorySeeder::class,
+            SupplierSeeder::class,
+            ProductSeeder::class,
+            ServiceSeeder::class,
+            CatalogSeeder::class,
+            LabEquipmentSeeder::class,
+
+            // System configuration
+            SystemDefaultsSeeder::class,
+            SmsDefaultsSeeder::class,
+            SmsTemplateSeeder::class,
+
+            // Sample data (depends on users/roles above)
+            SampleDataSeeder::class,
+            AppointmentSeeder::class,
+            ClinicalRecordSeeder::class,
+            ChatSeeder::class,
+        ]);
     }
 }
