@@ -80,7 +80,7 @@ Each role lands on its own workspace after login. Shared features — patient re
 
 ## 3. User Roles & Access Control
 
-Seven staff roles exist. Each staff account carries exactly one role; **admin** implicitly has access to everything.
+Eight staff roles exist. Each staff account carries exactly one role; **admin** implicitly has access to everything.
 
 | Role | Workspace | Purpose |
 |---|---|---|
@@ -91,6 +91,7 @@ Seven staff roles exist. Each staff account carries exactly one role; **admin** 
 | **lab** | Lab workspace | Lab order queue, processing, result entry, test catalog & equipment registry |
 | **pharmacy** | Pharmacy workspace | Prescription queue, dispensing, medication inventory, pharmacy reports |
 | **ultrasound** | Ultrasound workspace | Ultrasound order queue, scan results, service catalog |
+| **manager** | Manager workspace (`/manager`) | Daily & weekly manager reports (revenue, sales, clients, expenses, department reports, challenges, action plans, signature) with system auto-fill; admin can view all managers' reports |
 
 ### Access control rules
 
@@ -105,9 +106,10 @@ Seven staff roles exist. Each staff account carries exactly one role; **admin** 
 
 What each role can reach:
 
-| Area / Route | admin | reception | doctor | nurse | lab | pharmacy | ultrasound |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| `/dashboard`, stats | ✅ | ✅ | ↩ | ↩ | ↩ | ↩ | ↩ |
+| Area / Route | admin | reception | doctor | nurse | lab | pharmacy | ultrasound | manager |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| `/dashboard`, stats | ✅ | ✅ | ↩ | ↩ | ↩ | ↩ | ↩ | ↩ |
+| `/manager/*` (dashboard, daily & weekly reports) | ✅ | — | — | — | — | — | — | ✅ |
 | `/reception/*` (queue, payments, visits) | ✅ | ✅ | — | — | — | — | — |
 | `/doctor/*` (queue, consult, orders, prescribe) | ✅ | — | ✅ | — | — | — | — |
 | `/lab/*` + `lab-equipment`, `lab-tests` CRUD | ✅ | — | — | — | ✅ | — | — |
@@ -274,7 +276,8 @@ Patient ──┬──< Visit ──┬──< LabOrder ──< LabOrderItem �
   │       ├──< PatientDocument
   │       └──< ClinicalRecord
 
-User ──┬── (one role: admin | reception | doctor | lab | pharmacy | nurse | ultrasound)
+User ──┬── (one role: admin | reception | doctor | lab | pharmacy | nurse | ultrasound | manager)
+       ├──< ManagerReport (daily/weekly manager reports)
        ├──< Visit (as attending doctor / as registering receptionist)
        ├──< Appointment (as doctor)
        ├──> Department
@@ -323,7 +326,7 @@ System:    Setting · SmsTemplate · SmsLog · EmailTemplate · ActivityLog · P
 - **Inventory** — products track SKU, cost & selling price, quantity, reorder level and an active flag.
 - **User accounts** — have an active/inactive flag; admin can deactivate instead of deleting, reset passwords, and run bulk activate/deactivate/delete.
 - **Appointments** — statuses: `scheduled`, `confirmed`, `completed`, `cancelled`, `no_show`; types: `general`, `followup`, `emergency`.
-- **Roles** — exactly seven roles; every staff account has exactly one; admin is implicitly all-powerful.
+- **Roles** — exactly eight roles; every staff account has exactly one; admin is implicitly all-powerful.
 
 ---
 

@@ -60,6 +60,11 @@ class RedirectIfWrongRole
                 ->with('status', 'Redirected to your ultrasound dashboard.');
         }
 
+        if ($user->isManager()) {
+            return redirect()->route('manager.dashboard')
+                ->with('status', 'Redirected to your manager dashboard.');
+        }
+
         return redirect()->route('profile')
             ->with('status', 'Redirected to your profile.');
     }

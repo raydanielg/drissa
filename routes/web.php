@@ -18,6 +18,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LabController;
 use App\Http\Controllers\LabEquipmentController;
 use App\Http\Controllers\LabTestController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NurseController;
 use App\Http\Controllers\PatientController;
@@ -172,6 +173,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/queue', [NurseController::class, 'queue'])->name('queue');
         Route::post('visits/{visit}/vitals', [NurseController::class, 'saveVitals'])->name('visits.vitals');
         Route::get('/patients', [NurseController::class, 'patients'])->name('patients');
+    });
+
+    // Clinic Manager Workspace — daily & weekly manager reports
+    Route::prefix('manager')->name('manager.')->middleware('redirect.role:manager|admin')->group(function () {
+        Route::get('/', [ManagerController::class, 'dashboard'])->name('dashboard');
+        Route::get('/reports', [ManagerController::class, 'reports'])->name('reports.index');
+        Route::get('/reports/create', [ManagerController::class, 'createReport'])->name('reports.create');
+        Route::post('/reports', [ManagerController::class, 'storeReport'])->name('reports.store');
+        Route::get('/reports/suggestions', [ManagerController::class, 'suggestions'])->name('reports.suggestions');
+        Route::get('/reports/{report}', [ManagerController::class, 'showReport'])->name('reports.show');
+        Route::get('/reports/{report}/edit', [ManagerController::class, 'editReport'])->name('reports.edit');
+        Route::put('/reports/{report}', [ManagerController::class, 'updateReport'])->name('reports.update');
+        Route::delete('/reports/{report}', [ManagerController::class, 'destroyReport'])->name('reports.destroy');
     });
 
     // Appointments - accessible to admin and reception

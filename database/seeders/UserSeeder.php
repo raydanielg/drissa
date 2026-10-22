@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             ['name' => 'Lab Technician', 'email' => 'lab@drissa.test', 'role' => 'lab'],
             ['name' => 'Pharmacist Jane', 'email' => 'pharmacy@drissa.test', 'role' => 'pharmacy'],
             ['name' => 'Ultrasound Tech', 'email' => 'ultrasound@drissa.test', 'role' => 'ultrasound'],
+            ['name' => 'Clinic Manager', 'email' => 'manager@drissa.test', 'role' => 'manager'],
         ];
 
         foreach ($users as $userData) {

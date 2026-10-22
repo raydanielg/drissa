@@ -45,6 +45,7 @@
                 ['key' => 'lab', 'label' => 'Lab', 'icon' => 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', 'from' => 'pink-500', 'to' => 'pink-700', 'border' => 'pink-400', 'text' => 'pink-100', 'sub' => 'pink-200'],
                 ['key' => 'pharmacy', 'label' => 'Pharmacy', 'icon' => 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z', 'from' => 'teal-500', 'to' => 'teal-700', 'border' => 'teal-400', 'text' => 'teal-100', 'sub' => 'teal-200'],
                 ['key' => 'ultrasound', 'label' => 'Ultrasound', 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', 'from' => 'indigo-500', 'to' => 'indigo-700', 'border' => 'indigo-400', 'text' => 'indigo-100', 'sub' => 'indigo-200'],
+                ['key' => 'manager', 'label' => 'Managers', 'icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'from' => 'orange-500', 'to' => 'orange-700', 'border' => 'orange-400', 'text' => 'orange-100', 'sub' => 'orange-200'],
                 ['key' => 'admin', 'label' => 'Admin', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'from' => 'amber-500', 'to' => 'amber-700', 'border' => 'amber-400', 'text' => 'amber-100', 'sub' => 'amber-200'],
             ];
         @endphp
@@ -109,6 +110,7 @@
                                         'pharmacy' => ['bg' => 'bg-teal-100', 'text' => 'text-teal-700', 'dot' => 'bg-teal-500'],
                                         'nurse' => ['bg' => 'bg-rose-100', 'text' => 'text-rose-700', 'dot' => 'bg-rose-500'],
                                         'ultrasound' => ['bg' => 'bg-indigo-100', 'text' => 'text-indigo-700', 'dot' => 'bg-indigo-500'],
+                                        'manager' => ['bg' => 'bg-orange-100', 'text' => 'text-orange-700', 'dot' => 'bg-orange-500'],
                                     ];
                                     $rc = $roleColors[$roleName] ?? ['bg' => 'bg-gray-100', 'text' => 'text-gray-700', 'dot' => 'bg-gray-500'];
                                 @endphp

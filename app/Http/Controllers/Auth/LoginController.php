@@ -64,6 +64,10 @@ class LoginController extends Controller
             return redirect()->route('ultrasound.dashboard');
         }
 
+        if ($user->isManager()) {
+            return redirect()->route('manager.dashboard');
+        }
+
         return redirect()->route('dashboard');
     }
 }

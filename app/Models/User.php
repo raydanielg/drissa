@@ -75,6 +75,16 @@ class User extends Authenticatable
         return $this->hasRole('ultrasound');
     }
 
+    public function isManager(): bool
+    {
+        return $this->hasRole('manager');
+    }
+
+    public function managerReports()
+    {
+        return $this->hasMany(ManagerReport::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

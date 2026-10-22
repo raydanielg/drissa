@@ -28,6 +28,7 @@ class UserController extends Controller
             'lab' => User::role('lab')->count(),
             'pharmacy' => User::role('pharmacy')->count(),
             'ultrasound' => User::role('ultrasound')->count(),
+            'manager' => User::role('manager')->count(),
             'admin' => User::role('admin')->count(),
         ];
 
