@@ -37,6 +37,7 @@
     <div class="fixed inset-0">
         <img src="{{ asset('auth-bg.jpg') }}" alt="" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/55"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-700/45 via-blue-500/15 to-sky-400/25 mix-blend-multiply"></div>
         <div class="absolute inset-0 backdrop-blur-[2px]"></div>
     </div>
 
