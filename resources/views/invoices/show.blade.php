@@ -119,6 +119,10 @@
             <div class="text-center">
                 <span class="inline-block border text-[9px] font-bold uppercase tracking-widest rounded px-2 py-0.5 {{ $invoice->status === 'paid' ? 'border-emerald-500 text-emerald-600' : 'border-amber-500 text-amber-600' }}">{{ $invoice->status }}</span>
                 <p class="text-[10px] text-gray-500 mt-3">Asante kwa kutembelea {{ config('app.name', 'Uzazi Clinic') }}</p>
+                <div class="mt-1 text-slate-800" style="width:110px;margin:2px auto -10px;">
+                    <x-ui.signature :delay="2.4" :duration="2.2" :stroke-width="14" />
+                </div>
+                <p class="text-[8px] uppercase tracking-widest text-gray-400 mt-1">Authorized signature</p>
                 <p class="text-[9px] text-gray-400">Powered by {{ config('app.name') }} HIS</p>
             </div>
         </article>
