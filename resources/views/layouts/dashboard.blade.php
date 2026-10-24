@@ -850,5 +850,7 @@
         if (cfg) flatpickr(el, cfg);
     }, true);
     </script>
+    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>
