@@ -331,14 +331,11 @@
                                         <i class="hgi-stroke hgi-pencil-edit-01 text-base"></i>
                                         <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Edit</span>
                                     </button>
-                                    <form method="POST" action="{{ route('departments.destroy', $department) }}" data-ajax data-confirm="Delete this department?" class="inline">
+                                    <form method="POST" action="{{ route('departments.destroy', $department) }}" data-ajax class="inline" id="del-dept-{{ $department->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="action-icon group/icon relative p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
-                                            <i class="hgi-stroke hgi-cancel-circle text-base"></i>
-                                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Delete</span>
-                                        </button>
                                     </form>
+                                    <x-ui.hold-confirm form="#del-dept-{{ $department->id }}" label="Hold to delete" confirmed-label="Deleted" icon="hgi-cancel-circle" class="min-w-0 h-8 px-2.5" title="Delete" />
                                 </div>
                             </td>
                         </tr>
