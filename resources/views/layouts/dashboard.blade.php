@@ -57,6 +57,9 @@
             @if(session('status'))
                 window.AppToast.fire({ icon: 'success', title: @json(session('status')) });
             @endif
+            @if(session('success'))
+                window.AppToast.fire({ icon: 'success', title: @json(session('success')) });
+            @endif
             @if(session('error'))
                 window.AppToast.fire({ icon: 'error', title: @json(session('error')) });
             @endif
