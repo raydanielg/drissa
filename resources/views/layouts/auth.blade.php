@@ -34,6 +34,12 @@
 </head>
 <body class="antialiased text-slate-800 min-h-screen" style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;">
 
+    <div class="fixed inset-0">
+        <img src="{{ asset('auth-bg.jpg') }}" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/55"></div>
+        <div class="absolute inset-0 backdrop-blur-[2px]"></div>
+    </div>
+
     <script>
     // Shared compact toast
     window.AppToast = Swal.mixin({
@@ -90,12 +96,6 @@
                         btn.classList.remove('cursor-not-allowed', 'opacity-80');
                     }
                 }, 12000);
-            });
-        });
-    })();
-    </script>
-    <           btn.innerHTML = '<svg class="animate-spin mr-2 h-4 w-4 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Signing in...';
-                btn.classList.add('cursor-not-allowed', 'opacity-80');
             });
         });
     })();
