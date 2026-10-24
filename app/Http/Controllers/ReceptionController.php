@@ -27,29 +27,30 @@ class ReceptionController extends Controller
     {
         $today = today();
 
-        $todayVisits = Visit::with(['patient', 'doctor'])
-            ->whereDate('registered_at', $today)
-            ->latest('registered_at')
-            ->get();
+        $queueLimit = 20;
 
         $waitingForPayment = Visit::with(['patient', 'invoice'])
             ->where('status', VisitStatus::WaitingForPayment->value)
             ->latest('registered_at')
+            ->limit($queueLimit)
             ->get();
 
         $waitingForDoctor = Visit::with(['patient', 'doctor'])
             ->where('status', VisitStatus::WaitingForDoctor->value)
             ->latest('registered_at')
+            ->limit($queueLimit)
             ->get();
 
         $registeredVisits = Visit::with(['patient', 'invoice'])
             ->where('status', VisitStatus::Registered->value)
             ->latest('registered_at')
+            ->limit($queueLimit)
             ->get();
 
         $withDoctorVisits = Visit::with(['patient', 'doctor'])
             ->where('status', VisitStatus::WithDoctor->value)
             ->latest('registered_at')
+            ->limit($queueLimit)
             ->get();
 
         $todayAppointments = Appointment::with(['patient', 'doctor'])
@@ -104,7 +105,7 @@ class ReceptionController extends Controller
         ];
 
         return view('reception.dashboard', compact(
-            'todayVisits', 'waitingForPayment', 'waitingForDoctor', 'registeredVisits',
+            'waitingForPayment', 'waitingForDoctor', 'registeredVisits',
             'withDoctorVisits', 'todayAppointments', 'recentPatients', 'doctors',
             'patientsList', 'patientSearchData', 'kpis', 'visitTrend', 'visitLabels', 'statusCounts'
         ));

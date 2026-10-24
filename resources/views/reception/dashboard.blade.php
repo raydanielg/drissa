@@ -162,10 +162,10 @@
         <div class="px-5 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 class="text-sm font-bold text-gray-900">Live Reception Queue</h2>
             <div class="flex flex-wrap gap-2" id="queueTabs">
-                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded bg-slate-800 text-white">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $registeredVisits->count() }}</span></button>
-                <button data-tab="waiting-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Waiting Doctor <span class="ml-1 tab-count" data-count="waiting_for_doctor">{{ $waitingForDoctor->count() }}</span></button>
-                <button data-tab="with-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">With Doctor <span class="ml-1 tab-count" data-count="with_doctor">{{ $withDoctorVisits->count() }}</span></button>
-                <button data-tab="payment" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Payment <span class="ml-1 tab-count" data-count="waiting_for_payment">{{ $waitingForPayment->count() }}</span></button>
+                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded bg-slate-800 text-white">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $kpis['registered'] }}</span></button>
+                <button data-tab="waiting-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Waiting Doctor <span class="ml-1 tab-count" data-count="waiting_for_doctor">{{ $kpis['waiting_doctor'] }}</span></button>
+                <button data-tab="with-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">With Doctor <span class="ml-1 tab-count" data-count="with_doctor">{{ $kpis['with_doctor'] }}</span></button>
+                <button data-tab="payment" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Payment <span class="ml-1 tab-count" data-count="waiting_for_payment">{{ $kpis['waiting_payment'] }}</span></button>
             </div>
         </div>
         <div class="overflow-x-auto p-0">
