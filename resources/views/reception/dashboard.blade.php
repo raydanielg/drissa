@@ -1092,5 +1092,4 @@
         });
     }
 </script>
-</script>
 @endpush
