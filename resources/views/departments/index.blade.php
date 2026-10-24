@@ -335,7 +335,7 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    <x-ui.hold-confirm form="#del-dept-{{ $department->id }}" label="Hold to delete" confirmed-label="Deleted" icon="hgi-cancel-circle" class="min-w-0 h-8 px-2.5" title="Delete" />
+                                    <x-ui.hold-confirm form="#del-dept-{{ $department->id }}" label="Hold to delete" confirmed-label="Deleted" icon="hgi-cancel-circle" class="min-w-0 h-8 px-2.5" title="Delete" undo="Department deleted" />
                                 </div>
                             </td>
                         </tr>

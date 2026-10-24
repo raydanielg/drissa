@@ -99,14 +99,36 @@
         btn.setAttribute('aria-busy', 'false');
 
         // trigger action: named form or closest form
-        var form = null;
-        if (btn.dataset.form) form = document.querySelector(btn.dataset.form);
-        if (!form) form = btn.closest('form');
-        if (form) {
-            if (form.requestSubmit) form.requestSubmit();
-            else form.submit();
+        function submitTarget() {
+            var form = null;
+            if (btn.dataset.form) form = document.querySelector(btn.dataset.form);
+            if (!form) form = btn.closest('form');
+            if (form) {
+                if (form.requestSubmit) form.requestSubmit();
+                else form.submit();
+            }
+            btn.dispatchEvent(new CustomEvent('hold-confirmed', { bubbles: true }));
         }
-        btn.dispatchEvent(new CustomEvent('hold-confirmed', { bubbles: true }));
+
+        if (btn.dataset.undo && window.UndoNotice) {
+            window.UndoNotice.show({
+                message: btn.dataset.undo,
+                duration: parseInt(btn.dataset.undoDuration || '5000', 10),
+                onExpire: submitTarget,
+                onUndo: function () {
+                    // revert button to idle early
+                    if (btn._htcReset) { clearTimeout(btn._htcReset); btn._htcReset = null; }
+                    btn._htcState = 'idle';
+                    if (done) { done.classList.add('hidden'); done.classList.remove('flex'); }
+                    if (fill) {
+                        fill.style.transitionDuration = '180ms';
+                        fill.style.clipPath = 'inset(0 100% 0 0)';
+                    }
+                }
+            });
+        } else {
+            submitTarget();
+        }
 
         var reset = parseInt(btn.dataset.reset || '1800', 10);
         if (reset > 0) {
