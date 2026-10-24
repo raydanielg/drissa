@@ -160,7 +160,11 @@
 
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden" id="liveQueue">
         <div class="px-5 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <h2 class="text-sm font-bold text-gray-900">Live Reception Queue</h2>
+            <div class="flex items-center gap-2">
+                <h2 class="text-sm font-bold text-gray-900">Live Reception Queue</h2>
+                <span class="text-[10px] text-gray-400">latest 20</span>
+                <a href="{{ route('reception.queue') }}" class="text-[10px] font-medium text-slate-600 hover:text-slate-800 flex items-center gap-0.5">View all <i class="hgi-stroke hgi-arrow-right-01 text-xs"></i></a>
+            </div>
             <div class="flex flex-wrap gap-2" id="queueTabs">
                 <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded bg-slate-800 text-white">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $kpis['registered'] }}</span></button>
                 <button data-tab="waiting-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Waiting Doctor <span class="ml-1 tab-count" data-count="waiting_for_doctor">{{ $kpis['waiting_doctor'] }}</span></button>
