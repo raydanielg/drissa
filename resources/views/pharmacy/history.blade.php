@@ -4,15 +4,22 @@
 @section('page_title', 'Prescription History')
 
 @section('content')
-<div class="space-y-6">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<div class="space-y-5">
+    {{-- Header --}}
+    <div class="bg-slate-800 rounded-md p-6 text-white">
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Pharmacy</p>
+        <h1 class="text-xl font-bold">Prescription History</h1>
+        <p class="text-xs text-slate-400 mt-1">Dispensed and cancelled prescriptions.</p>
+    </div>
+
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-900">Dispensed & Cancelled Prescriptions</h3>
+            <h3 class="text-sm font-bold text-gray-900">Dispensed & Cancelled Prescriptions</h3>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="text-left text-xs text-gray-500 border-b border-gray-100">
+                    <tr class="text-left text-[10px] uppercase text-gray-400 border-b border-gray-100 bg-gray-50">
                         <th class="px-5 py-3 font-medium">Date</th>
                         <th class="px-5 py-3 font-medium">Patient</th>
                         <th class="px-5 py-3 font-medium">Doctor</th>
@@ -20,25 +27,26 @@
                         <th class="px-5 py-3 font-medium">Status</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-50">
                     @forelse($prescriptions as $rx)
-                        <tr class="border-b border-gray-50 hover:bg-gray-50/50">
-                            <td class="px-5 py-3 text-gray-500">{{ $rx->created_at->format('M j, Y H:i') }}</td>
-                            <td class="px-5 py-3 font-medium text-gray-900">{{ $rx->visit?->patient?->fullName() ?? 'Unknown' }}</td>
-                            <td class="px-5 py-3 text-gray-500">{{ $rx->doctor?->name ?? '-' }}</td>
+                        <tr class="hover:bg-gray-50/50">
+                            <td class="px-5 py-3 text-gray-500 text-xs">{{ $rx->created_at->format('M j, Y H:i') }}</td>
+                            <td class="px-5 py-3 font-medium text-gray-900 text-xs">{{ $rx->visit?->patient?->fullName() ?? 'Unknown' }}</td>
+                            <td class="px-5 py-3 text-gray-500 text-xs">{{ $rx->doctor?->name ?? '-' }}</td>
                             <td class="px-5 py-3">
                                 @foreach($rx->items as $item)
-                                    <div class="text-xs">{{ $item->medication?->name ?? 'Unknown' }} ×{{ $item->quantity }}</div>
+                                    <div class="text-xs text-gray-600">{{ $item->medication?->name ?? 'Unknown' }} ×{{ $item->quantity }}</div>
                                 @endforeach
                             </td>
                             <td class="px-5 py-3">
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium {{ $rx->status === 'dispensed' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $rx->status === 'dispensed' ? 'bg-emerald-500' : 'bg-red-500' }}"></span>
                                     {{ ucfirst($rx->status) }}
                                 </span>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400">No history found</td></tr>
+                        <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400 text-xs">No history found</td></tr>
                     @endforelse
                 </tbody>
             </table>

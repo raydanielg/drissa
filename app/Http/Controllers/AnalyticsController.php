@@ -61,7 +61,7 @@ class AnalyticsController extends Controller
         }
 
         $topDoctors = User::role('doctor')
-            ->withCount(['visits as visits_count' => function ($q) {
+            ->withCount(['visitsAsDoctor as visits_count' => function ($q) {
                 $q->whereDate('registered_at', '>=', now()->subDays(30));
             }])
             ->orderByDesc('visits_count')

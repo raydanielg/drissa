@@ -9,7 +9,7 @@
         <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm animate-fade">{{ session('status') }}</div>
     @endif
 
-    {{-- Header --}}
+    {{-- Attachments --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg font-bold">
@@ -21,12 +21,12 @@
             </div>
         </div>
         <a href="{{ route('lab.history') }}" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <i class="hgi-stroke hgi-arrow-left-02 text-base"></i>
             Back to History
         </a>
     </div>
 
-    {{-- Stats --}}
+    {{-- Attachments --}}
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
             <p class="text-xs font-medium text-gray-500 uppercase">Total Orders</p>
@@ -46,15 +46,15 @@
         </div>
     </div>
 
-    {{-- Lab Orders Timeline --}}
+    {{-- Attachments --}}
     <div class="space-y-4">
         @foreach($orders as $order)
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            {{-- Order Header --}}
+            {{-- Attachments --}}
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between {{ $order->status === 'completed' ? 'bg-emerald-50/40' : 'bg-amber-50/40' }}">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg {{ $order->status === 'completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600' }} flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        <i class="hgi-stroke hgi-test-tube-01 text-xl"></i>
                     </div>
                     <div>
                         <p class="text-sm font-semibold text-gray-900">Order #{{ $order->id }} - {{ $order->visit?->visit_number ?? 'No visit' }}</p>
@@ -72,7 +72,7 @@
                 </span>
             </div>
 
-            {{-- Order Items & Results --}}
+            {{-- Attachments --}}
             <div class="p-6">
                 @if($order->clinical_notes)
                 <div class="mb-4 p-3 bg-gray-50 rounded-lg">
@@ -141,7 +141,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach($order->attachments as $attachment)
                         <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 text-xs rounded-lg hover:bg-blue-100 transition-colors">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                            <i class="hgi-stroke hgi-file-01 text-sm"></i>
                             {{ $attachment->file_name }}
                         </a>
                         @endforeach
@@ -154,7 +154,7 @@
 
         @if($orders->isEmpty())
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-12 text-center">
-            <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6 4h6"/></svg>
+            <i class="hgi-stroke hgi-file-01 text-6xl text-gray-300 mx-auto mb-3"></i>
             <p class="text-sm text-gray-400">No lab history found for this patient</p>
         </div>
         @endif

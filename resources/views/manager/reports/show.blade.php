@@ -16,36 +16,43 @@
 @endpush
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
+<div class="max-w-4xl mx-auto space-y-5">
 
-    {{-- Actions --}}
-    <div class="flex items-center justify-between no-print">
-        <a href="{{ route('manager.reports.index') }}" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            All Reports
-        </a>
-        <div class="flex items-center gap-2">
-            <button onclick="window.print()" class="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-emerald-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-all">
-                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                Print
-            </button>
-            <a href="{{ route('manager.reports.edit', $report) }}" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.43-9.525l-9.17 9.17a2 2 0 00-.586 1.414V17a1 1 0 001 1h2.828a2 2 0 001.414-.586l9.17-9.17a2 2 0 000-2.828l-1.414-1.414a2 2 0 00-2.828 0z"/></svg>
-                Edit
-            </a>
+    {{-- Signature --}}
+    <div class="bg-slate-800 rounded-md p-6 text-white no-print">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Manager</p>
+                <h1 class="text-xl font-bold">{{ ucfirst($report->type) }} Manager Report</h1>
+                <p class="text-xs text-slate-400 mt-1">{{ $report->periodLabel() }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('manager.reports.index') }}" class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-slate-600 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">
+                    <i class="hgi-stroke hgi-arrow-left-02 text-sm"></i>
+                    All Reports
+                </a>
+                <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-slate-600 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">
+                    <i class="hgi-stroke hgi-printer text-sm"></i>
+                    Print
+                </button>
+                <a href="{{ route('manager.reports.edit', $report) }}" class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-100 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded transition-colors">
+                    <i class="hgi-stroke hgi-pencil-edit-01 text-sm"></i>
+                    Edit
+                </a>
+            </div>
         </div>
     </div>
 
-    {{-- Report document --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden print-card">
-        {{-- Letterhead --}}
-        <div class="px-8 pt-8 pb-4 border-b-2 border-emerald-800">
+    {{-- Signature --}}
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden print-card">
+        {{-- Signature --}}
+        <div class="px-8 pt-8 pb-4 border-b-2 border-slate-800">
             <div class="flex items-start justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('logo.png') }}" alt="Logo" class="w-12 h-12 rounded-lg object-cover">
+                    <img src="{{ asset('logo.png') }}" alt="Logo" class="w-12 h-12 rounded object-cover">
                     <div>
-                        <h1 class="text-lg font-extrabold text-emerald-900 uppercase tracking-wide">{{ config('app.name', 'Laravel') }}</h1>
-                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">Ultra Lab · Consult · Report From Every Department</p>
+                        <h1 class="text-lg font-extrabold text-slate-800 uppercase tracking-wide">{{ config('app.name', 'Laravel') }}</h1>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest">Ultra Lab — Consult — Report From Every Department</p>
                     </div>
                 </div>
                 <div class="text-right text-[10px] text-gray-500">
@@ -55,11 +62,11 @@
             </div>
             <div class="mt-4 flex items-center justify-between">
                 <h2 class="text-base font-extrabold text-gray-900 uppercase tracking-wider">{{ $report->type === 'weekly' ? 'Weekly Manager Report' : 'Daily Manager Report' }}</h2>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider {{ $report->type === 'weekly' ? 'bg-gold-100 text-gold-700' : 'bg-emerald-100 text-emerald-700' }}">{{ $report->periodLabel() }}</span>
+                <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full {{ $report->type === 'weekly' ? 'bg-amber-500' : 'bg-slate-500' }}"></span>{{ $report->periodLabel() }}</span>
             </div>
         </div>
 
-        {{-- Items table --}}
+        {{-- Signature --}}
         <div class="px-8 py-6">
             <table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
                 <thead>
@@ -79,7 +86,7 @@
                 </tbody>
             </table>
 
-            {{-- Department reports --}}
+            {{-- Signature --}}
             @if(!empty($report->department_reports))
             <div class="mt-6">
                 <h3 class="text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-2">Report From Every Department</h3>
@@ -102,7 +109,7 @@
             </div>
             @endif
 
-            {{-- Narrative --}}
+            {{-- Signature --}}
             <div class="mt-6 space-y-4">
                 <div>
                     <h3 class="text-[11px] font-bold uppercase tracking-wider text-gray-600">Staff Performance For Every Department</h3>

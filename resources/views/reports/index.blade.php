@@ -4,49 +4,54 @@
 @section('page_title', 'Reports Dashboard')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-5">
+    {{-- Header --}}
+    <div class="bg-slate-800 rounded-md p-6 text-white">
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
+        <h1 class="text-xl font-bold">Reports Dashboard</h1>
+        <p class="text-xs text-slate-400 mt-1">Clinic performance at a glance.</p>
+    </div>
+
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
         @foreach ([
-            ['label' => 'Total Patients', 'value' => $stats['total_patients'], 'icon' => 'users'],
-            ['label' => 'Total Visits', 'value' => $stats['total_visits'], 'icon' => 'clipboard'],
-            ['label' => 'Visits Today', 'value' => $stats['visits_today'], 'icon' => 'calendar'],
-            ['label' => 'Doctors', 'value' => $stats['total_doctors'], 'icon' => 'stethoscope'],
-            ['label' => 'Revenue Today', 'value' => 'TSh ' . number_format($stats['revenue_today']), 'icon' => 'currency'],
-            ['label' => 'Revenue This Month', 'value' => 'TSh ' . number_format($stats['revenue_this_month']), 'icon' => 'chart'],
-            ['label' => 'Low Stock Items', 'value' => $stats['low_stock'], 'icon' => 'box'],
-            ['label' => 'Unpaid Invoices', 'value' => $stats['unpaid_invoices'], 'icon' => 'warning'],
+            ['label' => 'Total Patients', 'value' => $stats['total_patients']],
+            ['label' => 'Total Visits', 'value' => $stats['total_visits']],
+            ['label' => 'Visits Today', 'value' => $stats['visits_today']],
+            ['label' => 'Doctors', 'value' => $stats['total_doctors']],
+            ['label' => 'Revenue Today', 'value' => 'TSh ' . number_format($stats['revenue_today'])],
+            ['label' => 'Revenue This Month', 'value' => 'TSh ' . number_format($stats['revenue_this_month'])],
+            ['label' => 'Low Stock Items', 'value' => $stats['low_stock']],
+            ['label' => 'Unpaid Invoices', 'value' => $stats['unpaid_invoices']],
         ] as $card)
-            <div class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-xl p-4 text-white relative overflow-hidden">
-                <div class="relative z-10">
-                    <p class="text-[10px] text-emerald-100">{{ $card['label'] }}</p>
-                    <p class="text-lg font-bold mt-1">{{ $card['value'] }}</p>
-                </div>
+            <div class="bg-white rounded-md border border-gray-200 p-4">
+                <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">{{ $card['label'] }}</p>
+                <p class="text-lg font-bold text-gray-900 mt-1">{{ $card['value'] }}</p>
             </div>
         @endforeach
     </div>
 
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-sm font-semibold text-gray-900">Recent Payments</h2>
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+            <h2 class="text-sm font-bold text-gray-900">Recent Payments</h2>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
                     <tr>
-                        <th class="px-6 py-3">Date</th>
-                        <th class="px-6 py-3">Amount</th>
-                        <th class="px-6 py-3">Method</th>
+                        <th class="px-5 py-3">Date</th>
+                        <th class="px-5 py-3 text-right">Amount</th>
+                        <th class="px-5 py-3">Method</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-50">
                     @forelse ($payments as $payment)
-                        <tr class="border-t border-gray-100">
-                            <td class="px-6 py-3">{{ $payment->created_at->format('d M Y H:i') }}</td>
-                            <td class="px-6 py-3">TSh {{ number_format($payment->amount, 2) }}</td>
-                            <td class="px-6 py-3 capitalize">{{ $payment->method }}</td>
+                        <tr class="hover:bg-gray-50/50">
+                            <td class="px-5 py-3 text-xs text-gray-600">{{ $payment->created_at->format('d M Y H:i') }}</td>
+                            <td class="px-5 py-3 text-xs font-semibold text-gray-900 text-right">TSh {{ number_format($payment->amount, 2) }}</td>
+                            <td class="px-5 py-3 text-xs text-gray-600 capitalize">{{ $payment->method }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="3" class="px-6 py-6 text-center text-gray-400">No payments yet</td></tr>
+                        <tr><td colspan="3" class="px-5 py-8 text-center text-gray-400 text-xs">No payments yet</td></tr>
                     @endforelse
                 </tbody>
             </table>

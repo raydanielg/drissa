@@ -4,69 +4,70 @@
 
 @section('content')
 <div class="p-8">
-    <h2 class="text-xl font-extrabold text-emerald-900 mb-2">Database Configuration</h2>
-    <p class="text-sm text-gray-500 mb-6">Enter your MySQL database credentials. The database will be created automatically if it doesn't exist.</p>
+    <h2 class="text-lg font-extrabold tracking-tight text-slate-900">Database Configuration</h2>
+    <p class="text-sm text-slate-500 mt-1 mb-6">Ingiza MySQL credentials. Database itatengenezwa automatic kisha haijapo.</p>
 
     @if(session('error'))
-        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-            <p class="text-sm text-red-700 font-semibold">{{ session('error') }}</p>
+        <div class="flex items-start gap-3 bg-white border-l-2 border-red-500 rounded-md p-4 mb-5 ring-1 ring-gray-200">
+            <i class="hgi-stroke hgi-alert-circle text-xl text-red-500 shrink-0 mt-0.5"></i>
+            <p class="text-[13px] text-red-700 font-medium">{{ session('error') }}</p>
         </div>
     @endif
 
-    <form method="POST" action="{{ route('install.process') }}" class="space-y-4">
+    <form method="POST" action="{{ route('install.process') }}" class="space-y-5">
         @csrf
 
-        {{-- App Settings --}}
-        <div class="bg-emerald-50 rounded-xl p-4 space-y-4">
-            <h3 class="text-sm font-bold text-emerald-800 uppercase tracking-wider">Application Settings</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {{-- Database Settings --}}
+        <div class="rounded-md ring-1 ring-gray-200 p-4 space-y-3">
+            <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Application</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">App Name</label>
-                    <input type="text" name="app_name" value="Uzazi Clinic" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">App Name</label>
+                    <x-ui.input type="text" name="app_name" value="Uzazi Clinic" class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">App URL</label>
-                    <input type="text" name="app_url" value="{{ request()->getSchemeAndHttpHost() }}" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">App URL</label>
+                    <x-ui.input type="text" name="app_url" value="{{ request()->getSchemeAndHttpHost() }}" class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
             </div>
         </div>
 
         {{-- Database Settings --}}
-        <div class="bg-gray-50 rounded-xl p-4 space-y-4">
-            <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wider">Database Settings</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="rounded-md ring-1 ring-gray-200 p-4 space-y-3">
+            <h3 class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">MySQL Database</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="sm:col-span-2">
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">DB Host *</label>
-                    <input type="text" name="db_host" value="127.0.0.1" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Host <span class="text-red-400">*</span></label>
+                    <x-ui.input type="text" name="db_host" value="127.0.0.1" required class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">DB Port *</label>
-                    <input type="text" name="db_port" value="3306" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Port <span class="text-red-400">*</span></label>
+                    <x-ui.input type="text" name="db_port" value="3306" required class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-700 mb-1">Database Name *</label>
-                <input type="text" name="db_name" value="drissa_clinic" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Database Name <span class="text-red-400">*</span></label>
+                <x-ui.input type="text" name="db_name" value="drissa_clinic" required class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">DB Username *</label>
-                    <input type="text" name="db_user" value="root" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Username <span class="text-red-400">*</span></label>
+                    <x-ui.input type="text" name="db_user" value="root" required class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-700 mb-1">DB Password</label>
-                    <input type="password" name="db_pass" value="" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Password</label>
+                    <x-ui.input type="password" name="db_pass" value="" placeholder="Optional" class="w-full h-10 px-3 rounded-lg border-0 ring-1 ring-slate-200 text-sm placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 outline-none transition-shadow" />
                 </div>
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <a href="{{ route('install.welcome') }}" class="px-5 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-sm transition-all">
+        <div class="flex items-center gap-3 pt-1">
+            <a href="{{ route('install.welcome') }}" class="flex items-center justify-center h-11 px-5 rounded border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-semibold transition-all">
                 &larr; Back
             </a>
-            <button type="submit" class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all">
-                Test & Install
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <button type="submit" class="flex-1 flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
+                Test Connection &amp; Install
+                <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
             </button>
         </div>
     </form>

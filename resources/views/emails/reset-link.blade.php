@@ -13,9 +13,9 @@
 
 <table width="560" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); max-width: 560px;">
 
-    {{-- Header --}}
+    {{-- Footer --}}
     <tr>
-        <td style="background: linear-gradient(135deg, #024938 0%, #013028 100%); padding: 36px 40px; text-align: center;">
+        <td style="background: #1e293b; padding: 36px 40px; text-align: center;">
             <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: -0.02em;">
                 {{ $clinicName }}
             </h1>
@@ -25,7 +25,7 @@
         </td>
     </tr>
 
-    {{-- Body --}}
+    {{-- Footer --}}
     <tr>
         <td style="padding: 36px 40px;">
             <p style="margin: 0 0 16px; font-size: 15px; line-height: 1.6; color: #374151;">
@@ -35,9 +35,9 @@
                 We received a request to reset your password for your {{ $clinicName }} account. Click the button below to choose a new password.
             </p>
 
-            {{-- Button --}}
+            {{-- Footer --}}
             <div style="text-align: center; margin: 28px 0;">
-                <a href="{{ $url }}" style="display: inline-block; background: linear-gradient(135deg, #f9ac00 0%, #d49700 100%); color: #1f2937; font-weight: 700; font-size: 15px; text-decoration: none; padding: 14px 40px; border-radius: 10px; box-shadow: 0 4px 14px rgba(249,172,0,0.3);">
+                <a href="{{ $url }}" style="display: inline-block; background: #1e293b; color: #ffffff; font-weight: 700; font-size: 15px; text-decoration: none; padding: 14px 40px; border-radius: 8px;">
                     Reset My Password
                 </a>
             </div>
@@ -46,10 +46,10 @@
                 If the button doesn't work, copy and paste this link into your browser:
             </p>
             <p style="margin: 0 0 24px; font-size: 12px; line-height: 1.5; color: #9ca3af; word-break: break-all;">
-                <a href="{{ $url }}" style="color: #024938; text-decoration: underline;">{{ $url }}</a>
+                <a href="{{ $url }}" style="color: #334155; text-decoration: underline;">{{ $url }}</a>
             </p>
 
-            {{-- Expiry Notice --}}
+            {{-- Footer --}}
             <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 18px; margin: 0 0 20px;">
                 <p style="margin: 0; font-size: 13px; color: #92400e; line-height: 1.5;">
                     <strong>&#9888; Important:</strong> This reset link will expire in <strong>{{ $expiry }} minutes</strong>. Please use it promptly.

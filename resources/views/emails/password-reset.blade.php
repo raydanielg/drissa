@@ -8,7 +8,7 @@
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 20px;">
     <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <!-- Header -->
-        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+        <div style="background: #1e293b; padding: 30px; text-align: center;">
             <h1 style="color: white; margin: 0; font-size: 24px;">{{ config('app.name') }}</h1>
             <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Password Reset Notification</p>
         </div>
@@ -24,7 +24,7 @@
                 <p style="margin: 0 0 20px 0; font-size: 16px; font-weight: bold; color: #1f2937;">{{ $user->email }}</p>
                 
                 <p style="margin: 0 0 10px 0; font-size: 14px; color: #6b7280;">New Password:</p>
-                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #10b981; letter-spacing: 2px;">{{ $newPassword }}</p>
+                <p style="margin: 0; font-size: 20px; font-weight: bold; color: #1e293b; letter-spacing: 2px;">{{ $newPassword }}</p>
             </div>
 
             <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px;">
@@ -32,7 +32,7 @@
             </p>
 
             <div style="text-align: center; margin: 30px 0;">
-                <a href="{{ url('/login') }}" style="display: inline-block; background: #10b981; color: white; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold;">Login Now</a>
+                <a href="{{ url('/login') }}" style="display: inline-block; background: #1e293b; color: white; text-decoration: none; padding: 12px 30px; border-radius: 6px; font-weight: bold;">Login Now</a>
             </div>
 
             <p style="margin: 0; color: #9ca3af; font-size: 12px; text-align: center;">

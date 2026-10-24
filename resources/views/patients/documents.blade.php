@@ -4,42 +4,43 @@
 @section('page_title', 'Documents: ' . $patient->fullName())
 
 @section('content')
-<div class="max-w-5xl mx-auto space-y-6">
-    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-6">
+<div class="max-w-5xl mx-auto space-y-5">
+    <div class="bg-slate-800 rounded-md p-6 text-white">
+        <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-white text-lg font-bold">
+                <div class="w-14 h-14 rounded-full border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-white text-lg font-bold">
                     {{ strtoupper(substr($patient->first_name, 0, 1)) }}
                 </div>
                 <div>
-                    <h2 class="text-xl font-bold text-gray-900">{{ $patient->fullName() }}</h2>
-                    <p class="text-sm text-gray-500">MRN: {{ $patient->mrn }} | Files & Documents</p>
+                    <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Documents</p>
+                    <h1 class="text-xl font-bold">{{ $patient->fullName() }}</h1>
+                    <p class="text-xs text-slate-400 mt-1">MRN: {{ $patient->mrn }} — Files & Documents</p>
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <a href="{{ route('patients.show', $patient) }}" class="action-icon group/icon relative p-2.5 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors" title="Profile">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Profile</span>
+                <a href="{{ route('patients.show', $patient) }}" class="p-2 text-slate-300 hover:bg-white/10 rounded transition-colors" title="Profile">
+                    <i class="hgi-stroke hgi-user text-base"></i>
                 </a>
-                <a href="{{ route('patients.history', $patient) }}" class="action-icon group/icon relative p-2.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors" title="History">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">History</span>
+                <a href="{{ route('patients.history', $patient) }}" class="p-2 text-slate-300 hover:bg-white/10 rounded transition-colors" title="History">
+                    <i class="hgi-stroke hgi-clock-01 text-base"></i>
                 </a>
-                <a href="{{ route('patients.edit', $patient) }}" class="action-icon group/icon relative p-2.5 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors" title="Edit">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.43-9.525l-9.17 9.17a2 2 0 00-.586 1.414V17a1 1 0 001 1h2.828a2 2 0 001.414-.586l9.17-9.17a2 2 0 000-2.828l-1.414-1.414a2 2 0 00-2.828 0z"/></svg>
-                    <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Edit</span>
+                <a href="{{ route('patients.edit', $patient) }}" class="p-2 text-slate-300 hover:bg-white/10 rounded transition-colors" title="Edit">
+                    <i class="hgi-stroke hgi-pencil-edit-01 text-base"></i>
                 </a>
             </div>
         </div>
+    </div>
+
+    <div class="bg-white rounded-md border border-gray-200 p-5">
 
         <h2 class="text-sm font-semibold text-gray-900 mb-4">Upload New Document</h2>
         <form method="POST" action="{{ route('patients.documents.store', $patient) }}" enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-4 gap-4" data-ajax>
             @csrf
             <div class="md:col-span-2">
-                <input type="text" name="title" placeholder="Document title" class="w-full border rounded-lg px-3 py-2 text-sm" required>
+                <x-ui.input type="text" name="title" placeholder="Document title" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" required />
             </div>
             <div>
-                <select name="category" class="w-full border rounded-lg px-3 py-2 text-sm" required>
+                <x-ui.select name="category" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" required>
                     <option value="">Category</option>
                     <option value="lab">Lab</option>
                     <option value="radiology">Radiology</option>
@@ -47,69 +48,67 @@
                     <option value="identification">Identification</option>
                     <option value="insurance">Insurance</option>
                     <option value="other">Other</option>
-                </select>
+                </x-ui.select>
             </div>
             <div>
-                <input type="file" name="file" class="w-full text-sm" required>
+                <x-ui.input type="file" name="file" class="w-full text-sm" required />
             </div>
             <div class="md:col-span-3">
-                <textarea name="description" placeholder="Description (optional)" class="w-full border rounded-lg px-3 py-2 text-sm" rows="2"></textarea>
+                <x-ui.textarea name="description" placeholder="Description (optional)" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" rows="2"></x-ui.textarea>
             </div>
             <div class="md:col-span-1 flex items-end">
-                <button type="submit" class="w-full bg-emerald-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-emerald-700">Upload</button>
+                <button type="submit" class="w-full bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Upload</button>
             </div>
         </form>
     </div>
 
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-sm font-semibold text-gray-900">Existing Documents</h2>
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100">
+            <h2 class="text-sm font-bold text-gray-900">Existing Documents</h2>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
-                <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
                     <tr>
-                        <th class="px-6 py-3">Title</th>
-                        <th class="px-6 py-3">Category</th>
-                        <th class="px-6 py-3">Size</th>
-                        <th class="px-6 py-3">Uploaded</th>
-                        <th class="px-6 py-3">Actions</th>
+                        <th class="px-5 py-3">Title</th>
+                        <th class="px-5 py-3">Category</th>
+                        <th class="px-5 py-3">Size</th>
+                        <th class="px-5 py-3">Uploaded</th>
+                        <th class="px-5 py-3">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-50">
                     @forelse ($documents as $doc)
-                        <tr class="border-t border-gray-100 hover:bg-gray-50/50">
-                            <td class="px-6 py-3">
-                                <div class="font-medium">{{ $doc->title }}</div>
-                                <div class="text-xs text-gray-500">{{ $doc->description }}</div>
+                        <tr class="hover:bg-gray-50/50">
+                            <td class="px-5 py-3">
+                                <div class="text-xs font-medium text-gray-900">{{ $doc->title }}</div>
+                                <div class="text-[10px] text-gray-500">{{ $doc->description }}</div>
                             </td>
-                            <td class="px-6 py-3"><span class="capitalize">{{ $doc->category }}</span></td>
-                            <td class="px-6 py-3">{{ $doc->formattedSize() }}</td>
-                            <td class="px-6 py-3 text-xs text-gray-500">{{ $doc->created_at->format('M d, Y') }} by {{ $doc->uploader?->name }}</td>
-                            <td class="px-6 py-3">
+                            <td class="px-5 py-3 text-xs text-gray-600 capitalize">{{ $doc->category }}</td>
+                            <td class="px-5 py-3 text-xs text-gray-600">{{ $doc->formattedSize() }}</td>
+                            <td class="px-5 py-3 text-xs text-gray-500">{{ $doc->created_at->format('M d, Y') }} by {{ $doc->uploader?->name }}</td>
+                            <td class="px-5 py-3">
                                 <div class="flex items-center gap-1">
-                                    <a href="{{ route('patients.documents.download', $doc) }}" class="action-icon group/icon relative p-2 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors" title="Download">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                        <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Download</span>
+                                    <a href="{{ route('patients.documents.download', $doc) }}" class="p-1.5 text-slate-600 hover:bg-slate-100 rounded transition-colors" title="Download">
+                                        <i class="hgi-stroke hgi-upload-01 text-base"></i>
                                     </a>
                                     <form method="POST" action="{{ route('patients.documents.destroy', $doc) }}" data-ajax data-confirm="Delete this document?" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="action-icon group/icon relative p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors" title="Delete">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Delete</span>
+                                        <button type="submit" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
+                                            <i class="hgi-stroke hgi-delete-02 text-base"></i>
                                         </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No documents uploaded yet</td></tr>
+                        <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400 text-xs">No documents uploaded yet</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="px-6 py-4 border-t border-gray-100">{{ $documents->links() }}</div>
+        <div class="px-5 py-3 border-t border-gray-100">{{ $documents->links() }}</div>
     </div>
 </div>
 @endsection

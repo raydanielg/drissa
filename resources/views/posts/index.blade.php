@@ -4,35 +4,41 @@
 @section('page_title', 'Blog Management')
 
 @section('content')
-<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 class="text-sm font-semibold text-gray-900">Posts</h2>
-        <a href="{{ route('posts.create') }}" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-emerald-700">+ New Post</a>
+<div class="space-y-5">
+<div class="bg-slate-800 rounded-md p-6 text-white flex items-center justify-between">
+    <div>
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Content</p>
+        <h1 class="text-xl font-bold">Blog Posts</h1>
+        <p class="text-xs text-slate-400 mt-1">Manage website articles and updates.</p>
     </div>
+    <a href="{{ route('posts.create') }}" class="bg-white text-slate-800 text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-100">+ New Post</a>
+</div>
+<div class="bg-white rounded-md border border-gray-200 overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-xs uppercase text-gray-500">
-                <tr>
-                    <th class="px-6 py-3">Title</th>
-                    <th class="px-6 py-3">Author</th>
-                    <th class="px-6 py-3">Status</th>
-                    <th class="px-6 py-3">Date</th>
-                    <th class="px-6 py-3">Actions</th>
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-gray-50 text-[10px] uppercase text-gray-400 border-b border-gray-100">
+                    <th class="px-5 py-3 font-medium text-left">Title</th>
+                    <th class="px-5 py-3 font-medium text-left">Author</th>
+                    <th class="px-5 py-3 font-medium text-left">Status</th>
+                    <th class="px-5 py-3 font-medium text-left">Date</th>
+                    <th class="px-5 py-3 font-medium text-left">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-50">
                 @forelse ($posts as $post)
-                    <tr class="border-t border-gray-100 hover:bg-gray-50/50">
-                        <td class="px-6 py-3 font-medium">{{ Str::limit($post->title, 50) }}</td>
-                        <td class="px-6 py-3">{{ $post->author->name }}</td>
-                        <td class="px-6 py-3">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium {{ $post->is_published ? 'bg-emerald-100 text-emerald-700' : 'bg-gold-100 text-gold-700' }}">
+                    <tr class="hover:bg-gray-50/50">
+                        <td class="px-5 py-3 text-xs font-medium text-gray-900">{{ Str::limit($post->title, 50) }}</td>
+                        <td class="px-5 py-3 text-xs text-gray-600">{{ $post->author->name }}</td>
+                        <td class="px-5 py-3">
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $post->is_published ? 'bg-emerald-500' : 'bg-amber-500' }}"></span>
                                 {{ $post->is_published ? 'Published' : 'Draft' }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 text-gray-500">{{ $post->created_at->format('d M Y') }}</td>
-                        <td class="px-6 py-3 flex items-center gap-2">
-                            <a href="{{ route('posts.edit', $post) }}" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">Edit</a>
+                        <td class="px-5 py-3 text-xs text-gray-500">{{ $post->created_at->format('d M Y') }}</td>
+                        <td class="px-5 py-3 flex items-center gap-2">
+                            <a href="{{ route('posts.edit', $post) }}" class="text-slate-600 hover:text-slate-800 text-xs font-medium">Edit</a>
                             <form method="POST" action="{{ route('posts.destroy', $post) }}" data-ajax data-confirm="Delete this post?" class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -41,13 +47,14 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="px-6 py-6 text-center text-gray-400">No posts yet</td></tr>
+                    <tr><td colspan="5" class="px-5 py-8 text-center text-gray-400 text-xs">No posts yet</td></tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    <div class="px-6 py-4 border-t border-gray-100">
+    <div class="px-5 py-3 border-t border-gray-100">
         {{ $posts->links() }}
     </div>
+</div>
 </div>
 @endsection

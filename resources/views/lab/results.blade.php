@@ -21,37 +21,37 @@
 @endpush
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-5">
     @if (session('status'))
-        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm animate-fade">{{ session('status') }}</div>
+        <div class="p-3 rounded-md bg-white border-l-2 border-emerald-500 text-emerald-700 text-xs">{{ session('status') }}</div>
     @endif
 
-    {{-- Action Bar --}}
+    {{-- Footer --}}
     <div class="flex items-center justify-between no-print">
-        <a href="{{ route('lab.queue') }}" class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <a href="{{ route('lab.queue') }}" class="inline-flex items-center gap-2 text-xs text-slate-600 hover:text-slate-800 transition-colors">
+            <i class="hgi-stroke hgi-arrow-left-02 text-sm"></i>
             Back to Lab Queue
         </a>
         <div class="flex items-center gap-2">
-            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 text-sm font-semibold rounded-lg transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded transition-colors">
+                <i class="hgi-stroke hgi-clock-01 text-sm"></i>
                 Patient History
             </a>
-            <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                <i class="hgi-stroke hgi-printer text-sm"></i>
                 Print / Preview
             </button>
         </div>
     </div>
 
-    {{-- Order Header Card --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="px-6 py-5 bg-gradient-to-r from-emerald-50 to-sky-50 border-b border-gray-100">
+    {{-- Footer --}}
+    <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+        <div class="px-5 py-5 border-b border-gray-100">
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="w-12 h-12 rounded bg-slate-100 flex items-center justify-center">
+                            <i class="hgi-stroke hgi-checkmark-circle-02 text-2xl text-slate-600"></i>
                         </div>
                         <div>
                             <h2 class="text-lg font-bold text-gray-900">Order #{{ $order->id }}</h2>
@@ -60,8 +60,8 @@
                     </div>
                 </div>
                 <div class="text-right">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                         Completed
                     </span>
                     <p class="text-xs text-gray-400 mt-1">{{ $order->completed_at?->format('M d, Y H:i') }}</p>
@@ -69,8 +69,8 @@
             </div>
         </div>
 
-        {{-- Patient & Order Info --}}
-        <div class="px-6 py-4 grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-gray-100">
+        {{-- Footer --}}
+        <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-gray-100">
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Patient</p>
                 <p class="text-sm font-semibold text-gray-800 mt-0.5">{{ $order->visit->patient->fullName() }}</p>
@@ -93,13 +93,13 @@
         </div>
     </div>
 
-    {{-- Results per Test --}}
+    {{-- Footer --}}
     @php
         $flagStyles = [
-            'normal' => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'icon' => '🟢', 'label' => 'Normal'],
-            'high' => ['bg' => 'bg-amber-50', 'text' => 'text-amber-700', 'border' => 'border-amber-200', 'icon' => '🟡', 'label' => 'High'],
-            'low' => ['bg' => 'bg-amber-50', 'text' => 'text-amber-700', 'border' => 'border-amber-200', 'icon' => '🟡', 'label' => 'Low'],
-            'critical' => ['bg' => 'bg-red-50', 'text' => 'text-red-700', 'border' => 'border-red-200', 'icon' => '🔴', 'label' => 'Critical'],
+            'normal' => ['dot' => 'bg-emerald-500', 'label' => 'Normal'],
+            'high' => ['dot' => 'bg-amber-500', 'label' => 'High'],
+            'low' => ['dot' => 'bg-amber-500', 'label' => 'Low'],
+            'critical' => ['dot' => 'bg-red-500', 'label' => 'Critical'],
         ];
     @endphp
 
@@ -108,59 +108,60 @@
             $itemResults = $order->results->where('lab_order_item_id', $item->id);
             $abnormalCount = $itemResults->whereNotIn('flag', ['normal'])->count();
         @endphp
-        <div class="result-card bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            {{-- Test Header --}}
-            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-violet-50 to-white">
+        <div class="result-card bg-white rounded-md border border-gray-200 overflow-hidden">
+            {{-- Footer --}}
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    <div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center">
+                        <i class="hgi-stroke hgi-test-tube-01 text-xl text-slate-600"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-gray-900">{{ $item->labTest?->name ?? 'Unknown Test' }}</h3>
+                        <h3 class="text-sm font-bold text-gray-900">{{ $item->labTest?->name ?? 'Unknown Test' }}</h3>
                         <p class="text-xs text-gray-400">{{ $itemResults->count() }} parameter(s) • {{ $item->labTest?->unit ?? '' }}</p>
                     </div>
                 </div>
                 @if($abnormalCount > 0)
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                         {{ $abnormalCount }} Abnormal
                     </span>
                 @else
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                         All Normal
                     </span>
                 @endif
             </div>
 
-            {{-- Results Table --}}
+            {{-- Footer --}}
             @if ($itemResults->isEmpty())
-                <div class="px-6 py-8 text-center text-sm text-gray-400">No results recorded for this test</div>
+                <div class="px-5 py-8 text-center text-xs text-gray-400">No results recorded for this test</div>
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
-                        <thead class="bg-gray-50/80 text-xs uppercase text-gray-500">
+                        <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
                             <tr>
-                                <th class="px-6 py-3 font-semibold">Parameter</th>
-                                <th class="px-6 py-3 font-semibold">Result</th>
-                                <th class="px-6 py-3 font-semibold">Unit</th>
-                                <th class="px-6 py-3 font-semibold">Reference Range</th>
-                                <th class="px-6 py-3 font-semibold">Flag</th>
+                                <th class="px-5 py-3 font-medium">Parameter</th>
+                                <th class="px-5 py-3 font-medium">Result</th>
+                                <th class="px-5 py-3 font-medium">Unit</th>
+                                <th class="px-5 py-3 font-medium">Reference Range</th>
+                                <th class="px-5 py-3 font-medium">Flag</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y divide-gray-50">
                             @foreach ($itemResults as $result)
                                 @php $style = $flagStyles[$result->flag] ?? $flagStyles['normal']; @endphp
-                                <tr class="hover:bg-gray-50/30 transition-colors">
-                                    <td class="px-6 py-3.5 font-medium text-gray-800">{{ $result->parameter }}</td>
-                                    <td class="px-6 py-3.5">
-                                        <span class="text-base font-bold {{ $result->flag === 'critical' ? 'text-red-600' : ($result->flag !== 'normal' ? 'text-amber-600' : 'text-gray-900') }}">{{ $result->value }}</span>
+                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-5 py-3 text-xs font-medium text-gray-800">{{ $result->parameter }}</td>
+                                    <td class="px-5 py-3">
+                                        <span class="text-sm font-bold {{ $result->flag === 'critical' ? 'text-red-600' : ($result->flag !== 'normal' ? 'text-amber-600' : 'text-gray-900') }}">{{ $result->value }}</span>
                                     </td>
-                                    <td class="px-6 py-3.5 text-gray-600">{{ $result->unit ?? '-' }}</td>
-                                    <td class="px-6 py-3.5 text-gray-500 text-xs">{{ $result->reference_range ?? '-' }}</td>
-                                    <td class="px-6 py-3.5">
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $style['bg'] }} {{ $style['text'] }} border {{ $style['border'] }}">
-                                            {{ $style['icon'] }} {{ $style['label'] }}
+                                    <td class="px-5 py-3 text-xs text-gray-600">{{ $result->unit ?? '-' }}</td>
+                                    <td class="px-5 py-3 text-xs text-gray-500">{{ $result->reference_range ?? '-' }}</td>
+                                    <td class="px-5 py-3">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                                            <span class="w-1.5 h-1.5 rounded-full {{ $style['dot'] }}"></span>
+                                            {{ $style['label'] }}
                                         </span>
                                     </td>
                                 </tr>
@@ -172,16 +173,16 @@
         </div>
     @endforeach
 
-    {{-- Attachments --}}
+    {{-- Footer --}}
     @if ($order->attachments->isNotEmpty())
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden no-print">
-            <div class="px-6 py-4 border-b border-gray-100">
+        <div class="bg-white rounded-md border border-gray-200 overflow-hidden no-print">
+            <div class="px-5 py-4 border-b border-gray-100">
                 <h3 class="text-sm font-bold text-gray-900">Attached Reports</h3>
             </div>
             <div class="p-5 flex flex-wrap gap-3">
                 @foreach ($order->attachments as $attachment)
-                    <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-700 transition-colors">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded text-sm text-gray-700 transition-colors">
+                        <i class="hgi-stroke hgi-file-01 text-xl text-gray-400"></i>
                         <div>
                             <p class="font-medium">{{ $attachment->file_name }}</p>
                             <p class="text-xs text-gray-400">{{ number_format($attachment->file_size / 1024, 1) }} KB</p>
@@ -193,20 +194,20 @@
     @endif
 </div>
 
-{{-- Print Report --}}
+{{-- Footer --}}
 <div id="printReport">
     <div style="text-align:center; margin-bottom: 24px;">
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:8px;">
             <img src="{{ asset('logo.png') }}" alt="logo" style="width:48px; height:48px; border-radius:8px;">
             <div style="text-align:left;">
-                <h1 style="font-size:22px; font-weight:800; color:#024938; margin:0;">{{ config('app.name', 'Clinic') }}</h1>
+                <h1 style="font-size:22px; font-weight:800; color:#0f172a; margin:0;">{{ config('app.name', 'Clinic') }}</h1>
                 <p style="font-size:11px; color:#666; margin:2px 0 0;">Laboratory Report</p>
             </div>
         </div>
-        <div style="height:3px; background:#024938; border-radius:2px; margin:12px 0;"></div>
+        <div style="height:3px; background:#0f172a; border-radius:2px; margin:12px 0;"></div>
     </div>
 
-    {{-- Report Meta --}}
+    {{-- Footer --}}
     <table style="width:100%; font-size:11px; margin-bottom:20px; border-collapse:collapse;">
         <tr>
             <td style="padding:4px 0;"><strong>Report #:</strong> {{ $order->id }}</td>
@@ -222,11 +223,11 @@
         </tr>
     </table>
 
-    {{-- Results per Test --}}
+    {{-- Footer --}}
     @foreach ($order->items as $item)
         @php $itemResults = $order->results->where('lab_order_item_id', $item->id); @endphp
         <div style="margin-bottom:24px; page-break-inside:avoid;">
-            <h2 style="font-size:14px; font-weight:700; color:#024938; border-bottom:2px solid #024938; padding-bottom:6px; margin-bottom:10px;">
+            <h2 style="font-size:14px; font-weight:700; color:#0f172a; border-bottom:2px solid #0f172a; padding-bottom:6px; margin-bottom:10px;">
                 {{ $item->labTest?->name ?? 'Unknown Test' }}
             </h2>
             @if ($itemResults->isEmpty())
@@ -274,10 +275,10 @@
         </div>
     @endforeach
 
-    {{-- Attachments --}}
+    {{-- Footer --}}
     @if ($order->attachments->isNotEmpty())
         <div style="margin-top:20px;">
-            <h2 style="font-size:13px; font-weight:700; color:#024938; margin-bottom:8px;">Attached Reports:</h2>
+            <h2 style="font-size:13px; font-weight:700; color:#0f172a; margin-bottom:8px;">Attached Reports:</h2>
             <ul style="font-size:11px; color:#666; padding-left:16px;">
                 @foreach ($order->attachments as $attachment)
                     <li>{{ $attachment->file_name }} ({{ number_format($attachment->file_size / 1024, 1) }} KB)</li>

@@ -15,29 +15,29 @@
         @method('PUT')
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Name <span class="text-red-500">*</span></label>
-            <input type="text" name="name" value="{{ $ultrasoundService->name }}" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            <x-ui.input type="text" name="name" value="{{ $ultrasoundService->name }}" required class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-slate-300" />
         </div>
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Code</label>
-            <input type="text" name="code" value="{{ $ultrasoundService->code }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            <x-ui.input type="text" name="code" value="{{ $ultrasoundService->code }}" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-slate-300" />
         </div>
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Price (TSh) <span class="text-red-500">*</span></label>
-            <input type="number" name="price" value="{{ $ultrasoundService->price }}" required min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            <x-ui.input type="number" name="price" value="{{ $ultrasoundService->price }}" required min="0" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-slate-300" />
         </div>
         <div>
             <label class="block text-xs font-medium text-gray-700 mb-1">Description</label>
-            <textarea name="description" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">{{ $ultrasoundService->description }}</textarea>
+            <x-ui.textarea name="description" rows="3" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-slate-300">{{ $ultrasoundService->description }}</x-ui.textarea>
         </div>
         <div>
             <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" name="is_active" value="1" {{ $ultrasoundService->is_active ? 'checked' : '' }} class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500">
+                <input type="checkbox" name="is_active" value="1" {{ $ultrasoundService->is_active ? 'checked' : '' }} class="w-4 h-4 text-slate-600 rounded focus:ring-slate-300">
                 <span class="text-sm text-gray-700">Active</span>
             </label>
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <a href="{{ route('ultrasound-services.index') }}" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</a>
-            <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700">Update Service</button>
+            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Update Service</button>
         </div>
     </form>
 </div>

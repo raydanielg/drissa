@@ -4,11 +4,11 @@
 
 @section('content')
 
-<section class="bg-emerald-900 py-16">
+<section class="bg-slate-800 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">Our Services</h1>
-        <p class="mt-4 text-emerald-100/80 max-w-2xl mx-auto">Comprehensive reproductive health and family planning services tailored to your needs.</p>
-        <div class="mt-4 w-20 h-1 bg-gold-500 mx-auto rounded-full"></div>
+        <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Comprehensive reproductive health and family planning services tailored to your needs.</p>
+        <div class="mt-4 w-20 h-1 bg-white mx-auto rounded-full"></div>
     </div>
 </section>
 
@@ -29,17 +29,17 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($services as $service)
                     <div class="card-hover bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        <div class="w-12 h-12 rounded-md bg-slate-100 flex items-center justify-center mb-4">
+                            <i class="hgi-stroke hgi-plus-sign text-2xl text-slate-600"></i>
                         </div>
-                        <h3 class="font-bold text-emerald-900 text-lg mb-2">{{ $service->name }}</h3>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">{{ $service->name }}</h3>
                         <p class="text-sm text-gray-600 leading-relaxed mb-4">{{ $service->description ?? 'Professional reproductive health service tailored to your needs.' }}</p>
                         @if($service->price)
-                            <p class="text-sm font-bold text-gold-600 mb-3">TSh {{ number_format($service->price) }}</p>
+                            <p class="text-sm font-bold text-slate-800 mb-3">TSh {{ number_format($service->price) }}</p>
                         @endif
-                        <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors">
+                        <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors">
                             Read more
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
                         </a>
                     </div>
                 @endforeach
@@ -49,14 +49,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($defaultServices as $svc)
                     <div class="card-hover bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        <div class="w-12 h-12 rounded-md bg-slate-100 flex items-center justify-center mb-4">
+                            <i class="hgi-stroke hgi-plus-sign text-2xl text-slate-600"></i>
                         </div>
-                        <h3 class="font-bold text-emerald-900 text-lg mb-2">{{ $svc[0] }}</h3>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">{{ $svc[0] }}</h3>
                         <p class="text-sm text-gray-600 leading-relaxed mb-4">{{ $svc[1] }}</p>
-                        <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-gold-600 hover:text-gold-700 transition-colors">
+                        <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-600 hover:text-slate-800 transition-colors">
                             Read more
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
                         </a>
                     </div>
                 @endforeach
@@ -64,9 +64,9 @@
         @endif
 
         <div class="text-center mt-12">
-            <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-lg shadow-sm hover:shadow-md transition-all">
+            <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded transition-colors">
                 Book an Appointment
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <i class="hgi-stroke hgi-arrow-right-01 text-xl"></i>
             </a>
         </div>
     </div>

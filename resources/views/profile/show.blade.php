@@ -1,27 +1,31 @@
 @extends('layouts.dashboard')
 
 @section('title', 'My Profile')
+@section('page_title', 'My Profile')
 
 @section('content')
 <div class="max-w-3xl mx-auto">
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div class="bg-gradient-to-r from-emerald-700 to-emerald-900 px-6 py-6">
+    <x-ui.page-header section="Account" title="My Profile" description="Manage your personal information and password." />
+
+    <x-ui.card class="p-0">
+        {{-- Profile Banner --}}
+        <div class="px-6 py-5 border-b border-gray-100">
             <div class="flex items-center gap-4">
-                <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-2xl">
+                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold text-lg">
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold text-white">{{ $user->name }}</h1>
-                    <p class="text-emerald-200 text-sm">{{ ucfirst($user->roles->first()->name ?? 'User') }}</p>
+                    <h1 class="text-sm font-bold text-gray-900">{{ $user->name }}</h1>
+                    <x-ui.badge variant="secondary" class="mt-1">{{ ucfirst($user->roles->first()->name ?? 'User') }}</x-ui.badge>
                 </div>
             </div>
         </div>
 
-        <div class="p-6">
+        <x-ui.card-content class="py-6">
             @if(session('status'))
-                <div class="mb-4 px-4 py-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-sm">
-                    {{ session('status') }}
-                </div>
+                <x-ui.alert variant="emerald" class="mb-4">
+                    <x-ui.alert-title>{{ session('status') }}</x-ui.alert-title>
+                </x-ui.alert>
             @endif
 
             <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
@@ -29,53 +33,53 @@
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500" required>
-                        @error('name')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                    <div class="space-y-2">
+                        <x-ui.label for="name">Full Name</x-ui.label>
+                        <x-ui.input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" required aria-invalid="{{ $errors->has('name') ? 'true' : 'false' }}" />
+                        @error('name')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500" required>
-                        @error('email')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                    <div class="space-y-2">
+                        <x-ui.label for="email">Email Address</x-ui.label>
+                        <x-ui.input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" required aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}" />
+                        @error('email')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
-                        @error('phone')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                    <div class="space-y-2">
+                        <x-ui.label for="phone">Phone Number</x-ui.label>
+                        <x-ui.input id="phone" type="text" name="phone" value="{{ old('phone', $user->phone) }}" aria-invalid="{{ $errors->has('phone') ? 'true' : 'false' }}" />
+                        @error('phone')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                        <input type="text" value="{{ ucfirst($user->roles->first()->name ?? 'User') }}" disabled class="w-full rounded-lg border-gray-200 bg-gray-50 text-gray-500">
+                    <div class="space-y-2">
+                        <x-ui.label for="role">Role</x-ui.label>
+                        <x-ui.input id="role" type="text" value="{{ ucfirst($user->roles->first()->name ?? 'User') }}" disabled />
                     </div>
                 </div>
 
-                <div class="border-t border-gray-100 pt-6">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">Change Password</h3>
+                <x-ui.separator />
+
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 mb-4">Change Password</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                            <input type="password" name="password" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
-                            @error('password')<p class="mt-1 text-xs text-red-600">{{ $message }}</p>@enderror
+                        <div class="space-y-2">
+                            <x-ui.label for="password">New Password</x-ui.label>
+                            <x-ui.input id="password" type="password" name="password" aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}" />
+                            @error('password')<p class="text-xs text-red-600">{{ $message }}</p>@enderror
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="w-full rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                        <div class="space-y-2">
+                            <x-ui.label for="password_confirmation">Confirm Password</x-ui.label>
+                            <x-ui.input id="password_confirmation" type="password" name="password_confirmation" />
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-medium rounded-lg transition-colors">
-                        Save Changes
-                    </button>
+                    <x-ui.button type="submit" size="lg">Save Changes</x-ui.button>
                 </div>
             </form>
-        </div>
-    </div>
+        </x-ui.card-content>
+    </x-ui.card>
 </div>
 @endsection

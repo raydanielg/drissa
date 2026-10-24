@@ -3,68 +3,66 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Installer') - Uzazi Clinic</title>
-    <link href="https://fonts.bunny.net/css?family=Nunito:400,500,600,700,800,900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        emerald: { 50:'#e6f5f1',100:'#b3e0d4',200:'#80cbc0',300:'#4db5a8',400:'#1a9f8e',500:'#024938',600:'#023d30',700:'#013028',800:'#01241f',900:'#001816' },
-                        gold: { 50:'#fff5e0',100:'#ffe6b3',200:'#ffd680',300:'#ffc64d',400:'#ffb71a',500:'#f9ac00',600:'#d49700',700:'#b07c00',800:'#8c6100',900:'#684600' }
-                    }
-                }
-            }
-        }
-    </script>
+    <title>@yield('title', 'Installer') — Uzazi Clinic</title>
+    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
+    <link href="https://fonts.bunny.net/css?family=Inter:400,500,600,700,800&display=swap" rel="stylesheet">
+    {{-- Card --}}
+    {{-- Card --}}
     <style>
-        body { font-family: 'Nunito', sans-serif; }
-        .step-active { background: linear-gradient(135deg, #024938, #f9ac00); }
+        body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        .fade-up { animation: fadeUp .45s cubic-bezier(.16,1,.3,1) both; }
+        .step-dot { transition: all .3s ease; }
+        .step-line { transition: background .3s ease; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-emerald-900 via-emerald-800 to-emerald-900 min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen antialiased text-slate-800 bg-gray-50">
 
-    <div class="w-full max-w-2xl">
-        {{-- Logo --}}
-        <div class="text-center mb-8">
-            <img src="{{ asset('logo.png') }}" alt="Uzazi Clinic" class="w-16 h-16 mx-auto rounded-2xl object-cover shadow-lg mb-3">
-            <h1 class="text-2xl font-extrabold text-white">Uzazi Clinic</h1>
-            <p class="text-emerald-200/60 text-sm">Installation Wizard</p>
-        </div>
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 py-10">
+        <div class="w-full max-w-xl fade-up">
 
-        {{-- Steps --}}
-        <div class="flex items-center justify-center gap-2 mb-8">
+            {{-- Card --}}
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <img src="{{ asset('logo.png') }}" alt="Uzazi Clinic" class="w-11 h-11 rounded-md object-cover shadow-sm ring-1 ring-slate-200">
+                <div class="text-left">
+                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 leading-none">Uzazi Clinic</h1>
+                    <p class="text-[11px] font-medium text-slate-500 tracking-widest uppercase mt-1">Setup Wizard</p>
+                </div>
+            </div>
+
+            {{-- Card --}}
             @php
                 $currentStep = $currentStep ?? 1;
-                $steps = [1 => 'Requirements', 2 => 'Database', 3 => 'Install', 4 => 'Complete'];
+                $steps = [1 => 'Requirements', 2 => 'Database', 3 => 'Install', 4 => 'Done'];
             @endphp
-            @foreach($steps as $num => $label)
-                <div class="flex items-center {{ !$loop->last ? 'flex-1' : '' }}">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold {{ $num < $currentStep ? 'bg-gold-500 text-white' : ($num === $currentStep ? 'step-active text-white' : 'bg-white/10 text-white/40') }}">
-                            @if($num < $currentStep)
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
-                            @else
-                                {{ $num }}
-                            @endif
+            <div class="flex items-center mb-8 px-2">
+                @foreach($steps as $num => $label)
+                    <div class="flex items-center {{ !$loop->last ? 'flex-1' : '' }}">
+                        <div class="flex flex-col items-center gap-1.5">
+                            <div class="step-dot w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold
+                                {{ $num < $currentStep ? 'bg-slate-600 text-white' : ($num === $currentStep ? 'bg-slate-800 text-white ring-4 ring-slate-300/40' : 'bg-white text-slate-400 ring-1 ring-slate-200') }}">
+                                @if($num < $currentStep)
+                                    <i class="hgi-stroke hgi-tick-02 text-sm"></i>
+                                @else
+                                    {{ $num }}
+                                @endif
+                            </div>
+                            <span class="text-[10px] font-semibold {{ $num <= $currentStep ? 'text-slate-700' : 'text-slate-400' }}">{{ $label }}</span>
                         </div>
-                        <span class="text-xs font-semibold {{ $num === $currentStep ? 'text-white' : 'text-white/40' }} hidden sm:inline">{{ $label }}</span>
+                        @if(!$loop->last)
+                            <div class="step-line flex-1 h-px mx-3 mb-4 {{ $num < $currentStep ? 'bg-slate-500' : 'bg-slate-200' }}"></div>
+                        @endif
                     </div>
-                    @if(!$loop->last)
-                        <div class="flex-1 h-0.5 mx-2 {{ $num < $currentStep ? 'bg-gold-500' : 'bg-white/10' }}"></div>
-                    @endif
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
-        {{-- Card --}}
-        <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            @yield('content')
-        </div>
+            {{-- Card --}}
+            <div class="bg-white rounded-md ring-1 ring-gray-200 shadow-sm overflow-hidden">
+                @yield('content')
+            </div>
 
-        <p class="text-center text-xs text-emerald-200/40 mt-6">&copy; {{ date('Y') }} Uzazi Clinic</p>
+            <p class="text-center text-[11px] text-slate-400 mt-6">&copy; {{ date('Y') }} Uzazi Clinic &middot; Hospital &amp; Clinic Management</p>
+        </div>
     </div>
 
     @stack('scripts')

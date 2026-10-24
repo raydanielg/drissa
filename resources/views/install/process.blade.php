@@ -4,52 +4,410 @@
 
 @section('content')
 <div class="p-8">
-    <h2 class="text-xl font-extrabold text-emerald-900 mb-2">Running Installation</h2>
-    <p class="text-sm text-gray-500 mb-6">Migrating database tables and seeding initial data. Please do not close this page.</p>
+    <h2 class="text-lg font-extrabold tracking-tight text-slate-900">Installing</h2>
+    <p class="text-sm text-slate-500 mt-1 mb-6">Tables na data za awali zinaandaliwa. Usifunge page hii.</p>
 
-    {{-- Status --}}
-    <div id="statusBox" class="bg-emerald-50 rounded-xl p-4 mb-4">
-        <div class="flex items-center gap-3">
-            <div id="spinner" class="w-6 h-6 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-            <p id="statusText" class="text-sm font-semibold text-emerald-800">Preparing installation...</p>
-        </div>
+    <script>
+    const progressSteps = [
+        { pct: 15, text: 'Connecting to database...' },
+        { pct: 30, text: 'Running migrations...' },
+        { pct: 60, text: 'Creating database tables...' },
+        { pct: 80, text: 'Seeding initial data...' },
+        { pct: 95, text: 'Finalizing installation...' },
+    ];
+    let stepIndex = 0;
+
+    function updateProgress() {
+        if (stepIndex < progressSteps.length) {
+            const step = progressSteps[stepIndex];
+            document.getElementById('progressBar').style.width = step.pct + '%';
+            document.getElementById('statusText').textContent = step.text;
+            stepIndex++;
+            setTimeout(updateProgress, 800);
+        }
+    }
+
+    function appendLog(text) {
+        const log = document.getElementById('outputLog');
+        log.textContent += '\n' + text;
+        log.parentElement.scrollTop = log.parentElement.scrollHeight;
+    }
+
+    function runInstall() {
+        document.getElementById('resultBox').classList.add('hidden');
+        document.getElementById('successBox').classList.add('hidden');
+        document.getElementById('errorBox').classList.add('hidden');
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('statusText').textContent = 'Preparing installation...';
+        document.getElementById('progressBar').style.width = '0%';
+        stepIndex = 0;
+        document.getElementById('outputLog').textContent = '$ starting installation...';
+
+        updateProgress();
+
+        fetch('{{ route("install.run") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        return data;
+                    } catch(e) {
+                        throw new Error('Server returned HTML instead of JSON (HTTP ' + res.status + '). Check if migration completed successfully.');
+                    }
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+
+            if (data.status === 'success') {
+                document.getElementById('statusText').textContent = 'Installation complete!';
+                if (data.output) {
+                    appendLog(data.output);
+                }
+                document.getElementById('successBox').classList.remove('hidden');
+            } else if (data.status === 'already_installed') {
+                document.getElementById('statusText').textContent = 'Already installed.';
+                window.location.href = '{{ route("install.complete") }}';
+            } else {
+                document.getElementById('statusText').textContent = 'Installation failed.';
+                document.getElementById('errorMessage').textContent = data.message || 'Unknown error occurred.';
+                document.getElementById('errorBox').classList.remove('hidden');
+            }
+        })
+        .catch(err => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Installation failed.';
+            document.getElementById('errorMessage').textContent = 'Network error: ' + err.message;
+            document.getElementById('errorBox').classList.remove('hidden');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', runInstall);
+</script>
+    <div class="flex items-center gap-3 bg-white border-l-2 border-slate-400 rounded-md px-4 py-3 mb-4 ring-1 ring-gray-200">
+        <svg id="spinner" class="w-5 h-5 text-slate-600 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v3a5 5 0 00-5 5H4z"/></svg>
+        <p id="statusText" class="text-sm font-semibold text-slate-800">Preparing installation...</p>
     </div>
 
-    {{-- Output log --}}
-    <div class="bg-gray-900 rounded-xl p-4 max-h-64 overflow-y-auto mb-4">
-        <pre id="outputLog" class="text-xs text-gray-300 font-mono whitespace-pre-wrap">$ waiting for installation to start...</pre>
+    <script>
+    const progressSteps = [
+        { pct: 15, text: 'Connecting to database...' },
+        { pct: 30, text: 'Running migrations...' },
+        { pct: 60, text: 'Creating database tables...' },
+        { pct: 80, text: 'Seeding initial data...' },
+        { pct: 95, text: 'Finalizing installation...' },
+    ];
+    let stepIndex = 0;
+
+    function updateProgress() {
+        if (stepIndex < progressSteps.length) {
+            const step = progressSteps[stepIndex];
+            document.getElementById('progressBar').style.width = step.pct + '%';
+            document.getElementById('statusText').textContent = step.text;
+            stepIndex++;
+            setTimeout(updateProgress, 800);
+        }
+    }
+
+    function appendLog(text) {
+        const log = document.getElementById('outputLog');
+        log.textContent += '\n' + text;
+        log.parentElement.scrollTop = log.parentElement.scrollHeight;
+    }
+
+    function runInstall() {
+        document.getElementById('resultBox').classList.add('hidden');
+        document.getElementById('successBox').classList.add('hidden');
+        document.getElementById('errorBox').classList.add('hidden');
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('statusText').textContent = 'Preparing installation...';
+        document.getElementById('progressBar').style.width = '0%';
+        stepIndex = 0;
+        document.getElementById('outputLog').textContent = '$ starting installation...';
+
+        updateProgress();
+
+        fetch('{{ route("install.run") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        return data;
+                    } catch(e) {
+                        throw new Error('Server returned HTML instead of JSON (HTTP ' + res.status + '). Check if migration completed successfully.');
+                    }
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+
+            if (data.status === 'success') {
+                document.getElementById('statusText').textContent = 'Installation complete!';
+                if (data.output) {
+                    appendLog(data.output);
+                }
+                document.getElementById('successBox').classList.remove('hidden');
+            } else if (data.status === 'already_installed') {
+                document.getElementById('statusText').textContent = 'Already installed.';
+                window.location.href = '{{ route("install.complete") }}';
+            } else {
+                document.getElementById('statusText').textContent = 'Installation failed.';
+                document.getElementById('errorMessage').textContent = data.message || 'Unknown error occurred.';
+                document.getElementById('errorBox').classList.remove('hidden');
+            }
+        })
+        .catch(err => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Installation failed.';
+            document.getElementById('errorMessage').textContent = 'Network error: ' + err.message;
+            document.getElementById('errorBox').classList.remove('hidden');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', runInstall);
+</script>
+    <div class="bg-slate-950 rounded-md p-4 max-h-60 overflow-y-auto mb-4 ring-1 ring-slate-800">
+        <pre id="outputLog" class="text-[11px] leading-relaxed text-slate-300/90 font-mono whitespace-pre-wrap">$ waiting for installation to start...</pre>
     </div>
 
-    {{-- Progress bar --}}
-    <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-        <div id="progressBar" class="bg-gradient-to-r from-gold-400 to-gold-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+    <script>
+    const progressSteps = [
+        { pct: 15, text: 'Connecting to database...' },
+        { pct: 30, text: 'Running migrations...' },
+        { pct: 60, text: 'Creating database tables...' },
+        { pct: 80, text: 'Seeding initial data...' },
+        { pct: 95, text: 'Finalizing installation...' },
+    ];
+    let stepIndex = 0;
+
+    function updateProgress() {
+        if (stepIndex < progressSteps.length) {
+            const step = progressSteps[stepIndex];
+            document.getElementById('progressBar').style.width = step.pct + '%';
+            document.getElementById('statusText').textContent = step.text;
+            stepIndex++;
+            setTimeout(updateProgress, 800);
+        }
+    }
+
+    function appendLog(text) {
+        const log = document.getElementById('outputLog');
+        log.textContent += '\n' + text;
+        log.parentElement.scrollTop = log.parentElement.scrollHeight;
+    }
+
+    function runInstall() {
+        document.getElementById('resultBox').classList.add('hidden');
+        document.getElementById('successBox').classList.add('hidden');
+        document.getElementById('errorBox').classList.add('hidden');
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('statusText').textContent = 'Preparing installation...';
+        document.getElementById('progressBar').style.width = '0%';
+        stepIndex = 0;
+        document.getElementById('outputLog').textContent = '$ starting installation...';
+
+        updateProgress();
+
+        fetch('{{ route("install.run") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        return data;
+                    } catch(e) {
+                        throw new Error('Server returned HTML instead of JSON (HTTP ' + res.status + '). Check if migration completed successfully.');
+                    }
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+
+            if (data.status === 'success') {
+                document.getElementById('statusText').textContent = 'Installation complete!';
+                if (data.output) {
+                    appendLog(data.output);
+                }
+                document.getElementById('successBox').classList.remove('hidden');
+            } else if (data.status === 'already_installed') {
+                document.getElementById('statusText').textContent = 'Already installed.';
+                window.location.href = '{{ route("install.complete") }}';
+            } else {
+                document.getElementById('statusText').textContent = 'Installation failed.';
+                document.getElementById('errorMessage').textContent = data.message || 'Unknown error occurred.';
+                document.getElementById('errorBox').classList.remove('hidden');
+            }
+        })
+        .catch(err => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Installation failed.';
+            document.getElementById('errorMessage').textContent = 'Network error: ' + err.message;
+            document.getElementById('errorBox').classList.remove('hidden');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', runInstall);
+</script>
+    <div class="w-full bg-gray-100 rounded-full h-1.5 mb-6 overflow-hidden">
+        <div id="progressBar" class="bg-slate-800 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
     </div>
 
-    {{-- Result (hidden initially) --}}
+    <script>
+    const progressSteps = [
+        { pct: 15, text: 'Connecting to database...' },
+        { pct: 30, text: 'Running migrations...' },
+        { pct: 60, text: 'Creating database tables...' },
+        { pct: 80, text: 'Seeding initial data...' },
+        { pct: 95, text: 'Finalizing installation...' },
+    ];
+    let stepIndex = 0;
+
+    function updateProgress() {
+        if (stepIndex < progressSteps.length) {
+            const step = progressSteps[stepIndex];
+            document.getElementById('progressBar').style.width = step.pct + '%';
+            document.getElementById('statusText').textContent = step.text;
+            stepIndex++;
+            setTimeout(updateProgress, 800);
+        }
+    }
+
+    function appendLog(text) {
+        const log = document.getElementById('outputLog');
+        log.textContent += '\n' + text;
+        log.parentElement.scrollTop = log.parentElement.scrollHeight;
+    }
+
+    function runInstall() {
+        document.getElementById('resultBox').classList.add('hidden');
+        document.getElementById('successBox').classList.add('hidden');
+        document.getElementById('errorBox').classList.add('hidden');
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('statusText').textContent = 'Preparing installation...';
+        document.getElementById('progressBar').style.width = '0%';
+        stepIndex = 0;
+        document.getElementById('outputLog').textContent = '$ starting installation...';
+
+        updateProgress();
+
+        fetch('{{ route("install.run") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+            },
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.text().then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        return data;
+                    } catch(e) {
+                        throw new Error('Server returned HTML instead of JSON (HTTP ' + res.status + '). Check if migration completed successfully.');
+                    }
+                });
+            }
+            return res.json();
+        })
+        .then(data => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+
+            if (data.status === 'success') {
+                document.getElementById('statusText').textContent = 'Installation complete!';
+                if (data.output) {
+                    appendLog(data.output);
+                }
+                document.getElementById('successBox').classList.remove('hidden');
+            } else if (data.status === 'already_installed') {
+                document.getElementById('statusText').textContent = 'Already installed.';
+                window.location.href = '{{ route("install.complete") }}';
+            } else {
+                document.getElementById('statusText').textContent = 'Installation failed.';
+                document.getElementById('errorMessage').textContent = data.message || 'Unknown error occurred.';
+                document.getElementById('errorBox').classList.remove('hidden');
+            }
+        })
+        .catch(err => {
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('spinner').style.display = 'none';
+            document.getElementById('resultBox').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Installation failed.';
+            document.getElementById('errorMessage').textContent = 'Network error: ' + err.message;
+            document.getElementById('errorBox').classList.remove('hidden');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', runInstall);
+</script>
     <div id="resultBox" class="hidden">
-        <div id="successBox" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4">
-            <div class="flex items-center gap-3">
-                <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div id="successBox" class="hidden">
+            <div class="flex items-center gap-3 bg-white border-l-2 border-emerald-500 rounded-md p-4 mb-4 ring-1 ring-gray-200">
+                <i class="hgi-stroke hgi-checkmark-circle-02 text-3xl text-emerald-600 shrink-0"></i>
                 <div>
-                    <p class="font-bold text-emerald-800">Installation Complete!</p>
-                    <p class="text-sm text-emerald-600">Database migrated and seeded successfully.</p>
+                    <p class="text-sm font-bold text-gray-900">Installation Complete</p>
+                    <p class="text-xs text-gray-500 mt-0.5">Database migrated and seeded successfully.</p>
                 </div>
             </div>
-            <a href="{{ route('install.complete') }}" class="mt-4 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all">
+            <a href="{{ route('install.complete') }}" class="w-full flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
                 Continue
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
             </a>
         </div>
-        <div id="errorBox" class="hidden bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
-            <div class="flex items-center gap-3">
-                <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <div id="errorBox" class="hidden">
+            <div class="flex items-center gap-3 bg-white border-l-2 border-red-500 rounded-md p-4 mb-4 ring-1 ring-gray-200">
+                <i class="hgi-stroke hgi-alert-circle text-3xl text-red-500 shrink-0"></i>
                 <div>
-                    <p class="font-bold text-red-800">Installation Failed</p>
-                    <p id="errorMessage" class="text-sm text-red-600"></p>
+                    <p class="text-sm font-bold text-red-700">Installation Failed</p>
+                    <p id="errorMessage" class="text-xs text-red-600 mt-0.5"></p>
                 </div>
             </div>
-            <button onclick="runInstall()" class="mt-4 w-full flex items-center justify-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 rounded-lg transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button onclick="runInstall()" class="w-full flex items-center justify-center gap-2 h-11 border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-bold rounded transition-all">
+                <i class="hgi-stroke hgi-refresh text-base"></i>
                 Try Again
             </button>
         </div>

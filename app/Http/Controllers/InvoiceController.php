@@ -41,6 +41,7 @@ class InvoiceController extends Controller
     {
         $invoice->load(['patient', 'visit', 'items']);
         $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
+        $pdf->setOption('enable_php', true);
         return $pdf->download("invoice-{$invoice->invoice_number}.pdf");
     }
 
@@ -49,6 +50,7 @@ class InvoiceController extends Controller
         $invoices = Invoice::with(['patient', 'visit', 'items'])->latest()->get();
         
         $pdf = Pdf::loadView('invoices.all-pdf', compact('invoices'));
+        $pdf->setOption('enable_php', true);
         return $pdf->download("all-invoices-" . now()->format('Y-m-d') . ".pdf");
     }
 }

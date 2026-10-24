@@ -4,14 +4,23 @@
 @section('page_title', 'Invoice ' . $invoice->invoice_number)
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white rounded-xl border border-gray-100 p-8 shadow-sm">
-    <div class="flex items-center justify-between mb-6">
-        <div>
-            <h2 class="text-lg font-bold text-gray-900">{{ config('app.name') }}</h2>
-            <p class="text-sm text-gray-500">Invoice #: {{ $invoice->invoice_number }}</p>
+<div class="max-w-3xl mx-auto space-y-5">
+    {{-- Header --}}
+    <div class="bg-slate-800 rounded-md p-6 text-white">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Billing</p>
+                <h1 class="text-xl font-bold">Invoice #{{ $invoice->invoice_number }}</h1>
+                <p class="text-xs text-slate-400 mt-1">{{ config('app.name') }}</p>
+            </div>
+            <a href="{{ route('invoices.pdf', $invoice) }}" class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-100 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded transition-colors">
+                <i class="hgi-stroke hgi-upload-01 text-sm"></i>
+                Download PDF
+            </a>
         </div>
-        <a href="{{ route('invoices.pdf', $invoice) }}" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-emerald-700">Download PDF</a>
     </div>
+
+    <div class="bg-white rounded-md border border-gray-200 p-5">
 
     <div class="grid grid-cols-2 gap-6 mb-6">
         <div>
@@ -27,7 +36,7 @@
     </div>
 
     <table class="w-full text-sm text-left mb-6">
-        <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+        <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
             <tr>
                 <th class="px-4 py-2">Item</th>
                 <th class="px-4 py-2 text-right">Qty</th>
@@ -53,6 +62,7 @@
             <p class="text-xs text-gray-500">Balance: TSh {{ number_format($invoice->total - $invoice->paid, 2) }}</p>
         </div>
         <p class="text-lg font-bold text-gray-900">Total: TSh {{ number_format($invoice->total, 2) }}</p>
+    </div>
     </div>
 </div>
 @endsection

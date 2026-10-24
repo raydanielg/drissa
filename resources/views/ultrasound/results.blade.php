@@ -4,20 +4,24 @@
 @section('page_title', 'Ultrasound Results')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <h2 class="text-lg font-bold text-gray-900">Ultrasound Results</h2>
-            <p class="text-sm text-gray-500">Order #{{ $order->id }} - {{ $order->patient?->fullName() }}</p>
+<div class="max-w-4xl mx-auto space-y-5">
+    {{-- Attachments --}}
+    <div class="bg-slate-800 rounded-md p-6 text-white">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Imaging</p>
+                <h1 class="text-xl font-bold">Ultrasound Results</h1>
+                <p class="text-xs text-slate-400 mt-1">Order #{{ $order->id }} — {{ $order->patient?->fullName() }}</p>
+            </div>
+            <a href="{{ route('ultrasound.queue') }}" class="inline-flex items-center gap-1.5 bg-white hover:bg-gray-100 text-slate-800 text-xs font-semibold px-3 py-1.5 rounded transition-colors">
+                <i class="hgi-stroke hgi-arrow-left-02 text-sm"></i>
+                Back to Queue
+            </a>
         </div>
-        <a href="{{ route('ultrasound.queue') }}" class="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            Back to Queue
-        </a>
     </div>
 
-    {{-- Patient Info --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+    {{-- Attachments --}}
+    <div class="bg-white rounded-md border border-gray-200 p-5">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
                 <p class="text-xs font-medium text-gray-500 uppercase">Patient</p>
@@ -35,19 +39,19 @@
         </div>
     </div>
 
-    {{-- Services --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 class="text-sm font-semibold text-gray-900 mb-3">Services Performed</h3>
+    {{-- Attachments --}}
+    <div class="bg-white rounded-md border border-gray-200 p-5">
+        <h3 class="text-sm font-bold text-gray-900 mb-3">Services Performed</h3>
         <div class="flex flex-wrap gap-2">
             @foreach($order->items as $item)
-                <span class="inline-block px-3 py-1.5 bg-purple-50 text-purple-700 text-sm rounded-lg">{{ $item->ultrasoundService?->name }}</span>
+                <span class="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{{ $item->ultrasoundService?->name }}</span>
             @endforeach
         </div>
     </div>
 
-    {{-- Findings & Impression --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 class="text-sm font-semibold text-gray-900">Results</h3>
+    {{-- Attachments --}}
+    <div class="bg-white rounded-md border border-gray-200 p-5 space-y-4">
+        <h3 class="text-sm font-bold text-gray-900">Results</h3>
         <div>
             <p class="text-xs font-medium text-gray-500 uppercase mb-1">Findings</p>
             <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $order->findings ?? 'No findings recorded.' }}</p>
@@ -59,25 +63,25 @@
     </div>
 
     {{-- Attachments --}}
-    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-        <h3 class="text-sm font-semibold text-gray-900 mb-3">Attachments</h3>
+    <div class="bg-white rounded-md border border-gray-200 p-5">
+        <h3 class="text-sm font-bold text-gray-900 mb-3">Attachments</h3>
         @if($order->attachments->isNotEmpty())
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 @foreach($order->attachments as $attachment)
-                    <div class="border border-gray-200 rounded-lg p-3 flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    <div class="border border-gray-200 rounded p-3 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center flex-shrink-0">
+                            <i class="hgi-stroke hgi-file-01 text-xl text-slate-600"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">{{ $attachment->file_name }}</p>
                             <p class="text-xs text-gray-500">{{ number_format($attachment->file_size / 1024, 1) }} KB</p>
                         </div>
-                        <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">View</a>
+                        <a href="{{ route('file.serve', $attachment->file_path) }}" target="_blank" class="text-slate-600 hover:text-slate-800 text-xs font-medium">View</a>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="text-sm text-gray-500">No attachments uploaded.</p>
+            <p class="text-xs text-gray-400">No attachments uploaded.</p>
         @endif
     </div>
 </div>

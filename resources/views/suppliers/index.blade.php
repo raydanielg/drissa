@@ -4,37 +4,46 @@
 @section('page_title', 'Enterprise & Logistics - Suppliers')
 
 @section('content')
-<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 class="text-sm font-semibold text-gray-900">Suppliers</h2>
-        <a href="{{ route('suppliers.create') }}" class="bg-emerald-600 text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-emerald-700">+ Add Supplier</a>
+<div class="space-y-5">
+<div class="bg-slate-800 rounded-md p-6 text-white flex items-center justify-between">
+    <div>
+        <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Logistics</p>
+        <h1 class="text-xl font-bold">Suppliers</h1>
+        <p class="text-xs text-slate-400 mt-1">Manage pharmacy suppliers and contacts.</p>
+    </div>
+    <a href="{{ route('suppliers.create') }}" class="bg-white text-slate-800 text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-100">+ Add Supplier</a>
+</div>
+<div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+    <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-gray-900">All Suppliers</h2>
     </div>
     <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left">
-            <thead class="bg-gray-50 text-xs uppercase text-gray-500">
-                <tr>
-                    <th class="px-6 py-3">Name</th>
-                    <th class="px-6 py-3">Contact Person</th>
-                    <th class="px-6 py-3">Phone</th>
-                    <th class="px-6 py-3">Email</th>
-                    <th class="px-6 py-3">Status</th>
-                    <th class="px-6 py-3">Actions</th>
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-gray-50 text-[10px] uppercase text-gray-400 border-b border-gray-100">
+                    <th class="px-5 py-3 font-medium text-left">Name</th>
+                    <th class="px-5 py-3 font-medium text-left">Contact Person</th>
+                    <th class="px-5 py-3 font-medium text-left">Phone</th>
+                    <th class="px-5 py-3 font-medium text-left">Email</th>
+                    <th class="px-5 py-3 font-medium text-left">Status</th>
+                    <th class="px-5 py-3 font-medium text-left">Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-50">
                 @forelse ($suppliers as $supplier)
-                    <tr class="border-t border-gray-100 hover:bg-gray-50/50">
-                        <td class="px-6 py-3 font-medium">{{ $supplier->name }}</td>
-                        <td class="px-6 py-3">{{ $supplier->contact_person ?? '-' }}</td>
-                        <td class="px-6 py-3">{{ $supplier->phone ?? '-' }}</td>
-                        <td class="px-6 py-3">{{ $supplier->email ?? '-' }}</td>
-                        <td class="px-6 py-3">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium {{ $supplier->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700' }}">
+                    <tr class="hover:bg-gray-50/50">
+                        <td class="px-5 py-3 text-xs font-medium text-gray-900">{{ $supplier->name }}</td>
+                        <td class="px-5 py-3 text-xs text-gray-600">{{ $supplier->contact_person ?? '-' }}</td>
+                        <td class="px-5 py-3 text-xs text-gray-600">{{ $supplier->phone ?? '-' }}</td>
+                        <td class="px-5 py-3 text-xs text-gray-600">{{ $supplier->email ?? '-' }}</td>
+                        <td class="px-5 py-3">
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $supplier->is_active ? 'bg-emerald-500' : 'bg-gray-400' }}"></span>
                                 {{ $supplier->is_active ? 'Active' : 'Inactive' }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 flex items-center gap-2">
-                            <a href="{{ route('suppliers.edit', $supplier) }}" class="text-emerald-600 hover:text-emerald-700 text-xs font-medium">Edit</a>
+                        <td class="px-5 py-3 flex items-center gap-2">
+                            <a href="{{ route('suppliers.edit', $supplier) }}" class="text-slate-600 hover:text-slate-800 text-xs font-medium">Edit</a>
                             <form method="POST" action="{{ route('suppliers.destroy', $supplier) }}" data-ajax data-confirm="Delete this supplier?" class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -43,13 +52,14 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="px-6 py-6 text-center text-gray-400">No suppliers found</td></tr>
+                    <tr><td colspan="6" class="px-5 py-6 text-center text-gray-400 text-xs">No suppliers found</td></tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    <div class="px-6 py-4 border-t border-gray-100">
+    <div class="px-5 py-3 border-t border-gray-100">
         {{ $suppliers->links() }}
     </div>
+</div>
 </div>
 @endsection
