@@ -293,6 +293,7 @@
     @stack('styles')
 </head>
 <body class="font-['Instrument_Sans',sans-serif] antialiased bg-gray-50 text-slate-800">
+    <x-ui.page-loader />
 
     <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
 

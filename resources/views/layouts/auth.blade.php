@@ -33,6 +33,7 @@
     </style>
 </head>
 <body class="antialiased text-slate-800 min-h-screen" style="font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;">
+    <x-ui.page-loader />
 
     <div class="fixed inset-0">
         <img src="{{ asset('auth-bg.jpg') }}" alt="" class="w-full h-full object-cover">

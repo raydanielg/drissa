@@ -40,6 +40,7 @@
     </style>
 </head>
 <body class="font-['Nunito',sans-serif] antialiased text-slate-800">
+    <x-ui.page-loader />
 
     <script>
     function toggleMobileNav() {
