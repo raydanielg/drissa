@@ -137,8 +137,9 @@
     })();
     </script>
     <div class="fixed inset-0">
-        <img src="{{ asset('blur-hospital.jpg') }}" alt="" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/40 to-slate-900/10"></div>
+        <img src="{{ asset('auth-bg.jpg') }}" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/55 to-slate-950/30"></div>
+        <div class="absolute inset-0 backdrop-blur-[2px]"></div>
     </div>
 
     <script>
@@ -192,6 +193,7 @@
         });
     })();
     </script>
+
     <a href="{{ Route::has('public.home') ? route('public.home') : url('/') }}" class="fixed top-6 left-6 z-20">
         <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Uzazi Clinic') }}" class="w-11 h-11 rounded-md object-cover">
     </a>
@@ -202,56 +204,6 @@
 
     <p class="fixed bottom-4 left-6 z-10 text-[11px] text-white/40">&copy; {{ date('Y') }} {{ config('app.name', 'Uzazi Clinic') }}. All rights reserved.</p>
 
-    <script>
-    // Shared compact toast
-    window.AppToast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        showCloseButton: true,
-        timer: 4000,
-        timerProgressBar: true,
-        customClass: { popup: 'app-toast' },
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
-    });
-    window.toast = (message, icon = 'success') => window.AppToast.fire({ icon, title: message });
-
-    (function() {
-        @if(session('status'))
-            window.AppToast.fire({ icon: 'success', title: @json(session('status')) });
-        @endif
-        @if(session('error'))
-            window.AppToast.fire({ icon: 'error', title: @json(session('error')) });
-        @endif
-        @if(session('warning'))
-            window.AppToast.fire({ icon: 'warning', title: @json(session('warning')) });
-        @endif
-        @if(session('info'))
-            window.AppToast.fire({ icon: 'info', title: @json(session('info')) });
-        @endif
-
-        @if($errors->any())
-            @foreach($errors->all() as $error)
-                window.AppToast.fire({ icon: 'error', title: @json($error) });
-            @endforeach
-        @endif
-    })();
-
-    // Submit button loading state
-    (function() {
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const btn = form.querySelector('button[type="submit"]');
-                if (!btn) return;
-                btn.disabled = true;
-                btn.innerHTML = '<svg class="animate-spin mr-2 h-4 w-4 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Signing in...';
-                btn.classList.add('cursor-not-allowed', 'opacity-80');
-            });
-        });
-    })();
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
     document.addEventListener('focusin', function(e) {
@@ -264,6 +216,6 @@
         if (cfg) flatpickr(el, cfg);
     }, true);
     </script>
-    </script>
+    @stack('scripts')
 </body>
 </html>
