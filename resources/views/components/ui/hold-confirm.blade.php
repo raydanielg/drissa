@@ -7,6 +7,8 @@
     'icon' => null,     // hugeicons name, e.g. 'hgi-cancel-circle'
     'danger' => true,
     'class' => '',
+    'undo' => null,     // message for UndoNotice; delays form submit until countdown expires
+    'undoDuration' => 5000,
 ])
 
 <button type="button"
@@ -14,6 +16,7 @@
     data-duration="{{ $duration }}"
     data-reset="{{ $reset }}"
     @if($form) data-form="{{ $form }}" @endif
+    @if($undo) data-undo="{{ $undo }}" data-undo-duration="{{ $undoDuration }}" @endif
     class="htc relative isolate inline-flex h-9 min-w-40 touch-none select-none items-center justify-center overflow-hidden rounded-md border px-3 text-xs font-semibold outline-none transition-[transform] duration-150 focus-visible:ring-2 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 {{ $danger ? 'border-red-300 bg-red-50 text-red-700 focus-visible:ring-red-400' : 'border-gray-200 bg-gray-50 text-gray-700 focus-visible:ring-gray-400' }} {{ $class }}"
     {{ $attributes }}>
     <span class="htc-label relative z-10 flex items-center justify-center gap-1.5">
