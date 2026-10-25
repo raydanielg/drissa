@@ -53,7 +53,31 @@ class ManagerController extends Controller
             ->whereDate('report_date', now()->endOfWeek())
             ->first();
 
-        return view('manager.dashboard', compact('stats', 'recentReports', 'todayReport', 'weekReport'));
+        $revenueLabels = [];
+        $revenueTrend = [];
+        $visitsTrend = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $revenueLabels[] = $date->format('D');
+            $revenueTrend[] = (float) Payment::whereDate('created_at', $date)->sum('amount');
+            $visitsTrend[] = Visit::whereDate('registered_at', $date)->count();
+        }
+
+        $visitStatusCounts = [
+            'registered' => Visit::where('status', VisitStatus::Registered->value)->count(),
+            'waiting_for_doctor' => Visit::where('status', VisitStatus::WaitingForDoctor->value)->count(),
+            'with_doctor' => Visit::where('status', VisitStatus::WithDoctor->value)->count(),
+            'waiting_for_lab' => Visit::where('status', VisitStatus::WaitingForLab->value)->count(),
+            'waiting_for_pharmacy' => Visit::where('status', VisitStatus::WaitingForPharmacy->value)->count(),
+            'waiting_for_payment' => Visit::where('status', VisitStatus::WaitingForPayment->value)->count(),
+            'completed' => Visit::where('status', VisitStatus::Completed->value)->count(),
+            'cancelled' => Visit::where('status', VisitStatus::Cancelled->value)->count(),
+        ];
+
+        return view('manager.dashboard', compact(
+            'stats', 'recentReports', 'todayReport', 'weekReport',
+            'revenueLabels', 'revenueTrend', 'visitsTrend', 'visitStatusCounts'
+        ));
     }
 
     public function reports(Request $request)

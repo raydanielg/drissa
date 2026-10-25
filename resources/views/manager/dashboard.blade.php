@@ -101,6 +101,49 @@
         </div>
     </div>
 
+    {{-- Charts --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="lg:col-span-2 bg-white rounded-md border border-gray-200 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900">Revenue & Visits — Last 7 Days</h3>
+                    <p class="text-[10px] text-gray-400 mt-0.5">TSh collected vs patients seen per day</p>
+                </div>
+                <div class="flex items-center gap-3 text-[10px] text-gray-500">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-600"></span>Revenue</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-400"></span>Visits</span>
+                </div>
+            </div>
+            <div class="h-56"><canvas id="managerTrendChart"></canvas></div>
+        </div>
+        <div class="bg-white rounded-md border border-gray-200 p-5">
+            <h3 class="text-sm font-bold text-gray-900 mb-4">Visit Status</h3>
+            <div class="h-40"><canvas id="managerStatusChart"></canvas></div>
+            <div class="grid grid-cols-2 gap-1.5 mt-4">
+                @php
+                    $statusLabels = [
+                        'registered' => 'Registered', 'waiting_for_doctor' => 'Waiting Doctor',
+                        'with_doctor' => 'With Doctor', 'waiting_for_lab' => 'Waiting Lab',
+                        'waiting_for_pharmacy' => 'Pharmacy', 'waiting_for_payment' => 'Payment',
+                        'completed' => 'Completed', 'cancelled' => 'Cancelled',
+                    ];
+                    $statusDots = [
+                        'registered' => 'bg-slate-400', 'waiting_for_doctor' => 'bg-amber-500',
+                        'with_doctor' => 'bg-slate-700', 'waiting_for_lab' => 'bg-slate-500',
+                        'waiting_for_pharmacy' => 'bg-slate-600', 'waiting_for_payment' => 'bg-amber-600',
+                        'completed' => 'bg-emerald-500', 'cancelled' => 'bg-red-500',
+                    ];
+                @endphp
+                @foreach ($visitStatusCounts as $status => $count)
+                    <div class="flex items-center justify-between text-[10px]">
+                        <span class="flex items-center gap-1 text-gray-500"><span class="w-1.5 h-1.5 rounded-full {{ $statusDots[$status] ?? 'bg-gray-400' }}"></span>{{ $statusLabels[$status] ?? ucwords(str_replace('_', ' ', $status)) }}</span>
+                        <span class="font-semibold text-gray-900">{{ $count }}</span>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
     {{-- Recent reports --}}
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
@@ -157,3 +200,109 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    (function () {
+        var trendCanvas = document.getElementById('managerTrendChart');
+        if (trendCanvas && window.Chart) {
+            var ctx = trendCanvas.getContext('2d');
+            var gradient = ctx.createLinearGradient(0, 0, 0, 220);
+            gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
+            gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($revenueLabels),
+                    datasets: [
+                        {
+                            label: 'Revenue (TSh)',
+                            data: @json($revenueTrend),
+                            borderColor: '#059669',
+                            backgroundColor: gradient,
+                            borderWidth: 2,
+                            tension: 0.35,
+                            fill: true,
+                            pointRadius: 2,
+                            pointHoverRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#059669',
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Visits',
+                            data: @json($visitsTrend),
+                            borderColor: '#94a3b8',
+                            borderDash: [5, 4],
+                            borderWidth: 2,
+                            tension: 0.35,
+                            fill: false,
+                            pointRadius: 2,
+                            pointHoverRadius: 4,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#94a3b8',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { intersect: false, mode: 'index' },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(17, 24, 39, 0.9)',
+                            padding: 10,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function (c) {
+                                    return c.dataset.yAxisID === 'y'
+                                        ? 'Revenue: ' + Number(c.raw).toLocaleString() + ' TSh'
+                                        : 'Visits: ' + c.raw;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 }, callback: function (v) { return (v / 1000) + 'k'; } } },
+                        y1: { beginAtZero: true, position: 'right', grid: { display: false }, ticks: { font: { size: 10 }, precision: 0 } },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                    }
+                }
+            });
+        }
+
+        var statusCanvas = document.getElementById('managerStatusChart');
+        if (statusCanvas && window.Chart) {
+            var statusColorMap = {
+                'registered': '#94a3b8', 'waiting_for_doctor': '#f59e0b', 'with_doctor': '#334155',
+                'waiting_for_lab': '#64748b', 'waiting_for_pharmacy': '#475569', 'waiting_for_payment': '#d97706',
+                'completed': '#059669', 'cancelled': '#dc2626'
+            };
+            var statusLabels = @json(array_keys($visitStatusCounts));
+            new Chart(statusCanvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: statusLabels.map(function (s) { return s.replace(/_/g, ' '); }),
+                    datasets: [{
+                        data: @json(array_values($visitStatusCounts)),
+                        backgroundColor: statusLabels.map(function (s) { return statusColorMap[s] || '#9ca3af'; }),
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: 'rgba(17, 24, 39, 0.9)', padding: 10, cornerRadius: 8 }
+                    }
+                }
+            });
+        }
+    })();
+</script>
+@endpush
