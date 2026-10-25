@@ -23,14 +23,16 @@ class UserController extends Controller
             'total' => User::count(),
             'active' => User::where('is_active', true)->count(),
             'inactive' => User::where('is_active', false)->count(),
-            'doctors' => User::role('doctor')->count(),
-            'reception' => User::role('reception')->count(),
-            'lab' => User::role('lab')->count(),
-            'pharmacy' => User::role('pharmacy')->count(),
-            'ultrasound' => User::role('ultrasound')->count(),
-            'manager' => User::role('manager')->count(),
-            'admin' => User::role('admin')->count(),
         ];
+
+        $roleStatKeys = [
+            'doctor' => 'doctors', 'reception' => 'reception', 'lab' => 'lab',
+            'pharmacy' => 'pharmacy', 'ultrasound' => 'ultrasound',
+            'manager' => 'manager', 'admin' => 'admin',
+        ];
+        foreach ($roleStatKeys as $role => $key) {
+            $stats[$key] = $roles->contains($role) ? User::role($role)->count() : 0;
+        }
 
         if (request()->wantsJson()) {
             return response()->json(['roles' => $roles]);
