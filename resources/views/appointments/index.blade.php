@@ -245,6 +245,90 @@
     </div>
 </div>
 
+{{-- Appointment form template (cloned into slide-over) --}}
+<div id="appointmentFormTemplate" class="hidden">
+    <form id="appointmentForm" method="POST" class="space-y-4">
+        @csrf
+        <input type="hidden" id="appt_method" name="_method" value="POST">
+        <div>
+            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-2">Patient</p>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Patient <span class="text-red-500">*</span></label>
+                    <x-ui.select id="appt_patient_id" name="patient_id" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+                        <option value="">Select patient</option>
+                    </x-ui.select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Doctor</label>
+                    <x-ui.select id="appt_doctor_id" name="doctor_id" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+                        <option value="">Select doctor</option>
+                    </x-ui.select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-2">Schedule</p>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Date <span class="text-red-500">*</span></label>
+                    <x-ui.input id="appt_date" type="date" name="appointment_date" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Time <span class="text-red-500">*</span></label>
+                    <x-ui.input id="appt_time" type="time" name="start_time" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Type <span class="text-red-500">*</span></label>
+                    <x-ui.select id="appt_type" name="type" required class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+                        <option value="general">General</option>
+                        <option value="followup">Follow-up</option>
+                        <option value="emergency">Emergency</option>
+                    </x-ui.select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Status</label>
+                    <x-ui.select id="appt_status" name="status" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+                        <option value="scheduled">Scheduled</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="no_show">No show</option>
+                    </x-ui.select>
+                </div>
+            </div>
+            <div class="mt-3">
+                <label class="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+                <textarea id="appt_notes" name="notes" rows="2" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300 focus:outline-none" placeholder="Optional notes..."></textarea>
+            </div>
+        </div>
+        <div>
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="appt_collect_payment" name="collect_payment" value="1" class="rounded border-gray-300 text-slate-600 focus:ring-slate-300">
+                <span class="text-xs font-medium text-gray-700">Collect payment now</span>
+            </label>
+            <div id="appt_payment_fields" class="grid-cols-2 gap-3 mt-3" style="display:none">
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Amount (TSh)</label>
+                    <x-ui.input type="number" name="payment_amount" min="0" step="0.01" placeholder="0" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-600 mb-1">Method</label>
+                    <x-ui.select name="payment_method" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300">
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                        <option value="mobile_money">Mobile Money</option>
+                        <option value="insurance">Insurance</option>
+                    </x-ui.select>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
+            <button type="button" onclick="closeAppointmentSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
+            <button type="submit" id="appt_submit_btn" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Appointment</button>
+        </div>
+    </form>
+</div>
 
 @endsection
 
