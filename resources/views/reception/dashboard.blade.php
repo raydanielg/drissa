@@ -900,10 +900,18 @@
 
     // AJAX form submissions
     function submitFormAjax(form, modalCloseFn) {
+        if (!form) return;
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const btn = form.querySelector('.btn-submit');
+            const btn = form.querySelector('.btn-submit') || form.querySelector('button[type="submit"]');
             const originalHTML = btn ? btn.innerHTML : '';
+            const restoreBtn = () => {
+                if (!btn) return;
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            };
+            const showError = (msg) => Swal.fire({ icon: 'error', title: 'Error', text: msg });
             if (btn) {
                 btn.disabled = true;
                 btn.innerHTML = '<i class="hgi-stroke hgi-refresh text-sm animate-spin inline"></i> Saving...';
@@ -915,29 +923,29 @@
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
             })
-            .then(r => r.json().then(data => ({ ok: r.ok, data })))
-            .then(({ ok, data }) => {
-                if (ok) {
-                    Swal.fire({ icon: 'success', title: 'Success', text: data.message || 'Saved successfully', timer: 1500, showConfirmButton: false });
-                    form.reset();
-                    if (modalCloseFn) modalCloseFn();
-                    refreshStats();
-                } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Something went wrong.' });
+            .then(async r => {
+                if (r.redirected) {
+                    showError('Your session expired or you do not have access to this action. Reloading...');
+                    setTimeout(() => window.location.href = r.url, 1500);
+                    return;
                 }
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalHTML;
-                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                const ct = r.headers.get('content-type') || '';
+                const data = ct.includes('json') ? await r.json().catch(() => null) : null;
+                if (!r.ok) {
+                    const errs = data?.errors ? Object.values(data.errors).flat().join(' ') : null;
+                    showError(errs || data?.message || ('Request failed (HTTP ' + r.status + '). Please try again.'));
+                    restoreBtn();
+                    return;
                 }
+                Swal.fire({ icon: 'success', title: 'Success', text: data?.message || 'Saved successfully', timer: 1500, showConfirmButton: false });
+                form.reset();
+                if (modalCloseFn) modalCloseFn();
+                refreshStats();
+                restoreBtn();
             })
             .catch(() => {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.' });
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = originalHTML;
-                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
-                }
+                showError('Network error — could not reach the server. Please check your connection and try again.');
+                restoreBtn();
             });
         });
     }

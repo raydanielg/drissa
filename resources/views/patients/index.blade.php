@@ -253,25 +253,41 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             var formData = new FormData(form);
+            var btn = form.querySelector('button[type="submit"]');
+            var originalHTML = btn ? btn.innerHTML : '';
+            if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+            var restoreBtn = function () { if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; } };
             fetch(action, {
                 method: 'POST',
                 body: formData,
                 headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
             })
-            .then(function (r) { return r.json().catch(function () { return {}; }); })
-            .then(function (data) {
-                if (data && data.success === false) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Could not save patient.' });
-                    return;
+            .then(function (r) {
+                if (r.redirected) {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Your session expired or you do not have access. Reloading...' });
+                    setTimeout(function () { window.location.href = r.url; }, 1500);
+                    restoreBtn();
+                    return null;
                 }
-                if (window.toast) window.toast(data.message || successMessage, 'success');
-                else Swal.fire({ icon: 'success', title: 'Success', text: data.message || successMessage, timer: 2000, showConfirmButton: false });
-                form.reset();
-                closePatientSlideOver();
-                setTimeout(function () { location.reload(); }, reload === false ? 800 : 1200);
+                var ct = r.headers.get('content-type') || '';
+                var parse = ct.indexOf('json') !== -1 ? r.json().catch(function () { return null; }) : Promise.resolve(null);
+                return parse.then(function (data) {
+                    if (!r.ok || (data && data.success === false)) {
+                        var errs = data && data.errors ? Object.values(data.errors).flat().join(' ') : null;
+                        Swal.fire({ icon: 'error', title: 'Error', text: errs || (data && data.message) || ('Request failed (HTTP ' + r.status + '). Please try again.') });
+                        restoreBtn();
+                        return;
+                    }
+                    if (window.toast) window.toast((data && data.message) || successMessage, 'success');
+                    else Swal.fire({ icon: 'success', title: 'Success', text: (data && data.message) || successMessage, timer: 2000, showConfirmButton: false });
+                    form.reset();
+                    closePatientSlideOver();
+                    setTimeout(function () { location.reload(); }, reload === false ? 800 : 1200);
+                });
             })
             .catch(function () {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Network error — could not reach the server. Please try again.' });
+                restoreBtn();
             });
         });
     }

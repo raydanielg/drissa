@@ -126,8 +126,17 @@
                         headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json', 'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value },
                         credentials: 'same-origin'
                     });
-                    const data = await response.json().catch(() => null);
-                    if (!response.ok) throw new Error(data?.message || 'Something went wrong');
+                    if (response.redirected) {
+                        window.AppToast.fire({ icon: 'warning', title: 'Session expired or access denied. Reloading...' });
+                        setTimeout(() => window.location.href = response.url, 1500);
+                        return;
+                    }
+                    const ct = response.headers.get('content-type') || '';
+                    const data = ct.includes('json') ? await response.json().catch(() => null) : null;
+                    if (!response.ok) {
+                        const errs = data?.errors ? Object.values(data.errors).flat().join(' ') : null;
+                        throw new Error(errs || data?.message || 'Request failed (HTTP ' + response.status + ')');
+                    }
                     window.AppToast.fire({ icon: 'success', title: data?.message || successMessage });
                     if (onSuccess) onSuccess();
                     form.reset();
@@ -170,11 +179,17 @@
                         credentials: 'same-origin'
                     });
                     if (response.redirected) { window.location.href = response.url; return; }
-                    const data = await response.json().catch(() => null);
+                    const ct = response.headers.get('content-type') || '';
+                    const data = ct.includes('json') ? await response.json().catch(() => null) : null;
+                    if (!response.ok) {
+                        const errs = data?.errors ? Object.values(data.errors).flat().join(' ') : null;
+                        Swal.fire({ icon: 'error', title: errs || data?.message || ('Request failed (HTTP ' + response.status + ')') });
+                        return;
+                    }
                     Swal.fire({ icon: 'success', title: data?.message || 'Done', timer: 2000, showConfirmButton: false });
                     if (!data?.redirect) setTimeout(() => window.location.reload(), 1000);
                 } catch (err) {
-                    Swal.fire({ icon: 'error', title: 'Something went wrong' });
+                    Swal.fire({ icon: 'error', title: 'Network error — could not reach the server.' });
                 } finally {
                     if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.original || 'Submit'; }
                 }

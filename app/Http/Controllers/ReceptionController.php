@@ -213,7 +213,7 @@ class ReceptionController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'name' => 'nullable|string|max:255',
-            'date_of_birth' => 'required|date',
+            'date_of_birth' => 'required|date|before_or_equal:today',
             'gender' => 'required|in:male,female,other',
             'phone' => 'nullable|string|max:50',
             'national_id' => 'nullable|string|max:50',
@@ -236,12 +236,20 @@ class ReceptionController extends Controller
                 : back()->withErrors(['name' => 'First and last name are required.'])->withInput();
         }
 
-        $latestId = Patient::withTrashed()->max('id') ?? 0;
-        $data['mrn'] = 'MRN-' . now()->format('Y') . '-' . str_pad($latestId + 1, 5, '0', STR_PAD_LEFT);
+        try {
+            $latestId = Patient::withTrashed()->max('id') ?? 0;
+            $data['mrn'] = 'MRN-' . now()->format('Y') . '-' . str_pad($latestId + 1, 5, '0', STR_PAD_LEFT);
 
-        $patient = Patient::create($data);
+            $patient = Patient::create($data);
 
-        ActivityLog::log('patient_registered', $patient, "Registered patient {$patient->fullName()}");
+            ActivityLog::log('patient_registered', $patient, "Registered patient {$patient->fullName()}");
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $request->wantsJson()
+                ? response()->json(['success' => false, 'message' => 'Failed to register patient. ' . $e->getMessage()], 500)
+                : back()->with('error', 'Failed to register patient.')->withInput();
+        }
 
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => "Patient {$patient->fullName()} registered.", 'patient' => $patient]);
