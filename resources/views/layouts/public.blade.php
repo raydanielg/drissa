@@ -282,11 +282,33 @@
         var el = e.target;
         if (!(el instanceof HTMLElement) || el._flatpickr || el.classList.contains('flatpickr-input')) return;
         var cfg = null;
-        if (el.matches('input[data-fp-date]')) cfg = { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd M Y', allowInput: true };
+        if (el.matches('input[data-fp-date]')) cfg = { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd M Y', allowInput: true, onChange: function(s, d, i) { if (i.altInput) i.altInput._fpTyped = ''; } };
         else if (el.matches('input[data-fp-datetime]')) cfg = { enableTime: true, time_24hr: true, dateFormat: 'Y-m-d\\TH:i', altInput: true, altFormat: 'd M Y h:i K', allowInput: true };
         else if (el.matches('input[data-fp-time]')) cfg = { enableTime: true, noCalendar: true, dateFormat: 'H:i', altInput: true, altFormat: 'h:i K', allowInput: true };
         if (cfg) flatpickr(el, cfg);
     }, true);
+
+    // Smart entry: a bare number in a date field means birth year ("1980") or,
+    // in date_of_birth, age ("45" -> born 1981). flatpickr otherwise mangles
+    // bare digits to the current year.
+    document.addEventListener('input', function(e) {
+        if (e.target instanceof HTMLInputElement) e.target._fpTyped = e.target.value;
+    }, true);
+    document.addEventListener('focusout', function(e) {
+        var alt = e.target;
+        if (!(alt instanceof HTMLInputElement)) return;
+        var orig = alt.previousElementSibling;
+        var fp = orig && orig._flatpickr;
+        if (!fp || fp.altInput !== alt || !orig.matches('input[data-fp-date]')) return;
+        var v = (alt._fpTyped || '').trim();
+        if (!/^\d{1,4}$/.test(v)) return;
+        var n = parseInt(v, 10), now = new Date().getFullYear(), year;
+        if (v.length === 4 && n >= 1900 && n <= now) year = n;
+        else if (orig.name === 'date_of_birth' && n <= 120) year = now - n;
+        else return;
+        fp.setDate(year + '-01-01', true);
+        alt._fpTyped = '';
+    });
     </script>
 
     <script>
