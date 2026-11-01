@@ -114,11 +114,28 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+    var fpMonths = { jan:1, feb:2, mar:3, apr:4, may:5, jun:6, jul:7, aug:8, sep:9, oct:10, nov:11, dec:12, mac:3, mei:5, ago:8, okt:10, des:12 };
+    // Parse typed dates flatpickr misses (e.g. "15/06/1980", "15-6-80",
+    // "15 Juni 1980") before its default parser, which drops the year.
+    function fpParseTyped(str, fmt) {
+        var s = (str || '').trim(), m, y, mo, d;
+        if ((m = s.match(/^(\d{1,2})[\s.\/-](\d{1,2})[\s.\/-](\d{2,4})$/))) {
+            d = +m[1]; mo = +m[2]; y = +m[3];
+        } else if ((m = s.match(/^(\d{4})[\s.\/-](\d{1,2})[\s.\/-](\d{1,2})$/))) {
+            y = +m[1]; mo = +m[2]; d = +m[3];
+        } else if ((m = s.match(/^(\d{1,2})[\s.\/-]?([a-zA-Z]+)[\s.\/-]?(\d{2,4})$/))) {
+            d = +m[1]; mo = fpMonths[m[2].slice(0, 3).toLowerCase()] || 0; y = +m[3];
+        } else {
+            return flatpickr.parseDate(str, fmt);
+        }
+        if (y < 100) y += y > 50 ? 1900 : 2000;
+        return (mo >= 1 && mo <= 12 && d >= 1 && d <= 31) ? new Date(y, mo - 1, d) : flatpickr.parseDate(str, fmt);
+    }
     document.addEventListener('focusin', function(e) {
         var el = e.target;
         if (!(el instanceof HTMLElement) || el._flatpickr || el.classList.contains('flatpickr-input')) return;
         var cfg = null;
-        if (el.matches('input[data-fp-date]')) cfg = { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd M Y', allowInput: true, onChange: function(s, d, i) { if (i.altInput) i.altInput._fpTyped = ''; } };
+        if (el.matches('input[data-fp-date]')) cfg = { dateFormat: 'Y-m-d', altInput: true, altFormat: 'd M Y', allowInput: true, parseDate: fpParseTyped, onChange: function(s, d, i) { if (i.altInput) i.altInput._fpTyped = ''; } };
         else if (el.matches('input[data-fp-datetime]')) cfg = { enableTime: true, time_24hr: true, dateFormat: 'Y-m-d\\TH:i', altInput: true, altFormat: 'd M Y h:i K', allowInput: true };
         else if (el.matches('input[data-fp-time]')) cfg = { enableTime: true, noCalendar: true, dateFormat: 'H:i', altInput: true, altFormat: 'h:i K', allowInput: true };
         if (cfg) flatpickr(el, cfg);
