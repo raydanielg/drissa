@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\User;
+use App\Services\DocumentNumberGenerator;
 use App\Services\SmsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -105,7 +106,7 @@ class AppointmentController extends Controller
                 $paymentMethod = $request->payment_method ?? 'cash';
 
                 $invoice = Invoice::create([
-                    'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::max('id') + 1, 6, '0', STR_PAD_LEFT),
+                    'invoice_number' => DocumentNumberGenerator::next(Invoice::class, 'invoice_number', 'INV'),
                     'visit_id' => null,
                     'patient_id' => $appointment->patient_id,
                     'total' => $consultationFee,

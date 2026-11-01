@@ -12,6 +12,7 @@ use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Visit;
+use App\Services\DocumentNumberGenerator;
 use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -237,8 +238,7 @@ class ReceptionController extends Controller
         }
 
         try {
-            $latestId = Patient::withTrashed()->max('id') ?? 0;
-            $data['mrn'] = 'MRN-' . now()->format('Y') . '-' . str_pad($latestId + 1, 5, '0', STR_PAD_LEFT);
+            $data['mrn'] = DocumentNumberGenerator::next(Patient::class, 'mrn', 'MRN', 5);
 
             $patient = Patient::create($data);
 
@@ -269,36 +269,41 @@ class ReceptionController extends Controller
             'consultation_fee' => 'nullable|numeric|min:0',
         ]);
 
-        $visit = Visit::create([
-            'visit_number' => 'VIS-' . now()->format('Y') . '-' . str_pad(Visit::count() + 1, 6, '0', STR_PAD_LEFT),
-            'patient_id' => $data['patient_id'],
-            'doctor_id' => $data['doctor_id'] ?? null,
-            'received_by' => auth()->id(),
-            'status' => VisitStatus::Registered->value,
-            'chief_complaint' => $data['chief_complaint'] ?? null,
-            'type' => $data['type'],
-            'registered_at' => now(),
-        ]);
-
         // Auto-create invoice with consultation fee (use provided value or default from settings)
         $consultationFee = $request->filled('consultation_fee')
             ? (float) $data['consultation_fee']
             : (float) Setting::get('consultation_fee', 10000);
-        $invoice = Invoice::create([
-            'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
-            'visit_id' => $visit->id,
-            'patient_id' => $visit->patient_id,
-            'total' => $consultationFee,
-            'paid' => 0,
-            'status' => 'unpaid',
-        ]);
 
-        $invoice->items()->create([
-            'description' => 'Consultation Fee',
-            'quantity' => 1,
-            'unit_price' => $consultationFee,
-            'line_total' => $consultationFee,
-        ]);
+        [$visit, $invoice] = DB::transaction(function () use ($data, $consultationFee) {
+            $visit = Visit::create([
+                'visit_number' => DocumentNumberGenerator::next(Visit::class, 'visit_number', 'VIS'),
+                'patient_id' => $data['patient_id'],
+                'doctor_id' => $data['doctor_id'] ?? null,
+                'received_by' => auth()->id(),
+                'status' => VisitStatus::Registered->value,
+                'chief_complaint' => $data['chief_complaint'] ?? null,
+                'type' => $data['type'],
+                'registered_at' => now(),
+            ]);
+
+            $invoice = Invoice::create([
+                'invoice_number' => DocumentNumberGenerator::next(Invoice::class, 'invoice_number', 'INV'),
+                'visit_id' => $visit->id,
+                'patient_id' => $visit->patient_id,
+                'total' => $consultationFee,
+                'paid' => 0,
+                'status' => 'unpaid',
+            ]);
+
+            $invoice->items()->create([
+                'description' => 'Consultation Fee',
+                'quantity' => 1,
+                'unit_price' => $consultationFee,
+                'line_total' => $consultationFee,
+            ]);
+
+            return [$visit, $invoice];
+        });
 
         ActivityLog::log('visit_created', $visit, "Created visit {$visit->visit_number} with consultation fee TSh {$consultationFee}");
 
@@ -379,7 +384,7 @@ class ReceptionController extends Controller
                     ? (float) $data['consultation_fee']
                     : (float) Setting::get('consultation_fee', 10000);
                 $invoice = Invoice::create([
-                    'invoice_number' => 'INV-' . now()->format('Y') . '-' . str_pad(Invoice::count() + 1, 6, '0', STR_PAD_LEFT),
+                    'invoice_number' => DocumentNumberGenerator::next(Invoice::class, 'invoice_number', 'INV'),
                     'visit_id' => $visit->id,
                     'patient_id' => $visit->patient_id,
                     'total' => $total,
