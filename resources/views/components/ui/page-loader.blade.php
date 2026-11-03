@@ -3,7 +3,7 @@
     <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Uzazi Clinic') }}"
          style="width:64px;height:64px;border-radius:14px;object-fit:cover;box-shadow:0 4px 16px rgba(15,23,42,.12);animation:pageLoaderPop .5s cubic-bezier(.16,1,.3,1) both;">
     <div style="margin-top:20px;height:3px;width:120px;border-radius:9999px;background:#f1f5f9;overflow:hidden;">
-        <div style="height:100%;width:38%;border-radius:9999px;background:#1e293b;animation:pageLoaderBar 1.1s cubic-bezier(.45,0,.55,1) infinite;"></div>
+        <div style="height:100%;width:38%;border-radius:9999px;background:#15803d;animation:pageLoaderBar 1.1s cubic-bezier(.45,0,.55,1) infinite;"></div>
     </div>
 </div>
 <style>

@@ -6,17 +6,17 @@
 ])
 
 @php
-$base = "group/button inline-flex shrink-0 items-center justify-center rounded border border-transparent text-sm font-medium whitespace-nowrap transition-colors outline-none select-none focus-visible:ring-2 focus-visible:ring-slate-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
+$base = "group/button inline-flex shrink-0 items-center justify-center rounded border border-transparent text-sm font-medium whitespace-nowrap transition-colors outline-none select-none focus-visible:ring-2 focus-visible:ring-emerald-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 $variants = [
-    'default' => 'bg-slate-800 text-white hover:bg-slate-700',
-    'outline' => 'border-gray-200 bg-white text-gray-700 hover:bg-gray-100',
-    'secondary' => 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-    'ghost' => 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+    'default' => 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm',
+    'outline' => 'border-emerald-600 bg-white text-emerald-700 hover:bg-emerald-50',
+    'secondary' => 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100',
+    'ghost' => 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700',
     'destructive' => 'bg-red-50 text-red-600 hover:bg-red-100',
-    'link' => 'text-slate-700 underline-offset-4 hover:underline',
-    'emerald' => 'bg-slate-800 text-white hover:bg-slate-700',
-    'gold' => 'bg-amber-500 text-white hover:bg-amber-600',
+    'link' => 'text-emerald-700 underline-offset-4 hover:underline',
+    'emerald' => 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm',
+    'gold' => 'bg-amber-500 text-white hover:bg-amber-600 shadow-sm',
 ];
 
 $sizes = [

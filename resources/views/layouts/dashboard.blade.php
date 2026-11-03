@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         .flatpickr-calendar { font-family: inherit; font-size: 12px; border: 1px solid #e5e7eb; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.08); }
-        .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus { background: #1e293b; border-color: #1e293b; }
-        .flatpickr-day.today { border-color: #94a3b8; }
+        .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus { background: #15803d; border-color: #15803d; }
+        .flatpickr-day.today { border-color: #22a447; }
         .flatpickr-day:hover { background: #f1f5f9; border-color: #f1f5f9; }
-        .flatpickr-months .flatpickr-month { color: #1e293b; }
+        .flatpickr-months .flatpickr-month { color: #15803d; }
         .flatpickr-current-month { font-size: 95%; }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -159,7 +159,7 @@
                         text: confirmMessage,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#0f172a',
+                        confirmButtonColor: '#15803d',
                         cancelButtonColor: '#6b7280',
                         confirmButtonText: 'Yes, proceed'
                     });
@@ -290,21 +290,23 @@
         .swal2-popup.swal2-toast .swal2-close:hover { color: #4b5563 !important; }
         .swal2-popup.swal2-toast .swal2-timer-progress-bar { height: 2px !important; background: #cbd5e1 !important; }
         .sidebar-link { transition: all 0.2s ease; position: relative; }
-        .sidebar-link:hover { background: rgba(255,255,255,0.06); }
-        .sidebar-link.active { background: rgba(51,65,85,0.9); color: #fff; }
+        .sidebar-link:hover { background: rgba(255,255,255,0.12); }
+        .sidebar-link.active { background: rgba(255,255,255,0.16); color: #fff; box-shadow: inset 3px 0 0 #f59e0b; }
         .sidebar-link.active svg { color: #fff; }
         .sidebar-submenu { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease; transform-origin: top; }
         .sidebar-submenu.open { max-height: 600px; opacity: 1; }
         .submenu-item { position: relative; transition: all 0.2s ease; }
         .submenu-item:hover { background: rgba(255,255,255,0.05); padding-left: 1rem; }
-        .submenu-item.active { color: #fff !important; font-weight: 600; background: rgba(51,65,85,0.5); }
+        .submenu-item.active { color: #fff !important; font-weight: 600; background: rgba(255,255,255,0.14); }
         .arrow-icon { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
         .arrow-icon.rotate-180 { transform: rotate(180deg); }
-        .group-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.35); padding: 0.5rem 0.75rem; margin-top: 0.5rem; }
+        .group-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(253,230,138,0.60); padding: 0.5rem 0.75rem; margin-top: 0.5rem; }
         ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-track { background: #0a3a20; }
+        ::-webkit-scrollbar-thumb { background: #166534; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #15803d; }
+        .brand-sidebar { background: linear-gradient(165deg, #0a3a20 0%, #14532d 55%, #166534 100%); }
+        .brand-sidebar .sidebar-link { border-radius: 8px; }
     </style>
     @stack('styles')
 </head>
@@ -314,8 +316,8 @@
 
     <div id="mobileOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
-    <aside id="dashboardSidebar" class="fixed top-0 left-0 z-50 w-64 h-screen bg-slate-900 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
-        <div class="h-16 flex items-center px-6 border-b border-slate-700/50 flex-shrink-0">
+    <aside id="dashboardSidebar" class="fixed top-0 left-0 z-50 w-64 h-screen brand-sidebar transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-white/10 flex-shrink-0">
             <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="w-8 h-8 rounded-lg object-cover">
             <span class="ml-2 text-white font-bold text-sm tracking-wide uppercase">{{ config('app.name', 'Laravel') }}</span>
         </div>
@@ -324,8 +326,8 @@
 
             <div class="sidebar-group">
                 @if(auth()->user()->isAdmin())
-                <a href="{{ route('dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-layout-2-column text-xl text-slate-400"></i>
+                <a href="{{ route('dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-layout-2-column text-xl text-emerald-200/75"></i>
                     <span>Admin Dashboard</span>
                 </a>
                 @endif
@@ -333,32 +335,32 @@
 
             @if(auth()->user()->isReception())
             <div class="sidebar-group">
-                <a href="{{ route('reception.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('reception.dashboard') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-layout-2-column text-xl text-slate-400"></i>
+                <a href="{{ route('reception.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('reception.dashboard') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-layout-2-column text-xl text-emerald-200/75"></i>
                     <span>Reception Dashboard</span>
                 </a>
-                <a href="{{ route('reception.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('reception.queue') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-file-01 text-xl text-slate-400"></i>
+                <a href="{{ route('reception.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('reception.queue') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-file-01 text-xl text-emerald-200/75"></i>
                     <span>Reception Queue</span>
                 </a>
-                <a href="{{ route('reception.payments') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('reception.payments') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-message-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('reception.payments') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('reception.payments') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-message-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>Payments</span>
                 </a>
-                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('patients.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('patients.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>Patients</span>
                 </a>
-                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-calendar-03 text-xl text-slate-400"></i>
+                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-calendar-03 text-xl text-emerald-200/75"></i>
                     <span>Appointments</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -366,24 +368,24 @@
 
             @if(auth()->user()->isAdmin())
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-reception')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('reception.*','patients.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-reception')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('reception.*','patients.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                         <span>Reception</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('reception.*','patients.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-reception" class="sidebar-submenu {{ request()->routeIs('reception.*','patients.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('reception.dashboard') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reception.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('reception.dashboard') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reception.dashboard') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-file-01 text-xs"></i> Reception Dashboard</span>
                     </a>
-                    <a href="{{ route('patients.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('patients.*') ? 'active' : '' }}">
+                    <a href="{{ route('patients.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('patients.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-user-multiple-02 text-xs"></i> Patients</span>
                     </a>
-                    <a href="{{ route('appointments.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
+                    <a href="{{ route('appointments.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-calendar-03 text-xs"></i> Appointments</span>
                     </a>
-                    <a href="{{ route('reception.payments') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reception.payments') ? 'active' : '' }}">
+                    <a href="{{ route('reception.payments') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reception.payments') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-message-multiple-02 text-xs"></i> Payments</span>
                     </a>
                 </div>
@@ -393,15 +395,15 @@
             @if(auth()->user()->isDoctor())
             <div class="sidebar-group">
                 <div class="px-3 py-2 mb-2">
-                    <span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Doctor Workspace</span>
+                    <span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Doctor Workspace</span>
                 </div>
-                <a href="{{ route('doctor.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.dashboard') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-home-01 text-xl text-slate-400"></i>
+                <a href="{{ route('doctor.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.dashboard') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-home-01 text-xl text-emerald-200/75"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('doctor.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.queue') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
+                <a href="{{ route('doctor.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.queue') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
                     <div class="relative">
-                        <i class="hgi-stroke hgi-building-03 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-building-03 text-xl text-emerald-200/75"></i>
                         <span class="absolute -top-1 -right-1 flex h-2 w-2">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
@@ -409,9 +411,9 @@
                     </div>
                     <span>My Queue</span>
                 </a>
-                <a href="{{ route('doctor.lab-results') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.lab-results') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
+                <a href="{{ route('doctor.lab-results') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.lab-results') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
                     <div class="relative">
-                        <i class="hgi-stroke hgi-test-tube-01 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-test-tube-01 text-xl text-emerald-200/75"></i>
                         <span class="absolute -top-1 -right-1 flex h-2 w-2">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
@@ -419,35 +421,35 @@
                     </div>
                     <span>Results</span>
                 </a>
-                <a href="{{ route('doctor.patients') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.patients') or request()->routeIs('doctor.patients.history') or request()->routeIs('patients.history') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-clipboard text-xl text-slate-400"></i>
+                <a href="{{ route('doctor.patients') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.patients') or request()->routeIs('doctor.patients.history') or request()->routeIs('patients.history') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-clipboard text-xl text-emerald-200/75"></i>
                     <span>Patient History</span>
                 </a>
-                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-calendar-03 text-xl text-slate-400"></i>
+                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-calendar-03 text-xl text-emerald-200/75"></i>
                     <span>Appointments</span>
                 </a>
-                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('patients.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('patients.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>My Patients</span>
                 </a>
-                <a href="{{ route('doctor.schedule') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.schedule') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-clock-01 text-xl text-slate-400"></i>
+                <a href="{{ route('doctor.schedule') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.schedule') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-clock-01 text-xl text-emerald-200/75"></i>
                     <span>Schedule</span>
                 </a>
-                <a href="{{ route('doctor.reports') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('doctor.reports') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-analytics-01 text-xl text-slate-400"></i>
+                <a href="{{ route('doctor.reports') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('doctor.reports') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-analytics-01 text-xl text-emerald-200/75"></i>
                     <span>Reports</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all mb-1">
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all mb-1">
                     <div class="relative">
-                        <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                         <span id="doctorChatUnreadBadge" class="hidden absolute -top-1 -right-1 bg-amber-500 text-white text-[8px] font-bold w-3.5 h-3.5 flex items-center justify-center rounded-full">0</span>
                     </div>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'bg-slate-700 text-white' : 'hover:bg-slate-800' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'bg-white/15 text-white' : 'hover:bg-white/10' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -455,29 +457,29 @@
 
             @if(auth()->user()->isLab())
             <div class="sidebar-group">
-                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Laboratory Workspace</span></div>
-                <a href="{{ route('lab.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('lab.queue') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-archive text-xl text-slate-400"></i>
+                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Laboratory Workspace</span></div>
+                <a href="{{ route('lab.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('lab.queue') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-archive text-xl text-emerald-200/75"></i>
                     <span>Lab Queue</span>
                 </a>
-                <a href="{{ route('lab.history') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('lab.history', 'lab.patient-history') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-clock-01 text-xl text-slate-400"></i>
+                <a href="{{ route('lab.history') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('lab.history', 'lab.patient-history') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-clock-01 text-xl text-emerald-200/75"></i>
                     <span>Lab History</span>
                 </a>
-                <a href="{{ route('lab-tests.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('lab-tests.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-file-01 text-xl text-slate-400"></i>
+                <a href="{{ route('lab-tests.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('lab-tests.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-file-01 text-xl text-emerald-200/75"></i>
                     <span>Lab Tests</span>
                 </a>
-                <a href="{{ route('lab-equipment.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('lab-equipment.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-test-tube-01 text-xl text-slate-400"></i>
+                <a href="{{ route('lab-equipment.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('lab-equipment.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-test-tube-01 text-xl text-emerald-200/75"></i>
                     <span>Equipment</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -485,17 +487,17 @@
 
             @if(auth()->user()->isLab() || auth()->user()->isUltrasound() || auth()->user()->isAdmin())
             <div class="sidebar-group">
-                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Ultrasound Workspace</span></div>
-                <a href="{{ route('ultrasound.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('ultrasound.dashboard') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-home-01 text-xl text-slate-400"></i>
+                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Ultrasound Workspace</span></div>
+                <a href="{{ route('ultrasound.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('ultrasound.dashboard') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-home-01 text-xl text-emerald-200/75"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('ultrasound.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('ultrasound.queue') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-analytics-02 text-xl text-slate-400"></i>
+                <a href="{{ route('ultrasound.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('ultrasound.queue') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-analytics-02 text-xl text-emerald-200/75"></i>
                     <span>Ultrasound Queue</span>
                 </a>
-                <a href="{{ route('ultrasound-services.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('ultrasound-services.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-archive text-xl text-slate-400"></i>
+                <a href="{{ route('ultrasound-services.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('ultrasound-services.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-archive text-xl text-emerald-200/75"></i>
                     <span>Ultrasound Services</span>
                 </a>
             </div>
@@ -503,33 +505,33 @@
 
             @if(auth()->user()->isPharmacy())
             <div class="sidebar-group">
-                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Pharmacy Workspace</span></div>
-                <a href="{{ route('pharmacy.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.dashboard') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-home-01 text-xl text-slate-400"></i>
+                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Pharmacy Workspace</span></div>
+                <a href="{{ route('pharmacy.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.dashboard') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-home-01 text-xl text-emerald-200/75"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('pharmacy.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.queue') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-test-tube-01 text-xl text-slate-400"></i>
+                <a href="{{ route('pharmacy.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.queue') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-test-tube-01 text-xl text-emerald-200/75"></i>
                     <span>Prescription Queue</span>
                 </a>
-                <a href="{{ route('pharmacy.inventory') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.inventory') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-package text-xl text-slate-400"></i>
+                <a href="{{ route('pharmacy.inventory') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.inventory') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-package text-xl text-emerald-200/75"></i>
                     <span>Inventory</span>
                 </a>
-                <a href="{{ route('pharmacy.history') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.history') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-clock-01 text-xl text-slate-400"></i>
+                <a href="{{ route('pharmacy.history') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.history') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-clock-01 text-xl text-emerald-200/75"></i>
                     <span>History</span>
                 </a>
-                <a href="{{ route('pharmacy.reports') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.reports') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-analytics-01 text-xl text-slate-400"></i>
+                <a href="{{ route('pharmacy.reports') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.reports') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-analytics-01 text-xl text-emerald-200/75"></i>
                     <span>Reports</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -537,25 +539,25 @@
 
             @if(auth()->user()->isNurse())
             <div class="sidebar-group">
-                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Nurse Workspace</span></div>
-                <a href="{{ route('nurse.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('nurse.dashboard') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-home-01 text-xl text-slate-400"></i>
+                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Nurse Workspace</span></div>
+                <a href="{{ route('nurse.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('nurse.dashboard') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-home-01 text-xl text-emerald-200/75"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('nurse.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('nurse.queue') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-archive text-xl text-slate-400"></i>
+                <a href="{{ route('nurse.queue') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('nurse.queue') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-archive text-xl text-emerald-200/75"></i>
                     <span>Vitals Queue</span>
                 </a>
-                <a href="{{ route('nurse.patients') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('nurse.patients') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('nurse.patients') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('nurse.patients') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>Patients</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -563,33 +565,33 @@
 
             @if(auth()->user()->isManager())
             <div class="sidebar-group">
-                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Clinic Manager</span></div>
-                <a href="{{ route('manager.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('manager.dashboard') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-home-01 text-xl text-slate-400"></i>
+                <div class="px-3 py-2 mb-2"><span class="text-[10px] uppercase tracking-wider text-emerald-200/50 font-bold">Clinic Manager</span></div>
+                <a href="{{ route('manager.dashboard') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('manager.dashboard') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-home-01 text-xl text-emerald-200/75"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') !== 'weekly' ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-clock-01 text-xl text-slate-400"></i>
+                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') !== 'weekly' ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-clock-01 text-xl text-emerald-200/75"></i>
                     <span>Daily Report</span>
                 </a>
-                <a href="{{ route('manager.reports.create', ['type' => 'weekly']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') === 'weekly' ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-calendar-03 text-xl text-slate-400"></i>
+                <a href="{{ route('manager.reports.create', ['type' => 'weekly']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') === 'weekly' ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-calendar-03 text-xl text-emerald-200/75"></i>
                     <span>Weekly Report</span>
                 </a>
-                <a href="{{ route('manager.reports.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('manager.reports.index','manager.reports.show','manager.reports.edit') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-file-02 text-xl text-slate-400"></i>
+                <a href="{{ route('manager.reports.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('manager.reports.index','manager.reports.show','manager.reports.edit') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-file-02 text-xl text-emerald-200/75"></i>
                     <span>My Reports</span>
                 </a>
-                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('patients.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('patients.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('patients.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>Patients</span>
                 </a>
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
-                    <i class="hgi-stroke hgi-bubble-chat text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-bubble-chat text-xl text-emerald-200/75"></i>
                     <span>Chats</span>
                 </a>
-                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
-                    <i class="hgi-stroke hgi-user text-xl text-slate-400"></i>
+                <a href="{{ route('profile') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-emerald-50/90 text-sm font-medium {{ request()->routeIs('profile') ? 'active' : '' }} transition-all">
+                    <i class="hgi-stroke hgi-user text-xl text-emerald-200/75"></i>
                     <span>My Profile</span>
                 </a>
             </div>
@@ -597,228 +599,228 @@
 
             @if(auth()->user()->isAdmin())
             <div class="sidebar-group">
-                <a href="{{ route('analytics.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('analytics.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-analytics-02 text-xl text-slate-400"></i>
+                <a href="{{ route('analytics.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('analytics.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-analytics-02 text-xl text-emerald-200/75"></i>
                     <span>Analytics</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('clinical-records.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('clinical-records.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-file-02 text-xl text-slate-400"></i>
+                <a href="{{ route('clinical-records.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('clinical-records.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-file-02 text-xl text-emerald-200/75"></i>
                     <span>Clinical Records</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-lab')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-lab')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-test-tube-01 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-test-tube-01 text-xl text-emerald-200/75"></i>
                         <span>Lab Management</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-lab" class="sidebar-submenu {{ request()->routeIs('lab.*','lab-equipment.*','lab-tests.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('lab.queue') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab.queue') ? 'active' : '' }}">
+                    <a href="{{ route('lab.queue') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab.queue') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-archive text-xs"></i> Lab Queue</span>
                     </a>
-                    <a href="{{ route('lab-tests.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-tests.*') ? 'active' : '' }}">
+                    <a href="{{ route('lab-tests.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-tests.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-file-01 text-xs"></i> Test Types</span>
                     </a>
-                    <a href="{{ route('lab-equipment.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-equipment.*') ? 'active' : '' }}">
+                    <a href="{{ route('lab-equipment.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('lab-equipment.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-test-tube-01 text-xs"></i> Lab Equipment</span>
                     </a>
                 </div>
             </div>
 
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-pharmacy')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-pharmacy')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-building-03 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-building-03 text-xl text-emerald-200/75"></i>
                         <span>Pharmacy & Inventory</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-pharmacy" class="sidebar-submenu {{ request()->routeIs('pharmacy.*','products.*','categories.*','suppliers.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('pharmacy.queue') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.queue') ? 'active' : '' }}">
+                    <a href="{{ route('pharmacy.queue') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.queue') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-test-tube-01 text-xs"></i> Pharmacy Queue</span>
                     </a>
-                    <a href="{{ route('pharmacy.inventory') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.inventory') ? 'active' : '' }}">
+                    <a href="{{ route('pharmacy.inventory') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.inventory') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-test-tube-01 text-xs"></i> Medications</span>
                     </a>
-                    <a href="{{ route('pharmacy.history') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.history') ? 'active' : '' }}">
+                    <a href="{{ route('pharmacy.history') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.history') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-clock-01 text-xs"></i> Rx History</span>
                     </a>
-                    <a href="{{ route('pharmacy.reports') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.reports') ? 'active' : '' }}">
+                    <a href="{{ route('pharmacy.reports') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('pharmacy.reports') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-analytics-01 text-xs"></i> Pharmacy Reports</span>
                     </a>
-                    <a href="{{ route('products.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                    <a href="{{ route('products.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('products.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-package text-xs"></i> Inventory</span>
                     </a>
-                    <a href="{{ route('categories.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                    <a href="{{ route('categories.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('categories.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-tag-01 text-xs"></i> Categories</span>
                     </a>
-                    <a href="{{ route('suppliers.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+                    <a href="{{ route('suppliers.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-user-multiple-02 text-xs"></i> Suppliers</span>
                     </a>
                 </div>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-calendar-03 text-xl text-slate-400"></i>
+                <a href="{{ route('appointments.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('appointments.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-calendar-03 text-xl text-emerald-200/75"></i>
                     <span>Appointments</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('clinic-rooms.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('clinic-rooms.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-building-03 text-xl text-slate-400"></i>
+                <a href="{{ route('clinic-rooms.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('clinic-rooms.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-building-03 text-xl text-emerald-200/75"></i>
                     <span>Clinic Rooms</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-hr')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-hr')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-user-multiple-02 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-user-multiple-02 text-xl text-emerald-200/75"></i>
                         <span>Medical Staff / HR</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-hr" class="sidebar-submenu {{ request()->routeIs('users.*','departments.*','shifts.*','admin.doctors.*','admin.queue') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('admin.queue') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('admin.queue') ? 'active' : '' }}">
+                    <a href="{{ route('admin.queue') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('admin.queue') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-user-multiple-02 text-xs"></i> Patient Queue</span>
                     </a>
-                    <a href="{{ route('admin.doctors.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.doctors.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('admin.doctors.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-activity-01 text-xs"></i> Doctors Management</span>
                     </a>
-                    <a href="{{ route('users.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                    <a href="{{ route('users.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('users.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-user text-xs"></i> User Accounts</span>
                     </a>
-                    <a href="{{ route('departments.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('departments.*') ? 'active' : '' }}">
+                    <a href="{{ route('departments.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('departments.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-building-03 text-xs"></i> Departments</span>
                     </a>
-                    <a href="{{ route('shifts.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('shifts.*') ? 'active' : '' }}">
+                    <a href="{{ route('shifts.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('shifts.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-clock-01 text-xs"></i> Shifts</span>
                     </a>
                 </div>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('posts.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('posts.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-news-01 text-xl text-slate-400"></i>
+                <a href="{{ route('posts.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('posts.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-news-01 text-xl text-emerald-200/75"></i>
                     <span>Blog</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('invoices.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-file-01 text-xl text-slate-400"></i>
+                <a href="{{ route('invoices.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-file-01 text-xl text-emerald-200/75"></i>
                     <span>Invoices</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <button type="button" onclick="toggleMenu('menu-reports')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                <button type="button" onclick="toggleMenu('menu-reports')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('reports.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-analytics-02 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-analytics-02 text-xl text-emerald-200/75"></i>
                         <span>Reports</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('reports.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-reports" class="sidebar-submenu {{ request()->routeIs('reports.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('reports.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.index') ? 'active' : '' }}">
+                    <a href="{{ route('reports.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.index') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-layout-2-column text-xs"></i> Overview</span>
                     </a>
-                    <a href="{{ route('reports.sales') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
+                    <a href="{{ route('reports.sales') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.sales') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-money-03 text-xs"></i> Sales Report</span>
                     </a>
-                    <a href="{{ route('reports.patients') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.patients') ? 'active' : '' }}">
+                    <a href="{{ route('reports.patients') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.patients') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-user-multiple-02 text-xs"></i> Patient Report</span>
                     </a>
-                    <a href="{{ route('reports.doctors') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.doctors') ? 'active' : '' }}">
+                    <a href="{{ route('reports.doctors') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.doctors') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-activity-01 text-xs"></i> Doctor Performance</span>
                     </a>
-                    <a href="{{ route('reports.stock') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.stock') ? 'active' : '' }}">
+                    <a href="{{ route('reports.stock') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.stock') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-package text-xs"></i> Stock Report</span>
                     </a>
-                    <a href="{{ route('reports.revenue') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.revenue') ? 'active' : '' }}">
+                    <a href="{{ route('reports.revenue') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.revenue') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-analytics-02 text-xs"></i> Revenue Report</span>
                     </a>
-                    <a href="{{ route('reports.health') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.health') ? 'active' : '' }}">
+                    <a href="{{ route('reports.health') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('reports.health') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-favourite text-xs"></i> System Health</span>
                     </a>
-                    <a href="{{ route('manager.reports.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('manager.reports.*') ? 'active' : '' }}">
+                    <a href="{{ route('manager.reports.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('manager.reports.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-file-02 text-xs"></i> Manager Reports</span>
                     </a>
                 </div>
             </div>
 
             <div class="sidebar-group">
-                <button onclick="toggleMenu('menu-communications')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('notifications.*','sms.*') ? 'active' : '' }}">
+                <button onclick="toggleMenu('menu-communications')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('notifications.*','sms.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-message-01 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-message-01 text-xl text-emerald-200/75"></i>
                         <span>Communications</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('notifications.*','sms.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-communications" class="sidebar-submenu {{ request()->routeIs('notifications.*','sms.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('notifications.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.index') ? 'active' : '' }}">
+                    <a href="{{ route('notifications.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.index') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-sent text-xs"></i> Send Notification</span>
                     </a>
-                    <a href="{{ route('notifications.templates') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.templates') ? 'active' : '' }}">
+                    <a href="{{ route('notifications.templates') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('notifications.templates') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-file-02 text-xs"></i> Templates</span>
                     </a>
-                    <a href="{{ route('sms.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.index','sms.store') ? 'active' : '' }}">
+                    <a href="{{ route('sms.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.index','sms.store') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-message-01 text-xs"></i> Send SMS</span>
                     </a>
-                    <a href="{{ route('sms.logs') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.logs') ? 'active' : '' }}">
+                    <a href="{{ route('sms.logs') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.logs') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-file-02 text-xs"></i> SMS Logs</span>
                     </a>
-                    <a href="{{ route('sms.templates') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.templates') ? 'active' : '' }}">
+                    <a href="{{ route('sms.templates') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('sms.templates') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-copy-01 text-xs"></i> SMS Templates</span>
                     </a>
                 </div>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-message-multiple-02 text-xl text-slate-400"></i>
+                <a href="{{ route('chat.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('chat.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-message-multiple-02 text-xl text-emerald-200/75"></i>
                     <span>Chat</span>
                     <span id="chatUnreadBadge" class="hidden ml-auto bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <a href="{{ route('activity_logs.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('activity_logs.*') ? 'active' : '' }}">
-                    <i class="hgi-stroke hgi-file-02 text-xl text-slate-400"></i>
+                <a href="{{ route('activity_logs.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('activity_logs.*') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-file-02 text-xl text-emerald-200/75"></i>
                     <span>Audit Logs</span>
                 </a>
             </div>
 
             <div class="sidebar-group">
-                <button onclick="toggleMenu('menu-settings')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-slate-300 text-sm font-medium {{ request()->routeIs('settings.*','services.*') ? 'active' : '' }}">
+                <button onclick="toggleMenu('menu-settings')" class="sidebar-link w-full flex items-center justify-between px-3 py-2.5 rounded-none text-emerald-50/90 text-sm font-medium {{ request()->routeIs('settings.*','services.*') ? 'active' : '' }}">
                     <div class="flex items-center gap-3">
-                        <i class="hgi-stroke hgi-settings-02 text-xl text-slate-400"></i>
+                        <i class="hgi-stroke hgi-settings-02 text-xl text-emerald-200/75"></i>
                         <span>Settings</span>
                     </div>
                     <i class="hgi-stroke hgi-arrow-down-01 text-xs arrow-icon {{ request()->routeIs('settings.*','services.*') ? 'rotate-180' : '' }}"></i>
                 </button>
                 <div id="menu-settings" class="sidebar-submenu {{ request()->routeIs('settings.*','services.*') ? 'open' : '' }} pl-10 pr-2 space-y-0.5">
-                    <a href="{{ route('settings.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                    <a href="{{ route('settings.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.index') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-settings-02 text-xs"></i> General</span>
                     </a>
-                    <a href="{{ route('settings.email') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.email') ? 'active' : '' }}">
+                    <a href="{{ route('settings.email') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.email') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-mail-01 text-xs"></i> Email Config</span>
                     </a>
-                    <a href="{{ route('settings.sms') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.sms') ? 'active' : '' }}">
+                    <a href="{{ route('settings.sms') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.sms') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-message-01 text-xs"></i> SMS Gateway</span>
                     </a>
-                    <a href="{{ route('settings.payment') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.payment') ? 'active' : '' }}">
+                    <a href="{{ route('settings.payment') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('settings.payment') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-money-03 text-xs"></i> Payment Gateways</span>
                     </a>
-                    <a href="{{ route('services.index') }}" class="submenu-item block text-xs text-slate-400 hover:text-white py-1.5 pl-3 {{ request()->routeIs('services.*') ? 'active' : '' }}">
+                    <a href="{{ route('services.index') }}" class="submenu-item block text-xs text-emerald-200/75 hover:text-white py-1.5 pl-3 {{ request()->routeIs('services.*') ? 'active' : '' }}">
                         <span class="flex items-center gap-2"><i class="hgi-stroke hgi-archive text-xs"></i> Services & Prices</span>
                     </a>
                 </div>
@@ -827,16 +829,16 @@
 
         </div>
 
-        <div class="p-4 border-t border-slate-700/50">
+        <div class="p-4 border-t border-white/10">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold text-xs">
+                <div class="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center text-white font-bold text-xs">
                     {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-semibold text-white truncate">{{ ucfirst(Auth::user()->roles->first()->name ?? 'User') }}</p>
-                    <p class="text-xs text-slate-500">Account</p>
+                    <p class="text-xs text-emerald-200/50">Account</p>
                 </div>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('dashboard-logout').submit();" class="text-slate-500 hover:text-white transition-colors">
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('dashboard-logout').submit();" class="text-emerald-200/50 hover:text-white transition-colors">
                     <i class="hgi-stroke hgi-logout-02 text-xl"></i>
                 </a>
                 <form id="dashboard-logout" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
@@ -851,7 +853,7 @@
                 <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600">
                     <i class="hgi-stroke hgi-menu-01 text-xl"></i>
                 </button>
-                <h1 class="text-lg font-bold text-gray-800">@yield('page_title', 'Dashboard')</h1>
+                <h1 class="text-lg font-bold text-emerald-800">@yield('page_title', 'Dashboard')</h1>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative">
