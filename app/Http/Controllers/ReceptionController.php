@@ -238,9 +238,18 @@ class ReceptionController extends Controller
         }
 
         try {
-            $data['mrn'] = DocumentNumberGenerator::next(Patient::class, 'mrn', 'MRN', 5);
-
-            $patient = Patient::create($data);
+            $patient = \DB::transaction(function () use ($data) {
+                for ($i = 0; $i < 4; $i++) {
+                    try {
+                        $data['mrn'] = DocumentNumberGenerator::next(Patient::class, 'mrn', 'MRN', 5);
+                        return Patient::create($data);
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        if (($e->errorInfo[1] ?? 0) !== 1062 || $i === 3) {
+                            throw $e;
+                        }
+                    }
+                }
+            });
 
             ActivityLog::log('patient_registered', $patient, "Registered patient {$patient->fullName()}");
         } catch (\Throwable $e) {
