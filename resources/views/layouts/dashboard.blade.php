@@ -306,7 +306,15 @@
         ::-webkit-scrollbar-thumb { background: #166534; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #15803d; }
         .brand-sidebar { background: linear-gradient(165deg, #0a3a20 0%, #14532d 55%, #166534 100%); }
-        .brand-sidebar .sidebar-link { border-radius: 8px; }
+        .brand-sidebar .sidebar-link { border-radius: 8px; color: rgba(255,255,255,.85) !important; }
+        .brand-sidebar .sidebar-link i, .brand-sidebar .sidebar-link svg { color: rgba(255,255,255,.60); }
+        .brand-sidebar .sidebar-link:hover { color: #fff !important; }
+        .brand-sidebar .sidebar-link.active, .brand-sidebar .sidebar-link.active i, .brand-sidebar .sidebar-link.active svg { color: #fff !important; }
+        .brand-sidebar .submenu-item { color: rgba(255,255,255,.65) !important; }
+        .brand-sidebar .submenu-item:hover { color: #fff !important; }
+        .brand-sidebar .submenu-item.active { color: #fff !important; background: rgba(255,255,255,.14); }
+        .brand-sidebar .brand-name { color: #fcd34d; }
+        .brand-sidebar .border-b, .brand-sidebar .border-t { border-color: rgba(255,255,255,.12); }
     </style>
     @stack('styles')
 </head>
@@ -319,7 +327,7 @@
     <aside id="dashboardSidebar" class="fixed top-0 left-0 z-50 w-64 h-screen brand-sidebar transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col">
         <div class="h-16 flex items-center px-6 border-b border-white/10 flex-shrink-0">
             <img src="{{ asset('logo.png') }}" alt="{{ config('app.name', 'Laravel') }}" class="w-8 h-8 rounded-lg object-cover">
-            <span class="ml-2 text-amber-300 font-bold text-sm tracking-wide uppercase">{{ config('app.name', 'Laravel') }}</span>
+            <span class="ml-2 brand-name font-bold text-sm tracking-wide uppercase">{{ config('app.name', 'Laravel') }}</span>
         </div>
 
         <div class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
