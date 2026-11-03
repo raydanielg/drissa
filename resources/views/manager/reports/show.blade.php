@@ -31,6 +31,7 @@
                     <i class="hgi-stroke hgi-arrow-left-02 text-sm"></i>
                     All Reports
                 </a>
+                <a href="{{ route('manager.reports.pdf', $report) }}" class="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors"><i class="hgi-stroke hgi-download-01 text-sm"></i> Download PDF</a>
                 <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-slate-600 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">
                     <i class="hgi-stroke hgi-printer text-sm"></i>
                     Print

@@ -279,4 +279,13 @@ class ManagerController extends Controller
     {
         abort_unless(auth()->user()->isAdmin() || $report->user_id === auth()->id(), 403);
     }
+
+    public function reportPdf(ManagerReport $report)
+    {
+        $this->authorizeReport($report);
+        $report->load("user");
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView("manager.reports.pdf", ["report" => $report]);
+        $pdf->setPaper("a4");
+        return $pdf->download("manager-report-{$report->type}-{$report->id}.pdf");
+    }
 }

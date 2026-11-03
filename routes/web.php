@@ -182,6 +182,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/reports', [ManagerController::class, 'storeReport'])->name('reports.store');
         Route::get('/reports/suggestions', [ManagerController::class, 'suggestions'])->name('reports.suggestions');
         Route::get('/reports/{report}', [ManagerController::class, 'showReport'])->name('reports.show');
+        Route::get('/reports/{report}/pdf', [ManagerController::class, 'reportPdf'])->name('reports.pdf');
         Route::get('/reports/{report}/edit', [ManagerController::class, 'editReport'])->name('reports.edit');
         Route::put('/reports/{report}', [ManagerController::class, 'updateReport'])->name('reports.update');
         Route::delete('/reports/{report}', [ManagerController::class, 'destroyReport'])->name('reports.destroy');
