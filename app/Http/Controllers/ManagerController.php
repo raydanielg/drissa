@@ -110,6 +110,11 @@ class ManagerController extends Controller
             ->whereDate('report_date', $reportDate)
             ->first();
 
+        if ($existing) {
+            return redirect()->route('manager.reports.show', $existing)
+                ->with('status', ucfirst($type).' report for '.$existing->periodLabel().' already exists — opened it instead.');
+        }
+
         return view('manager.reports.create', compact('type', 'start', 'end', 'reportDate', 'suggestions', 'departments', 'existing'));
     }
 
