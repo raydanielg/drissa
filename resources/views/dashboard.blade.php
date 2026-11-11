@@ -47,7 +47,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -61,12 +66,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -79,7 +84,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -106,14 +111,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -241,7 +246,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -321,7 +326,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -335,12 +345,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -353,7 +363,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -380,14 +390,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -515,7 +525,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -561,7 +571,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -575,12 +590,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -593,7 +608,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -620,14 +635,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -755,7 +770,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -834,7 +849,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -848,12 +868,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -866,7 +886,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -893,14 +913,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -1028,7 +1048,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -1073,7 +1093,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -1087,12 +1112,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -1105,7 +1130,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -1132,14 +1157,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -1267,7 +1292,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -1343,7 +1368,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -1357,12 +1387,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -1375,7 +1405,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -1402,14 +1432,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -1537,7 +1567,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -1614,7 +1644,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -1628,12 +1663,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -1646,7 +1681,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -1673,14 +1708,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -1808,7 +1843,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -1880,7 +1915,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -1894,12 +1934,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -1912,7 +1952,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -1939,14 +1979,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -2074,7 +2114,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -2137,7 +2177,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -2151,12 +2196,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -2169,7 +2214,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -2196,14 +2241,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -2331,7 +2376,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -2376,7 +2421,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -2390,12 +2440,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -2408,7 +2458,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -2435,14 +2485,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -2570,7 +2620,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -2636,7 +2686,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -2650,12 +2705,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -2668,7 +2723,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -2695,14 +2750,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -2830,7 +2885,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -2914,7 +2969,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -2928,12 +2988,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -2946,7 +3006,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -2973,14 +3033,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -3108,7 +3168,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -3153,7 +3213,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -3167,12 +3232,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -3185,7 +3250,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -3212,14 +3277,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -3347,7 +3412,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -3407,7 +3472,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -3421,12 +3491,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -3439,7 +3509,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -3466,14 +3536,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -3601,7 +3671,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -3659,7 +3729,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -3673,12 +3748,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -3691,7 +3766,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -3718,14 +3793,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -3853,7 +3928,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -3928,7 +4003,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -3942,12 +4022,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -3960,7 +4040,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -3987,14 +4067,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -4122,7 +4202,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -4292,7 +4372,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -4306,12 +4391,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -4324,7 +4409,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -4351,14 +4436,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -4486,7 +4571,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -4595,7 +4680,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -4609,12 +4699,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -4627,7 +4717,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -4654,14 +4744,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -4789,7 +4879,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -4866,7 +4956,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -4880,12 +4975,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -4898,7 +4993,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -4925,14 +5020,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -5060,7 +5155,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -5167,7 +5262,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -5181,12 +5281,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -5199,7 +5299,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -5226,14 +5326,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -5361,7 +5461,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -5472,7 +5572,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -5486,12 +5591,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -5504,7 +5609,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -5531,14 +5636,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -5666,7 +5771,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
@@ -5710,7 +5815,12 @@ const deptData = {{ $departmentPerformance->pluck('visits') }};
 let revenueChart, visitChart, deptChart;
 
 function initCharts() {
-    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    const revEl = document.getElementById('revenueChart');
+    const visEl = document.getElementById('visitTrendChart');
+    const depEl = document.getElementById('departmentChart');
+    if (!revEl || !visEl || !depEl || typeof Chart === 'undefined') return;
+    [revEl, visEl, depEl].forEach(el => { const c = Chart.getChart(el); if (c) c.destroy(); });
+    const revCtx = revEl.getContext('2d');
     const gradient = revCtx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(0, 'rgba(5, 150, 105, 0.08)');
     gradient.addColorStop(1, 'rgba(5, 150, 105, 0)');
@@ -5724,12 +5834,12 @@ function initCharts() {
                 data: weeklyData,
                 borderColor: '#059669',
                 backgroundColor: gradient,
-                borderWidth: 2,
+                borderWidth: 3,
                 pointBackgroundColor: '#ffffff',
                 pointBorderColor: '#059669',
                 pointBorderWidth: 2,
-                pointRadius: 2,
-                pointHoverRadius: 4,
+                pointRadius: 3,
+                pointHoverRadius: 6,
                 fill: true,
                 tension: 0.35
             }]
@@ -5742,7 +5852,7 @@ function initCharts() {
         }
     });
 
-    visitChart = new Chart(document.getElementById('visitTrendChart'), {
+    visitChart = new Chart(visEl, {
         type: 'line',
         data: {
             labels: visitLabels,
@@ -5769,14 +5879,14 @@ function initCharts() {
         }
     });
 
-    deptChart = new Chart(document.getElementById('departmentChart'), {
+    deptChart = new Chart(depEl, {
         type: 'bar',
         data: {
             labels: deptLabels,
             datasets: [{
                 label: 'Visits',
                 data: deptData,
-                backgroundColor: ['#334155', '#94a3b8', '#059669', '#f59e0b', '#cbd5e1', '#dc2626'],
+                backgroundColor: ['#166534', '#15803d', '#22a447', '#f59e0b', '#d81e8c', '#2e63b8'],
                 borderRadius: 6,
                 barThickness: 24
             }]
@@ -5904,7 +6014,7 @@ document.getElementById('changeDoctorForm')?.addEventListener('submit', function
 });
 
 // Initialize charts
-initCharts();
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCharts); } else { initCharts(); }
 
 // Real-time refresh every 60 seconds
 setInterval(() => {
