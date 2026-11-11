@@ -9,7 +9,7 @@
     <div class="bg-slate-800 rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Appointments</p>
         <h1 class="text-xl font-bold">Edit Appointment</h1>
-        <p class="text-xs text-slate-400 mt-1">{{ $appointment->patient->fullName() }} — {{ $appointment->scheduled_at->format('M d, Y H:i') }}</p>
+        <p class="text-xs text-slate-400 mt-1">{{ $appointment->patient?->fullName() ?? 'Unknown' }} — {{ $appointment->scheduled_at->format('M d, Y H:i') }}</p>
     </div>
 
     @if (session('status'))

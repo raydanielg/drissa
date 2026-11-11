@@ -89,56 +89,56 @@
                                 <td class="px-5 py-3">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold">
-                                            {{ strtoupper(substr($appointment->patient->first_name, 0, 1)) }}
+                                            {{ strtoupper(substr($appointment->patient?->first_name, 0, 1)) }}
                                         </div>
-                                        <button type="button" data-popover-target="patient-popover-{{ $appointment->patient->id }}" class="font-medium text-gray-900 hover:text-slate-700 transition-colors" onclick="event.stopPropagation()">
-                                            {{ $appointment->patient->fullName() }}
+                                        <button type="button" data-popover-target="patient-popover-{{ $appointment->patient?->id }}" class="font-medium text-gray-900 hover:text-slate-700 transition-colors" onclick="event.stopPropagation()">
+                                            {{ $appointment->patient?->fullName() ?? 'Unknown' }}
                                         </button>
                                     </div>
-                                    <div data-popover id="patient-popover-{{ $appointment->patient->id }}" role="tooltip" class="absolute z-50 invisible inline-block w-80 text-sm text-gray-700 transition-opacity duration-300 bg-white border border-gray-200 rounded-md shadow-lg opacity-0">
+                                    <div data-popover id="patient-popover-{{ $appointment->patient?->id }}" role="tooltip" class="absolute z-50 invisible inline-block w-80 text-sm text-gray-700 transition-opacity duration-300 bg-white border border-gray-200 rounded-md shadow-lg opacity-0">
                                         <div class="p-4">
                                             <div class="flex items-start gap-3">
                                                 <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-lg font-bold shrink-0">
-                                                    {{ strtoupper(substr($appointment->patient->first_name, 0, 1)) }}
+                                                    {{ strtoupper(substr($appointment->patient?->first_name, 0, 1)) }}
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-base font-semibold text-gray-900 truncate">{{ $appointment->patient->fullName() }}</p>
-                                                    <p class="text-xs text-gray-500 mb-2">MRN: {{ $appointment->patient->mrn }}</p>
+                                                    <p class="text-base font-semibold text-gray-900 truncate">{{ $appointment->patient?->fullName() ?? 'Unknown' }}</p>
+                                                    <p class="text-xs text-gray-500 mb-2">MRN: {{ $appointment->patient?->mrn }}</p>
                                                     <div class="space-y-1.5">
-                                                        @if ($appointment->patient->date_of_birth)
+                                                        @if ($appointment->patient?->date_of_birth)
                                                             <div class="flex items-center gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-calendar-03 text-sm text-gray-400"></i>
-                                                                <span>{{ $appointment->patient->date_of_birth->format('d M Y') }} ({{ $appointment->patient->date_of_birth->age }} years)</span>
+                                                                <span>{{ $appointment->patient?->date_of_birth->format('d M Y') }} ({{ $appointment->patient?->date_of_birth->age }} years)</span>
                                                             </div>
                                                         @endif
-                                                        @if ($appointment->patient->gender)
+                                                        @if ($appointment->patient?->gender)
                                                             <div class="flex items-center gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-user text-sm text-gray-400"></i>
-                                                                <span class="capitalize">{{ $appointment->patient->gender }}</span>
+                                                                <span class="capitalize">{{ $appointment->patient?->gender }}</span>
                                                             </div>
                                                         @endif
-                                                        @if ($appointment->patient->phone)
+                                                        @if ($appointment->patient?->phone)
                                                             <div class="flex items-center gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-call-02 text-sm text-gray-400"></i>
-                                                                <span>{{ $appointment->patient->phone }}</span>
+                                                                <span>{{ $appointment->patient?->phone }}</span>
                                                             </div>
                                                         @endif
-                                                        @if ($appointment->patient->blood_group)
+                                                        @if ($appointment->patient?->blood_group)
                                                             <div class="flex items-center gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-favourite text-sm text-gray-400"></i>
-                                                                <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">{{ $appointment->patient->blood_group }}</span>
+                                                                <span class="px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-xs font-medium">{{ $appointment->patient?->blood_group }}</span>
                                                             </div>
                                                         @endif
-                                                        @if ($appointment->patient->allergies)
+                                                        @if ($appointment->patient?->allergies)
                                                             <div class="flex items-start gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-alert-02 text-sm text-gray-400 mt-0.5"></i>
-                                                                <span class="text-amber-600">{{ $appointment->patient->allergies }}</span>
+                                                                <span class="text-amber-600">{{ $appointment->patient?->allergies }}</span>
                                                             </div>
                                                         @endif
-                                                        @if ($appointment->patient->address)
+                                                        @if ($appointment->patient?->address)
                                                             <div class="flex items-start gap-2 text-xs">
                                                                 <i class="hgi-stroke hgi-location-01 text-sm text-gray-400 mt-0.5"></i>
-                                                                <span class="text-gray-500 truncate">{{ $appointment->patient->address }}</span>
+                                                                <span class="text-gray-500 truncate">{{ $appointment->patient?->address }}</span>
                                                             </div>
                                                         @endif
                                                     </div>
@@ -148,7 +148,7 @@
                                                 <a href="{{ route('patients.show', $appointment->patient) }}" class="flex-1 text-center text-xs font-medium text-white bg-slate-800 hover:bg-slate-700 py-2 rounded transition-colors">
                                                     View Profile
                                                 </a>
-                                                <a href="{{ route('clinical-records.create', ['patient_id' => $appointment->patient->id]) }}" class="flex-1 text-center text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:bg-gray-100 py-2 rounded transition-colors">
+                                                <a href="{{ route('clinical-records.create', ['patient_id' => $appointment->patient?->id]) }}" class="flex-1 text-center text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:bg-gray-100 py-2 rounded transition-colors">
                                                     Add Record
                                                 </a>
                                             </div>
@@ -180,17 +180,17 @@
                                                 'partial' => 'bg-amber-500',
                                                 'unpaid' => 'bg-red-500',
                                             ];
-                                            $invDot = $invDots[$appointment->invoice->status] ?? 'bg-slate-400';
+                                            $invDot = $invDots[$appointment->invoice?->status] ?? 'bg-slate-400';
                                         @endphp
                                         <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
                                             <span class="w-1.5 h-1.5 rounded-full {{ $invDot }}"></span>
-                                            {{ $appointment->invoice->status === 'paid' ? 'Paid' : ($appointment->invoice->status === 'partial' ? 'Partial' : 'Unpaid') }}
+                                            {{ $appointment->invoice?->status === 'paid' ? 'Paid' : ($appointment->invoice?->status === 'partial' ? 'Partial' : 'Unpaid') }}
                                         </span>
                                     @endif
                                 </td>
                                 <td class="px-5 py-3">
                                     <div class="flex items-center justify-end gap-1">
-                                        <button type="button" onclick="sendSingleSms('{{ route('appointments.send-sms', $appointment) }}', '{{ $appointment->patient->fullName() }}')" class="action-icon group/icon relative p-1.5 text-slate-600 hover:bg-gray-100 rounded transition-colors" title="Send SMS">
+                                        <button type="button" onclick="sendSingleSms('{{ route('appointments.send-sms', $appointment) }}', '{{ $appointment->patient?->fullName() ?? 'Unknown' }}')" class="action-icon group/icon relative p-1.5 text-slate-600 hover:bg-gray-100 rounded transition-colors" title="Send SMS">
                                             <i class="hgi-stroke hgi-message-01 text-base"></i>
                                             <span class="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-[10px] rounded opacity-0 group-hover/icon:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Send SMS</span>
                                         </button>

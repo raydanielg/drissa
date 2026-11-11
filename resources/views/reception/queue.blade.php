@@ -985,15 +985,15 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                 <td class="py-3">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                            {{ strtoupper(substr($visit->patient->first_name ?? 'U', 0, 1)) }}
+                                            {{ strtoupper(substr($visit->patient?->first_name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div>
-                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient->fullName() }}</p>
-                                            <p class="text-gray-500 text-xs">{{ $visit->patient->phone ?? 'N/A' }}</p>
+                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient?->fullName() ?? 'Unknown' }}</p>
+                                            <p class="text-gray-500 text-xs">{{ $visit->patient?->phone ?? 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient->mrn }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient?->mrn }}</td>
                                 <td class="py-3">
                                     @php
                                         $statusDot = match($visit->status) {
@@ -1015,7 +1015,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                     </span>
                                 </td>
                                 <td class="py-3 text-gray-600 text-sm">
-                                    {{ $visit->doctor ? $visit->doctor->name : 'Not Assigned' }}
+                                    {{ $visit->doctor ? $visit->doctor?->name : 'Not Assigned' }}
                                 </td>
                                 <td class="py-3 text-gray-500 text-sm">
                                     {{ $visit->registered_at->format('H:i') }}
@@ -1243,15 +1243,15 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                 <td class="py-3">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                            {{ strtoupper(substr($visit->patient->first_name ?? 'U', 0, 1)) }}
+                                            {{ strtoupper(substr($visit->patient?->first_name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div>
-                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient->fullName() }}</p>
-                                            <p class="text-gray-500 text-xs">{{ $visit->patient->phone ?? 'N/A' }}</p>
+                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient?->fullName() ?? 'Unknown' }}</p>
+                                            <p class="text-gray-500 text-xs">{{ $visit->patient?->phone ?? 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient->mrn }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient?->mrn }}</td>
                                 <td class="py-3 text-gray-500 text-sm">{{ $visit->registered_at->format('H:i') }}</td>
                                 <td class="py-3">
                                     <div class="flex items-center gap-2">
@@ -1472,16 +1472,16 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                 <td class="py-3">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                            {{ strtoupper(substr($visit->patient->first_name ?? 'U', 0, 1)) }}
+                                            {{ strtoupper(substr($visit->patient?->first_name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div>
-                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient->fullName() }}</p>
-                                            <p class="text-gray-500 text-xs">{{ $visit->patient->phone ?? 'N/A' }}</p>
+                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient?->fullName() ?? 'Unknown' }}</p>
+                                            <p class="text-gray-500 text-xs">{{ $visit->patient?->phone ?? 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient->mrn }}</td>
-                                <td class="py-3 text-gray-600 text-sm font-medium">{{ $visit->doctor ? $visit->doctor->name : 'Not Assigned' }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient?->mrn }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-medium">{{ $visit->doctor ? $visit->doctor?->name : 'Not Assigned' }}</td>
                                 <td class="py-3 text-gray-500 text-sm">{{ $visit->registered_at->format('H:i') }}</td>
                                 <td class="py-3">
                                     <div class="flex items-center gap-2">
@@ -1701,16 +1701,16 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                 <td class="py-3">
                                     <div class="flex items-center gap-3">
                                         <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
-                                            {{ strtoupper(substr($visit->patient->first_name ?? 'U', 0, 1)) }}
+                                            {{ strtoupper(substr($visit->patient?->first_name ?? 'U', 0, 1)) }}
                                         </div>
                                         <div>
-                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient->fullName() }}</p>
-                                            <p class="text-gray-500 text-xs">{{ $visit->patient->phone ?? 'N/A' }}</p>
+                                            <p class="text-gray-900 text-sm font-medium">{{ $visit->patient?->fullName() ?? 'Unknown' }}</p>
+                                            <p class="text-gray-500 text-xs">{{ $visit->patient?->phone ?? 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient->mrn }}</td>
-                                <td class="py-3 text-gray-600 text-sm font-medium">{{ $visit->doctor ? $visit->doctor->name : 'Not Assigned' }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-mono">{{ $visit->patient?->mrn }}</td>
+                                <td class="py-3 text-gray-600 text-sm font-medium">{{ $visit->doctor ? $visit->doctor?->name : 'Not Assigned' }}</td>
                                 <td class="py-3 text-gray-500 text-sm">{{ $visit->registered_at->format('H:i') }}</td>
                                 <td class="py-3">
                                     <a href="{{ route('patients.show', $visit->patient) }}" class="p-2 text-gray-400 hover:text-slate-700 hover:bg-gray-100 rounded transition-colors">

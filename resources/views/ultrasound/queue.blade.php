@@ -107,7 +107,7 @@
                     @foreach($pendingOrders as $order)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-5 py-3">
-                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() ?? 'Unknown' }}</div>
                             <div class="text-xs text-gray-500">{{ $order->patient?->mrn }}</div>
                         </td>
                         <td class="px-5 py-3">
@@ -118,14 +118,14 @@
                         <td class="px-5 py-3 text-sm text-gray-700">{{ $order->doctor?->name ?? 'N/A' }}</td>
                         <td class="px-5 py-3">
                             @if($order->visit)
-                                @if($order->visit->status === 'waiting_for_ultrasound')
+                                @if($order->visit?->status === 'waiting_for_ultrasound')
                                     <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Waiting</span>
-                                @elseif($order->visit->status === 'in_ultrasound')
+                                @elseif($order->visit?->status === 'in_ultrasound')
                                     <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>In Scan</span>
-                                @elseif($order->visit->status === 'ultrasound_completed')
+                                @elseif($order->visit?->status === 'ultrasound_completed')
                                     <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Completed</span>
                                 @else
-                                    <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>{{ $order->visit->status }}</span>
+                                    <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>{{ $order->visit?->status }}</span>
                                 @endif
                             @else
                                 <span class="text-xs text-gray-400">N/A</span>
@@ -181,7 +181,7 @@
                     @foreach($processingOrders as $order)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-5 py-3">
-                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() ?? 'Unknown' }}</div>
                             <div class="text-xs text-gray-500">{{ $order->patient?->mrn }}</div>
                         </td>
                         <td class="px-5 py-3">
@@ -191,7 +191,7 @@
                         </td>
                         <td class="px-5 py-3 text-sm text-gray-700">{{ $order->ultrasoundTech?->name ?? 'N/A' }}</td>
                         <td class="px-5 py-3 text-right">
-                            <button onclick="openResultsModal({{ $order->id }}, '{{ $order->patient?->fullName() }}')" class="px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Submit Results</button>
+                            <button onclick="openResultsModal({{ $order->id }}, '{{ $order->patient?->fullName() ?? 'Unknown' }}')" class="px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Submit Results</button>
                         </td>
                     </tr>
                     @endforeach
@@ -233,7 +233,7 @@
                     @foreach($completedOrders as $order)
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-5 py-3">
-                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $order->patient?->fullName() ?? 'Unknown' }}</div>
                             <div class="text-xs text-gray-500">{{ $order->patient?->mrn }}</div>
                         </td>
                         <td class="px-5 py-3">

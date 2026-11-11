@@ -1245,11 +1245,11 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
                                     <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-xs font-bold">
-                                        {{ strtoupper(substr($visit->patient->name, 0, 1)) }}
+                                        {{ strtoupper(substr($visit->patient?->name ?? 'U', 0, 1)) }}
                                     </div>
                                     <div>
-                                        <div class="text-xs text-gray-900 font-medium">{{ $visit->patient->fullName() }}</div>
-                                        <div class="text-[10px] text-gray-400">{{ $visit->patient->mrn }}</div>
+                                        <div class="text-xs text-gray-900 font-medium">{{ $visit->patient?->fullName() ?? 'Unknown' }}</div>
+                                        <div class="text-[10px] text-gray-400">{{ $visit->patient?->mrn }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -1278,7 +1278,7 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
                             <td class="px-5 py-3 text-gray-500 text-xs">{{ $visit->registered_at->format('H:i') }}</td>
                             <td class="px-5 py-3 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button type="button" onclick="openStepperModal({{ $visit->id }}, '{{ $visit->patient->fullName() }}', '{{ $visit->status }}')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                                    <button type="button" onclick="openStepperModal({{ $visit->id }}, '{{ $visit->patient?->fullName() ?? 'Unknown' }}', '{{ $visit->status }}')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                                         <i class="hgi-stroke hgi-clipboard text-sm"></i>
                                         Journey
                                     </button>

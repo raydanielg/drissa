@@ -36,7 +36,7 @@
                     @forelse ($prescriptions as $prescription)
                         <tr class="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
                             <td class="px-5 py-3 text-xs font-semibold text-gray-900">#{{ $prescription->id }}</td>
-                            <td class="px-5 py-3 text-xs text-gray-700">{{ $prescription->visit->patient->fullName() }}</td>
+                            <td class="px-5 py-3 text-xs text-gray-700">{{ $prescription->visit?->patient?->fullName() ?? 'Unknown' }}</td>
                             <td class="px-5 py-3">
                                 <ul class="list-disc list-inside text-xs text-gray-600">
                                     @foreach ($prescription->items as $item)

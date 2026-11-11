@@ -64,10 +64,10 @@
             @forelse($waitingVitals as $visit)
                 <div class="flex items-center gap-3 py-3 {{ !$loop->last ? 'border-b border-gray-50' : '' }}">
                     <div class="w-10 h-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-sm font-bold">
-                        {{ strtoupper(substr($visit->patient->fullName(), 0, 1)) }}
+                        {{ strtoupper(substr($visit->patient?->fullName(), 0, 1)) }}
                     </div>
                     <div class="flex-1">
-                        <div class="text-sm font-medium text-gray-900">{{ $visit->patient->fullName() }}</div>
+                        <div class="text-sm font-medium text-gray-900">{{ $visit->patient?->fullName() ?? 'Unknown' }}</div>
                         <div class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->registered_at->format('H:i') }}</div>
                     </div>
                     <a href="{{ route('nurse.queue') }}" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Take Vitals</a>

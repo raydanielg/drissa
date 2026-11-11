@@ -52,7 +52,7 @@
                             <td class="px-5 py-3 text-xs text-gray-600">{{ Str::limit($record->diagnosis, 40) }}</td>
                             <td class="px-5 py-3">
                                 @if ($record->visit)
-                                    <span class="text-[10px] font-medium text-slate-600">{{ $record->visit->visit_number }}</span>
+                                    <span class="text-[10px] font-medium text-slate-600">{{ $record->visit?->visit_number }}</span>
                                 @else
                                     <span class="text-gray-400 text-xs">-</span>
                                 @endif

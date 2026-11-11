@@ -31,11 +31,11 @@
                 <div class="p-5">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-sm font-bold">
-                            {{ strtoupper(substr($visit->patient->fullName(), 0, 1)) }}
+                            {{ strtoupper(substr($visit->patient?->fullName(), 0, 1)) }}
                         </div>
                         <div class="flex-1">
-                            <div class="text-sm font-medium text-gray-900">{{ $visit->patient->fullName() }}</div>
-                            <div class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->patient->mrn }} • Registered at {{ $visit->registered_at->format('H:i') }}</div>
+                            <div class="text-sm font-medium text-gray-900">{{ $visit->patient?->fullName() ?? 'Unknown' }}</div>
+                            <div class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->patient?->mrn }} • Registered at {{ $visit->registered_at->format('H:i') }}</div>
                         </div>
                         @if($visit->vitals)
                             <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Vitals Taken</span>

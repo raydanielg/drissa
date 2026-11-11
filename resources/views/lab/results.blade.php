@@ -33,7 +33,7 @@
             Back to Lab Queue
         </a>
         <div class="flex items-center gap-2">
-            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded transition-colors">
+            <a href="{{ route('lab.patient-history', $order->visit?->patient) }}" class="inline-flex items-center gap-2 px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded transition-colors">
                 <i class="hgi-stroke hgi-clock-01 text-sm"></i>
                 Patient History
             </a>
@@ -55,7 +55,7 @@
                         </div>
                         <div>
                             <h2 class="text-lg font-bold text-gray-900">Order #{{ $order->id }}</h2>
-                            <p class="text-sm text-gray-500">{{ $order->visit->visit_number }} • {{ $order->visit->patient->fullName() }}</p>
+                            <p class="text-sm text-gray-500">{{ $order->visit?->visit_number }} • {{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</p>
                         </div>
                     </div>
                 </div>
@@ -73,9 +73,9 @@
         <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-gray-100">
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Patient</p>
-                <p class="text-sm font-semibold text-gray-800 mt-0.5">{{ $order->visit->patient->fullName() }}</p>
-                @if($order->visit->patient?->gender)
-                <p class="text-xs text-gray-500">{{ ucfirst($order->visit->patient->gender) }}</p>
+                <p class="text-sm font-semibold text-gray-800 mt-0.5">{{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</p>
+                @if($order->visit?->patient?->gender)
+                <p class="text-xs text-gray-500">{{ ucfirst($order->visit?->patient?->gender) }}</p>
                 @endif
             </div>
             <div>
@@ -214,8 +214,8 @@
             <td style="padding:4px 0;"><strong>Date:</strong> {{ $order->completed_at?->format('d M Y H:i') }}</td>
         </tr>
         <tr>
-            <td style="padding:4px 0;"><strong>Patient:</strong> {{ $order->visit->patient->fullName() }}</td>
-            <td style="padding:4px 0;"><strong>Visit #:</strong> {{ $order->visit->visit_number }}</td>
+            <td style="padding:4px 0;"><strong>Patient:</strong> {{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</td>
+            <td style="padding:4px 0;"><strong>Visit #:</strong> {{ $order->visit?->visit_number }}</td>
         </tr>
         <tr>
             <td style="padding:4px 0;"><strong>Ordered By:</strong> Dr. {{ $order->doctor?->name ?? 'Unknown' }}</td>

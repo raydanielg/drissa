@@ -244,9 +244,9 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm font-bold text-gray-900">Order #{{ $order->id }}</span>
                                             <span class="text-xs text-gray-400">•</span>
-                                            <span class="text-xs text-gray-500">{{ $order->visit->visit_number }}</span>
+                                            <span class="text-xs text-gray-500">{{ $order->visit?->visit_number }}</span>
                                         </div>
-                                        <p class="text-sm font-medium text-gray-700 mt-0.5">{{ $order->visit->patient->fullName() }}</p>
+                                        <p class="text-sm font-medium text-gray-700 mt-0.5">{{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</p>
                                         <p class="text-xs text-gray-400 mt-0.5">Ordered by Dr. {{ $order->doctor?->name ?? 'Unknown' }} • {{ $order->created_at->diffForHumans() }}</p>
                                     </div>
                                 </div>
@@ -331,9 +331,9 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                         <div class="flex items-center gap-2">
                                             <span class="text-sm font-bold text-gray-900">Order #{{ $order->id }}</span>
                                             <span class="text-xs text-gray-400">•</span>
-                                            <span class="text-xs text-gray-500">{{ $order->visit->visit_number }}</span>
+                                            <span class="text-xs text-gray-500">{{ $order->visit?->visit_number }}</span>
                                         </div>
-                                        <p class="text-sm font-medium text-gray-700 mt-0.5">{{ $order->visit->patient->fullName() }}</p>
+                                        <p class="text-sm font-medium text-gray-700 mt-0.5">{{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</p>
                                         <p class="text-xs text-gray-400 mt-0.5">Processing started {{ $order->updated_at->diffForHumans() }}</p>
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
 </script>
                             <div class="mt-4 pl-14 space-y-4">
                                 @php
-                                    $patient = $order->visit->patient;
+                                    $patient = $order->visit?->patient;
                                     $isFemale = $patient && $patient->gender === 'female';
                                     $completedCount = 0;
                                     $totalItems = $order->items->count();
@@ -757,7 +757,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                             @foreach ($completedOrders as $order)
                                 <tr class="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
                                     <td class="px-5 py-3 text-xs font-semibold text-gray-900">#{{ $order->id }}</td>
-                                    <td class="px-5 py-3 text-xs text-gray-700">{{ $order->visit->patient->fullName() }}</td>
+                                    <td class="px-5 py-3 text-xs text-gray-700">{{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</td>
                                     <td class="px-5 py-3">
                                         <div class="flex flex-wrap gap-1">
                                             @foreach ($order->items as $item)
@@ -782,7 +782,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                     <td class="px-5 py-3 text-xs text-gray-500">{{ $order->completed_at?->diffForHumans() }}</td>
                                     <td class="px-5 py-3">
                                         <div class="flex items-center justify-end gap-2">
-                                            <a href="{{ route('lab.patient-history', $order->visit->patient) }}" class="inline-flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 hover:bg-gray-100 text-gray-700 text-[10px] font-medium rounded transition-colors" title="View patient lab history">
+                                            <a href="{{ route('lab.patient-history', $order->visit?->patient) }}" class="inline-flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 hover:bg-gray-100 text-gray-700 text-[10px] font-medium rounded transition-colors" title="View patient lab history">
                                                 <i class="hgi-stroke hgi-clock-01 text-xs"></i>
                                                 History
                                             </a>

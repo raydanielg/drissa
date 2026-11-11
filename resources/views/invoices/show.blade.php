@@ -76,12 +76,12 @@
             </div>
             <div class="flex justify-between">
                 <span class="text-gray-500">Patient</span>
-                <span class="font-semibold">{{ $invoice->patient->fullName() }}</span>
+                <span class="font-semibold">{{ $invoice->patient?->fullName() ?? 'Unknown' }}</span>
             </div>
-            @if($invoice->patient->phone)
+            @if($invoice->patient?->phone)
             <div class="flex justify-between">
                 <span class="text-gray-500">Phone</span>
-                <span>{{ $invoice->patient->phone }}</span>
+                <span>{{ $invoice->patient?->phone }}</span>
             </div>
             @endif
 

@@ -197,7 +197,7 @@
                             @endphp
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                                <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                                <td class="px-6 py-3">{{ $visit->patient?->fullName() ?? 'Unknown' }}</td>
                                 <td class="px-6 py-3 text-xs font-semibold text-gray-900 text-right">{{ number_format($invoice?->total ?? 0) }} TSh</td>
                                 <td class="px-6 py-3">
                                     @if ($isPaid)
@@ -220,7 +220,7 @@
                                                     Pay {{ number_format($balance) }}
                                                 </button>
                                             </form>
-                                            <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient->fullName() }}', {{ $invoice?->total ?? 0 }}, {{ $invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
+                                            <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient?->fullName() ?? 'Unknown' }}', {{ $invoice?->total ?? 0 }}, {{ $invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
                                                 <i class="hgi-stroke hgi-plus-sign text-sm"></i>
                                                 Custom
                                             </button>
@@ -259,7 +259,7 @@
                         @forelse ($waitingForDoctor as $visit)
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                                <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                                <td class="px-6 py-3">{{ $visit->patient?->fullName() ?? 'Unknown' }}</td>
                                 <td class="px-6 py-3 text-xs">{{ $visit->doctor?->name ?? 'Unassigned' }}</td>
                                 <td class="px-6 py-3 text-gray-500 text-xs">{{ $visit->registered_at->diffForHumans() }}</td>
                                 <td class="px-6 py-3">
@@ -292,7 +292,7 @@
                         @forelse ($withDoctorVisits as $visit)
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                                <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                                <td class="px-6 py-3">{{ $visit->patient?->fullName() ?? 'Unknown' }}</td>
                                 <td class="px-6 py-3 text-xs">{{ $visit->doctor?->name ?? 'Unassigned' }}</td>
                                 <td class="px-6 py-3"><span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full {{ $statusDots[$visit->status] ?? 'bg-slate-400' }}"></span>{{ str_replace('_', ' ', $visit->status) }}</span></td>
                                 <td class="px-6 py-3 text-right">
@@ -317,7 +317,7 @@
                             @endphp
                             <tr class="border-t border-gray-100 hover:bg-gray-50/50 transition-colors" id="visit-row-{{ $visit->id }}">
                                 <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                                <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                                <td class="px-6 py-3">{{ $visit->patient?->fullName() ?? 'Unknown' }}</td>
                                 <td class="px-6 py-3 text-xs font-semibold text-gray-900 text-right">{{ number_format($visit->invoice?->total ?? 0) }} TSh</td>
                                 <td class="px-6 py-3">
                                     <div class="flex items-center gap-2">
@@ -330,7 +330,7 @@
                                                 Pay {{ number_format($balance) }}
                                             </button>
                                         </form>
-                                        <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient->fullName() }}', {{ $visit->invoice?->total ?? 0 }}, {{ $visit->invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
+                                        <button type="button" onclick="openPaymentModal({{ $visit->id }}, '{{ $visit->visit_number }}', '{{ $visit->patient?->fullName() ?? 'Unknown' }}', {{ $visit->invoice?->total ?? 0 }}, {{ $visit->invoice?->paid ?? 0 }}, {{ $balance }})" class="inline-flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
                                             <i class="hgi-stroke hgi-plus-sign text-sm"></i>
                                             Custom
                                         </button>

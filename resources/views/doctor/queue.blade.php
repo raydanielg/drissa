@@ -135,18 +135,18 @@ function toggleVitalsForm(visitId) {
             <div class="px-5 py-4 bg-gray-50 border-b border-gray-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-lg">
-                        {{ strtoupper(substr($visit->patient->first_name, 0, 1)) }}
+                        {{ strtoupper(substr($visit->patient?->first_name, 0, 1)) }}
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-gray-900">{{ $visit->patient->fullName() }}</h3>
+                        <h3 class="text-base font-bold text-gray-900">{{ $visit->patient?->fullName() ?? 'Unknown' }}</h3>
                         <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mt-0.5">
                             <span class="inline-flex items-center gap-1"><i class="hgi-stroke hgi-identity-card text-sm"></i> {{ $visit->visit_number }}</span>
                             <span>&bull;</span>
-                            <span>{{ $visit->patient->gender ?? 'N/A' }} / {{ $visit->patient->date_of_birth?->age ?? 'N/A' }} yrs</span>
+                            <span>{{ $visit->patient?->gender ?? 'N/A' }} / {{ $visit->patient?->date_of_birth?->age ?? 'N/A' }} yrs</span>
                             <span>&bull;</span>
-                            <span>{{ $visit->patient->phone ?? 'No phone' }}</span>
+                            <span>{{ $visit->patient?->phone ?? 'No phone' }}</span>
                             <span>&bull;</span>
-                            <span>MRN: {{ $visit->patient->mrn ?? 'N/A' }}</span>
+                            <span>MRN: {{ $visit->patient?->mrn ?? 'N/A' }}</span>
                         </div>
                     </div>
                 </div>
@@ -1066,7 +1066,7 @@ function toggleVitalsForm(visitId) {
                         || $visit->ultrasoundOrders->isNotEmpty()
                         || $visit->consultation
                         || $visit->vitals;
-                    $previousVisits = $visit->patient->visits->filter(fn($v) => $v->id !== $visit->id);
+                    $previousVisits = $visit->patient?->visits->filter(fn($v) => $v->id !== $visit->id);
                 @endphp
                 @if ($hasActivity || $previousVisits->isNotEmpty())
                     <div class="mt-6 border-t-2 border-gray-100 pt-5">

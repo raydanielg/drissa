@@ -195,9 +195,9 @@ function closeReceipt() {
                             <td class="px-5 py-3">
                                 <div class="flex items-center gap-2">
                                     <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold">
-                                        {{ strtoupper(substr($invoice->patient->fullName(), 0, 1)) }}
+                                        {{ strtoupper(substr($invoice->patient?->fullName(), 0, 1)) }}
                                     </div>
-                                    <span class="text-xs text-gray-700">{{ $invoice->patient->fullName() }}</span>
+                                    <span class="text-xs text-gray-700">{{ $invoice->patient?->fullName() ?? 'Unknown' }}</span>
                                 </div>
                             </td>
                             <td class="px-5 py-3 text-right text-xs font-semibold text-gray-900">TSh {{ number_format($invoice->total, 2) }}</td>

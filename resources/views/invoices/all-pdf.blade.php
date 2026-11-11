@@ -89,9 +89,9 @@
             </tr></table>
 
             <div class="patient">
-                <strong>{{ $invoice->patient->fullName() }}</strong>
-                &nbsp;&middot;&nbsp; MRN: {{ $invoice->patient->mrn ?? '-' }}
-                &nbsp;&middot;&nbsp; {{ $invoice->patient->phone ?? '-' }}
+                <strong>{{ $invoice->patient?->fullName() ?? 'Unknown' }}</strong>
+                &nbsp;&middot;&nbsp; MRN: {{ $invoice->patient?->mrn ?? '-' }}
+                &nbsp;&middot;&nbsp; {{ $invoice->patient?->phone ?? '-' }}
             </div>
 
             <table class="items">

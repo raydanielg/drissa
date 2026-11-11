@@ -56,9 +56,9 @@
         <tr>
             <td width="55%" valign="top">
                 <div class="section-label">Billed To</div>
-                <div class="info-val"><strong>{{ $invoice->patient->fullName() }}</strong></div>
-                <div class="info-val" style="color:#6b7280">MRN: {{ $invoice->patient->mrn ?? '-' }}</div>
-                <div class="info-val" style="color:#6b7280">{{ $invoice->patient->phone ?? '-' }}</div>
+                <div class="info-val"><strong>{{ $invoice->patient?->fullName() ?? 'Unknown' }}</strong></div>
+                <div class="info-val" style="color:#6b7280">MRN: {{ $invoice->patient?->mrn ?? '-' }}</div>
+                <div class="info-val" style="color:#6b7280">{{ $invoice->patient?->phone ?? '-' }}</div>
             </td>
             <td width="45%" valign="top" class="meta">
                 <div><strong>Invoice #:</strong> {{ $invoice->invoice_number }}</div>

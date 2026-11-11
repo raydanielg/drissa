@@ -76,8 +76,8 @@
                         <i class="hgi-stroke hgi-user text-xl text-slate-600"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-gray-900">{{ $visit->patient->fullName() }}</h3>
-                        <p class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->patient->phone ?? 'No phone' }}</p>
+                        <h3 class="text-sm font-bold text-gray-900">{{ $visit->patient?->fullName() ?? 'Unknown' }}</h3>
+                        <p class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->patient?->phone ?? 'No phone' }}</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
