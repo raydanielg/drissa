@@ -48,24 +48,25 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        // Weekly revenue chart
+        // Revenue per day (last 30 days) — one grouped query, split into 7/30 day charts
+        $revenueByDay = Payment::where('created_at', '>=', now()->subDays(29)->startOfDay())
+            ->selectRaw('DATE(created_at) as d, SUM(amount) as total')
+            ->groupBy('d')
+            ->pluck('total', 'd');
+
         $revenueDays = collect();
         $dayLabels = [];
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i);
-            $amount = Payment::whereDate('created_at', $date)->sum('amount') ?? 0;
-            $revenueDays->push((int) $amount);
-            $dayLabels[] = $date->format('D');
-        }
-
-        // Monthly revenue chart (last 30 days)
         $monthlyDays = collect();
         $monthLabels = [];
         for ($i = 29; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $amount = Payment::whereDate('created_at', $date)->sum('amount') ?? 0;
-            $monthlyDays->push((int) $amount);
+            $amount = (int) ($revenueByDay[$date->toDateString()] ?? 0);
+            $monthlyDays->push($amount);
             $monthLabels[] = $date->format('d M');
+            if ($i <= 6) {
+                $revenueDays->push($amount);
+                $dayLabels[] = $date->format('D');
+            }
         }
 
         // Performance metrics
@@ -86,22 +87,33 @@ class HomeController extends Controller
             ->get();
 
         // Department performance
+        $visitsByDept = Visit::join('users', 'visits.doctor_id', '=', 'users.id')
+            ->whereMonth('visits.registered_at', now()->month)
+            ->selectRaw('users.department_id, count(*) as c')
+            ->groupBy('users.department_id')
+            ->pluck('c', 'department_id');
+
         $departmentPerformance = \App\Models\Department::where('is_active', true)
             ->withCount(['users as doctors_count' => fn($q) => $q->role('doctor')])
             ->get()
             ->map(fn($dept) => [
                 'name' => $dept->name,
-                'visits' => Visit::whereHas('doctor', fn($q) => $q->where('department_id', $dept->id))->whereMonth('registered_at', now()->month)->count(),
+                'visits' => (int) ($visitsByDept[$dept->id] ?? 0),
             ])
             ->sortByDesc('visits')
             ->values();
 
-        // Visit trend (last 7 days)
+        // Visit trend (last 7 days) — one grouped query
+        $visitsByDay = Visit::where('registered_at', '>=', now()->subDays(6)->startOfDay())
+            ->selectRaw('DATE(registered_at) as d, count(*) as c')
+            ->groupBy('d')
+            ->pluck('c', 'd');
+
         $visitTrend = collect();
         $visitLabels = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
-            $visitTrend->push(Visit::whereDate('registered_at', $date)->count());
+            $visitTrend->push((int) ($visitsByDay[$date->toDateString()] ?? 0));
             $visitLabels[] = $date->format('D');
         }
 
@@ -114,7 +126,7 @@ class HomeController extends Controller
         $recentPatients = Patient::latest()->limit(5)->get();
 
         // Lists for quick forms
-        $patientsList = Patient::orderBy('first_name')->get();
+        $patientsList = Patient::select('id', 'first_name', 'last_name', 'mrn')->orderBy('first_name')->limit(400)->get();
         $doctorsList = User::role('doctor')->get();
 
         return view('dashboard', compact(
