@@ -37,12 +37,12 @@ class HomeController extends Controller
             'low_stock' => Medication::whereColumn('stock_quantity', '<=', 'reorder_level')->count(),
         ];
 
-        $recentVisits = Visit::with('patient')
+        $recentVisits = Visit::with(['patient' => fn ($q) => $q->withTrashed()])
             ->latest()
             ->limit(10)
             ->get();
 
-        $waitingForDoctor = Visit::with('patient')
+        $waitingForDoctor = Visit::with(['patient' => fn ($q) => $q->withTrashed()])
             ->where('status', VisitStatus::WaitingForDoctor->value)
             ->when($user->isDoctor(), fn ($q) => $q->where('doctor_id', $user->id))
             ->limit(5)
@@ -119,7 +119,7 @@ class HomeController extends Controller
 
         // Today's schedule
         $todayAppointments = Appointment::whereDate('scheduled_at', today())
-            ->with('patient', 'doctor')
+            ->with(['patient' => fn ($q) => $q->withTrashed(), 'doctor'])
             ->orderBy('scheduled_at')
             ->get();
 

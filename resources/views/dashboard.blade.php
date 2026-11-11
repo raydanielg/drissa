@@ -3902,7 +3902,7 @@ setInterval(() => {
                 @foreach ($waitingForDoctor as $visit)
                     <tr class="border-t border-gray-200 hover:bg-gray-50/50">
                         <td class="px-6 py-3 font-medium">{{ $visit->visit_number }}</td>
-                        <td class="px-6 py-3">{{ $visit->patient->fullName() }}</td>
+                        <td class="px-6 py-3">{{ $visit->patient->fullName() ?? 'Unknown' }}</td>
                         <td class="px-6 py-3"><span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Waiting</span></td>
                         <td class="px-6 py-3 text-gray-500">{{ $visit->registered_at->diffForHumans() }}</td>
                     </tr>
@@ -4546,9 +4546,9 @@ setInterval(() => {
                         <td class="px-6 py-3">
                             <div class="flex items-center gap-2">
                                 <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold">
-                                    {{ strtoupper(substr($visit->patient->name, 0, 1)) }}
+                                    {{ strtoupper(substr($visit->patient->name ?? 'U', 0, 1)) }}
                                 </div>
-                                <span>{{ $visit->patient->fullName() }}</span>
+                                <span>{{ $visit->patient->fullName() ?? 'Unknown' }}</span>
                             </div>
                         </td>
                         <td class="px-6 py-3">
