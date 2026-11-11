@@ -5,6 +5,11 @@ use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
+// Shared hosts without the mbstring/iconv extensions run polyfills in pure
+// PHP, which can exceed the default 30s limit on heavy pages (e.g. the admin
+// dashboard). Raise the ceiling; enabling the real extensions is the fix.
+@set_time_limit(120);
+
 // Determine if the application is in maintenance mode...
 if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
     require $maintenance;
