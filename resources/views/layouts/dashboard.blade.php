@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        :root {
+            --brand-green: #159447; --brand-green-700: #0e7a37; --brand-green-900: #0a3a20;
+            --brand-blue: #1260A8; --brand-magenta: #D41482; --brand-gold: #f59e0b;
+            --brand-bg: #F7F9FC; --brand-border: #E8EDF2;
+            --brand-text: #263445; --brand-text-2: #718096;
+        }
+        body { background: var(--brand-bg); }
         .flatpickr-calendar { font-family: inherit; font-size: 12px; border: 1px solid #e5e7eb; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.08); }
         .flatpickr-day.selected, .flatpickr-day.selected:hover, .flatpickr-day.selected:focus { background: #15803d; border-color: #15803d; }
         .flatpickr-day.today { border-color: #22a447; }
@@ -37,21 +44,36 @@
             if (arrow) arrow.classList.toggle('rotate-180');
         }
 
-        // Shared compact toast (reusable across all pages)
-        window.AppToast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            showCloseButton: true,
-            timer: 4000,
-            timerProgressBar: true,
-            customClass: { popup: 'app-toast' },
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-        window.toast = (message, icon = 'success') => window.AppToast.fire({ icon, title: message });
+        // Shared compact top-left toast (reusable across all pages)
+        window.showToast = function (message, type = 'success', opts = {}) {
+            const ICONS = { success: '\u2713', error: '\u00d7', warning: '!', info: 'i', loading: '\u27f3' };
+            let c = document.getElementById('appToastContainer');
+            if (!c) { c = document.createElement('div'); c.id = 'appToastContainer'; document.body.appendChild(c); }
+            const el = document.createElement('div');
+            el.className = 'app-toast app-toast-' + type;
+            el.innerHTML = '<span class="t-icon"></span><span class="t-msg"></span><button type="button" class="t-close" aria-label="Close">\u00d7</button>';
+            el.querySelector('.t-icon').textContent = ICONS[type] || ICONS.info;
+            el.querySelector('.t-msg').textContent = message;
+            el.querySelector('.t-close').onclick = dismiss;
+            c.appendChild(el);
+            requestAnimationFrame(() => el.classList.add('show'));
+            let timer = setTimeout(dismiss, opts.duration ?? (type === 'error' ? 7000 : 4000));
+            function dismiss() { clearTimeout(timer); el.classList.remove('show'); setTimeout(() => el.remove(), 250); }
+            return { close: dismiss };
+        };
+        window.AppToast = { fire: (opts) => window.showToast(opts?.title ?? opts, opts?.icon ?? 'success') };
+        window.toast = (message, icon = 'success') => window.showToast(message, icon);
+
+        // Button loading state on native (non-AJAX) form submits — prevents double submit
+        document.addEventListener('submit', function (e) {
+            const form = e.target;
+            if (!(form instanceof HTMLFormElement) || form.hasAttribute('data-ajax')) return;
+            const btn = form.querySelector('button[type="submit"], button:not([type])');
+            if (!btn || btn.dataset.keepEnabled !== undefined) return;
+            btn.disabled = true;
+            btn.dataset.origHtml = btn.innerHTML;
+            btn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:btnSpin .6s linear infinite;vertical-align:-2px;margin-right:6px"></span>Processing...';
+        }, true);
 
         // Session flashes
         (function() {
@@ -315,6 +337,20 @@
         .brand-sidebar .submenu-item.active { color: #fff !important; background: rgba(255,255,255,.14); }
         .brand-sidebar .brand-name { color: #fcd34d; }
         .brand-sidebar .border-b, .brand-sidebar .border-t { border-color: rgba(255,255,255,.12); }
+        #appToastContainer { position: fixed; top: 12px; left: 12px; z-index: 99999; display: flex; flex-direction: column; gap: 8px; max-width: min(92vw, 360px); }
+        .app-toast { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: #fff; border: 1px solid var(--brand-border); border-left: 3px solid var(--brand-blue); box-shadow: 0 6px 20px rgba(38,52,69,.10); font-size: 12.5px; color: var(--brand-text); opacity: 0; transform: translateX(-12px); transition: all .25s ease; }
+        .app-toast.show { opacity: 1; transform: none; }
+        .app-toast .t-icon { flex: 0 0 18px; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+        .app-toast .t-msg { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-toast .t-close { flex: 0 0 auto; color: var(--brand-text-2); font-size: 14px; line-height: 1; padding: 0 2px; cursor: pointer; background: none; border: none; }
+        .app-toast .t-close:hover { color: var(--brand-text); }
+        .app-toast-success { border-left-color: var(--brand-green); } .app-toast-success .t-icon { background: var(--brand-green); }
+        .app-toast-error { border-left-color: #dc2626; } .app-toast-error .t-icon { background: #dc2626; }
+        .app-toast-warning { border-left-color: var(--brand-gold); } .app-toast-warning .t-icon { background: var(--brand-gold); }
+        .app-toast-info { border-left-color: var(--brand-blue); } .app-toast-info .t-icon { background: var(--brand-blue); }
+        .app-toast-loading { border-left-color: var(--brand-magenta); } .app-toast-loading .t-icon { background: var(--brand-magenta); }
+        @media (prefers-reduced-motion: reduce) { .app-toast { transition: none; } }
+        @keyframes btnSpin { to { transform: rotate(360deg); } }
     </style>
     @stack('styles')
 </head>
@@ -578,13 +614,17 @@
                     <i class="hgi-stroke hgi-home-01 text-xl text-white/60"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/85 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') !== 'weekly' ? 'active' : '' }} transition-all mb-1">
+                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/85 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type', 'daily') === 'daily' ? 'active' : '' }} transition-all mb-1">
                     <i class="hgi-stroke hgi-clock-01 text-xl text-white/60"></i>
                     <span>Daily Report</span>
                 </a>
                 <a href="{{ route('manager.reports.create', ['type' => 'weekly']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/85 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') === 'weekly' ? 'active' : '' }} transition-all mb-1">
                     <i class="hgi-stroke hgi-calendar-03 text-xl text-white/60"></i>
                     <span>Weekly Report</span>
+                </a>
+                <a href="{{ route('manager.reports.create', ['type' => 'monthly']) }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/85 text-sm font-medium {{ request()->routeIs('manager.reports.create') && request('type') === 'monthly' ? 'active' : '' }} transition-all mb-1">
+                    <i class="hgi-stroke hgi-date-time text-xl text-white/60"></i>
+                    <span>Monthly Report</span>
                 </a>
                 <a href="{{ route('manager.reports.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/85 text-sm font-medium {{ request()->routeIs('manager.reports.index','manager.reports.show','manager.reports.edit') ? 'active' : '' }} transition-all mb-1">
                     <i class="hgi-stroke hgi-file-02 text-xl text-white/60"></i>

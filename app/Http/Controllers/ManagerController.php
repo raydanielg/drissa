@@ -99,7 +99,7 @@ class ManagerController extends Controller
 
     public function createReport(Request $request)
     {
-        $type = $request->get('type', 'daily') === 'weekly' ? 'weekly' : 'daily';
+        $type = in_array($request->get('type'), ['weekly', 'monthly'], true) ? $request->get('type') : 'daily';
         [$start, $end, $reportDate] = $this->resolvePeriod($request, $type);
 
         $suggestions = $this->periodSuggestions($start, $end);
@@ -124,6 +124,10 @@ class ManagerController extends Controller
 
         if ($data['type'] === 'weekly') {
             $data['report_date'] = $data['week_end'];
+        }
+
+        if ($data['type'] === 'monthly') {
+            $data['report_date'] = Carbon::create($data['year'], $data['month'], 1)->endOfMonth()->toDateString();
         }
 
         $exists = ManagerReport::where('user_id', auth()->id())
@@ -161,8 +165,8 @@ class ManagerController extends Controller
 
         $departments = Department::where('is_active', true)->orderBy('name')->get();
         $type = $report->type;
-        $start = $report->week_start ?? $report->report_date;
-        $end = $report->week_end ?? $report->report_date;
+        $start = $report->week_start ?? ($report->type === 'monthly' ? $report->report_date->copy()->startOfMonth() : $report->report_date);
+        $end = $report->week_end ?? ($report->type === 'monthly' ? $report->report_date->copy()->endOfMonth() : $report->report_date);
         $reportDate = $report->report_date;
         $suggestions = [];
         $existing = null;
@@ -179,6 +183,8 @@ class ManagerController extends Controller
         $data['report_date'] = $report->report_date;
         $data['week_start'] = $report->week_start;
         $data['week_end'] = $report->week_end;
+        $data['month'] = $report->month;
+        $data['year'] = $report->year;
         $data['department_reports'] = collect($request->input('department_reports', []))
             ->filter(fn ($row) => filled($row['name'] ?? null) || filled($row['report'] ?? null))
             ->values()
@@ -207,7 +213,7 @@ class ManagerController extends Controller
 
     public function suggestions(Request $request)
     {
-        $type = $request->get('type', 'daily') === 'weekly' ? 'weekly' : 'daily';
+        $type = in_array($request->get('type'), ['weekly', 'monthly'], true) ? $request->get('type') : 'daily';
         [$start, $end] = $this->resolvePeriod($request, $type);
 
         return response()->json($this->periodSuggestions($start, $end));
@@ -222,6 +228,17 @@ class ManagerController extends Controller
 
             $start = $anchor->copy()->startOfWeek();
             $end = $anchor->copy()->endOfWeek();
+
+            return [$start, $end, $end->copy()];
+        }
+
+        if ($type === 'monthly') {
+            $anchor = $request->filled('date')
+                ? Carbon::parse($request->date)
+                : now();
+
+            $start = $anchor->copy()->startOfMonth();
+            $end = $anchor->copy()->endOfMonth();
 
             return [$start, $end, $end->copy()];
         }
@@ -258,10 +275,12 @@ class ManagerController extends Controller
     protected function validateReport(Request $request, ?string $fixedType = null): array
     {
         return $request->validate([
-            'type' => ($fixedType ? 'sometimes' : 'required').'|in:daily,weekly',
-            'report_date' => 'required|date',
+            'type' => ($fixedType ? 'sometimes' : 'required').'|in:daily,weekly,monthly',
+            'report_date' => 'nullable|required_if:type,daily|date',
             'week_start' => 'nullable|required_if:type,weekly|date',
             'week_end' => 'nullable|required_if:type,weekly|date|after_or_equal:week_start',
+            'month' => 'nullable|required_if:type,monthly|integer|min:1|max:12',
+            'year' => 'nullable|required_if:type,monthly|integer|min:2020|max:2100',
             'revenue_overall' => 'nullable|numeric|min:0',
             'supplement_sales_ppv' => 'nullable|numeric|min:0',
             'product_sales_costs' => 'nullable|numeric|min:0',
@@ -283,6 +302,36 @@ class ManagerController extends Controller
     protected function authorizeReport(ManagerReport $report): void
     {
         abort_unless(auth()->user()->isAdmin() || $report->user_id === auth()->id(), 403);
+    }
+
+    public function exportCsv(Request $request)
+    {
+        $user = auth()->user();
+
+        $reports = ManagerReport::with('user')
+            ->when(! $user->isAdmin(), fn ($q) => $q->where('user_id', $user->id))
+            ->when($request->filled('type'), fn ($q) => $q->where('type', $request->type))
+            ->when($request->filled('from'), fn ($q) => $q->whereDate('report_date', '>=', $request->from))
+            ->when($request->filled('to'), fn ($q) => $q->whereDate('report_date', '<=', $request->to))
+            ->latest('report_date')
+            ->get();
+
+        $filename = 'manager-reports-'.now()->format('Ymd-His').'.csv';
+
+        return response()->streamDownload(function () use ($reports) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['Report ID', 'Type', 'Period', 'Manager', 'Revenue (TSh)', 'Supplement PPV', 'Product Sales', 'New Clients', 'Returning Clients', 'Lab Expenses', 'Office Expenses', 'Submitted']);
+            foreach ($reports as $r) {
+                fputcsv($out, [
+                    $r->id, $r->type, $r->periodLabel(), $r->user?->name,
+                    $r->revenue_overall, $r->supplement_sales_ppv, $r->product_sales_costs,
+                    $r->new_clients, $r->returning_clients,
+                    $r->lab_tools_expenses, $r->office_expenses,
+                    $r->created_at?->format('Y-m-d H:i'),
+                ]);
+            }
+            fclose($out);
+        }, $filename, ['Content-Type' => 'text/csv']);
     }
 
     public function reportPdf(ManagerReport $report)

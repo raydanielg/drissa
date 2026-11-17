@@ -12,7 +12,7 @@
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Manager</p>
                 <h1 class="text-xl font-bold">Manager Reports</h1>
-                <p class="text-xs text-slate-400 mt-1">{{ auth()->user()->isAdmin() ? 'All daily & weekly reports from clinic managers' : 'Your daily & weekly clinic reports' }}</p>
+                <p class="text-xs text-slate-400 mt-1">{{ auth()->user()->isAdmin() ? 'All daily, weekly & monthly reports from clinic managers' : 'Your daily, weekly & monthly clinic reports' }}</p>
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-slate-600 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">
@@ -36,6 +36,7 @@
                     <option value="">All</option>
                     <option value="daily" {{ request('type') === 'daily' ? 'selected' : '' }}>Daily</option>
                     <option value="weekly" {{ request('type') === 'weekly' ? 'selected' : '' }}>Weekly</option>
+                    <option value="monthly" {{ request('type') === 'monthly' ? 'selected' : '' }}>Monthly</option>
                 </x-ui.select>
             </div>
             <div>
@@ -48,6 +49,7 @@
             </div>
             <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">Filter</button>
             <a href="{{ route('manager.reports.index') }}" class="px-4 py-2 text-sm text-gray-500 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Reset</a>
+            <a href="{{ route('manager.reports.export', request()->query()) }}" class="px-4 py-2 text-sm text-emerald-700 border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 rounded transition-colors">Export CSV</a>
         </form>
     </div>
 
@@ -73,7 +75,7 @@
                     <tr class="hover:bg-gray-50/50">
                         <td class="px-5 py-3">
                             <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $report->type === 'weekly' ? 'bg-amber-500' : 'bg-slate-500' }}"></span>
+                                <span class="w-1.5 h-1.5 rounded-full {{ $report->type === 'weekly' ? 'bg-amber-500' : ($report->type === 'monthly' ? 'bg-blue-500' : 'bg-slate-500') }}"></span>
                                 {{ ucfirst($report->type) }}
                             </span>
                         </td>

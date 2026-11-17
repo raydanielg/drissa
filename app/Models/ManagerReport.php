@@ -15,6 +15,8 @@ class ManagerReport extends Model
         'report_date',
         'week_start',
         'week_end',
+        'month',
+        'year',
         'revenue_overall',
         'supplement_sales_ppv',
         'product_sales_costs',
@@ -41,6 +43,10 @@ class ManagerReport extends Model
             return $this->week_start->format('d M Y').' - '.$this->week_end->format('d M Y');
         }
 
+        if ($this->type === 'monthly') {
+            return $this->report_date->format('F Y');
+        }
+
         return $this->report_date->format('d M Y');
     }
 
@@ -55,6 +61,8 @@ class ManagerReport extends Model
             'report_date' => 'date',
             'week_start' => 'date',
             'week_end' => 'date',
+            'month' => 'integer',
+            'year' => 'integer',
             'department_reports' => 'array',
             'revenue_overall' => 'decimal:2',
             'supplement_sales_ppv' => 'decimal:2',

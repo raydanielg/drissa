@@ -181,6 +181,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports/create', [ManagerController::class, 'createReport'])->name('reports.create');
         Route::post('/reports', [ManagerController::class, 'storeReport'])->name('reports.store');
         Route::get('/reports/suggestions', [ManagerController::class, 'suggestions'])->name('reports.suggestions');
+        Route::get('/reports/export', [ManagerController::class, 'exportCsv'])->name('reports.export');
         Route::get('/reports/{report}', [ManagerController::class, 'showReport'])->name('reports.show');
         Route::get('/reports/{report}/pdf', [ManagerController::class, 'reportPdf'])->name('reports.pdf');
         Route::get('/reports/{report}/edit', [ManagerController::class, 'editReport'])->name('reports.edit');

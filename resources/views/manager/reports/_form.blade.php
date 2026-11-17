@@ -1,6 +1,7 @@
 @php
     $isWeekly = $type === 'weekly';
-    $periodLabel = $isWeekly ? "This Week's Report" : "Today's Report";
+    $isMonthly = $type === 'monthly';
+    $periodLabel = $isWeekly ? "This Week's Report" : ($isMonthly ? "This Month's Report" : "Today's Report");
     $r = $report ?? null;
     $val = fn(string $key) => old($key, $r?->{$key} ?? ($suggestions[$key] ?? null));
     $deptRows = old('department_reports', $r?->department_reports ?? []);
@@ -33,6 +34,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -94,6 +97,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -126,6 +131,23 @@
                     <x-ui.input type="text" data-fp-date name="week_end" id="week_end" value="{{ old('week_end', $r?->week_end?->format('Y-m-d') ?? $end->format('Y-m-d')) }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" required />
                 </div>
                 <input type="hidden" name="report_date" id="report_date" value="{{ old('report_date', $r?->report_date?->format('Y-m-d') ?? $end->format('Y-m-d')) }}">
+            @elseif($isMonthly)
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Month <span class="text-red-500">*</span></label>
+                    <select name="month" id="report_month" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" required>
+                        @foreach(['January','February','March','April','May','June','July','August','September','October','November','December'] as $mi => $mname)
+                            <option value="{{ $mi + 1 }}" {{ (int) old('month', $r?->month ?? $start->month) === $mi + 1 ? 'selected' : '' }}>{{ $mname }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Year <span class="text-red-500">*</span></label>
+                    <select name="year" id="report_year" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" required>
+                        @for($y = now()->year; $y >= now()->year - 3; $y--)
+                            <option value="{{ $y }}" {{ (int) old('year', $r?->year ?? $start->year) === $y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endfor
+                    </select>
+                </div>
             @else
                 <div>
                     <label class="block text-xs font-medium text-gray-700 mb-1">Report Date <span class="text-red-500">*</span></label>
@@ -176,6 +198,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -264,6 +288,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -336,6 +362,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -402,6 +430,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -465,6 +495,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif
@@ -514,6 +546,8 @@
         const params = new URLSearchParams({ type });
         @if($isWeekly)
             params.set('date', document.getElementById('week_start').value);
+        @elseif($isMonthly)
+            params.set('date', document.getElementById('report_year').value + '-' + String(document.getElementById('report_month').value).padStart(2,'0') + '-01');
         @else
             params.set('date', document.getElementById('report_date').value);
         @endif

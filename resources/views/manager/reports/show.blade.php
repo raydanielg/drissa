@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class="mt-4 flex items-center justify-between">
-                <h2 class="text-base font-extrabold text-gray-900 uppercase tracking-wider">{{ $report->type === 'weekly' ? 'Weekly Manager Report' : 'Daily Manager Report' }}</h2>
+                <h2 class="text-base font-extrabold text-gray-900 uppercase tracking-wider">{{ ucfirst($report->type) }} Manager Report</h2>
                 <span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-600"><span class="w-1.5 h-1.5 rounded-full {{ $report->type === 'weekly' ? 'bg-amber-500' : 'bg-slate-500' }}"></span>{{ $report->periodLabel() }}</span>
             </div>
         </div>
