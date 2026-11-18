@@ -69,7 +69,7 @@
 
     {{-- List --}}
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
-        <clinic-table page-size="10" placeholder="Search announcements…">
+        <clinic-table placeholder="Search announcements…">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>

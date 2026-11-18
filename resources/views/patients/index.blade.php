@@ -29,6 +29,7 @@
                 <button type="submit" class="brand-btn text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700">Search</button>
             </form>
         </div>
+        <clinic-table placeholder="Search patients…">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
@@ -74,6 +75,7 @@
                 </tbody>
             </table>
         </div>
+        </clinic-table>
         <div class="px-5 py-3 border-t border-gray-100">{{ $patients->links() }}</div>
     </div>
 </div>

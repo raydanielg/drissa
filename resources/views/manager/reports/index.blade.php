@@ -55,7 +55,7 @@
 
     {{-- Table --}}
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
-        <clinic-table page-size="10" placeholder="Search reports…">
+        <clinic-table placeholder="Search reports…">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">

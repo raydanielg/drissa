@@ -947,6 +947,9 @@
                     <i class="hgi-stroke hgi-search-01 text-xl"></i>
                 </button>
                 <div class="relative">
+                    @if (file_exists(public_path('ng/main.js')))
+                        <clinic-notifications></clinic-notifications>
+                    @else
                     <button onclick="document.getElementById('notificationDropdown').classList.toggle('hidden')" class="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors">
                         <i class="hgi-stroke hgi-notification-01 text-xl"></i>
                     </button>
@@ -958,6 +961,7 @@
                             <div class="px-4 py-6 text-center text-xs text-gray-400">No new notifications</div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </header>

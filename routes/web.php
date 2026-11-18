@@ -22,6 +22,7 @@ use App\Http\Controllers\LabEquipmentController;
 use App\Http\Controllers\LabTestController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationFeedController;
 use App\Http\Controllers\NurseController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientDocumentController;
@@ -89,6 +90,11 @@ Auth::routes(['login' => false, 'register' => false]);
 Route::middleware('auth')->group(function () {
     // Active announcements feed for <clinic-banner> element (all authenticated staff)
     Route::get('api/announcements/active', [AnnouncementController::class, 'active'])->name('announcements.active');
+
+    // Notification center feed for <clinic-notifications> element
+    Route::get('api/notifications/feed', [NotificationFeedController::class, 'feed'])->name('notifications.feed');
+    Route::post('api/notifications/{notification}/read', [NotificationFeedController::class, 'markRead'])->name('notifications.read');
+    Route::post('api/notifications/read-all', [NotificationFeedController::class, 'markAllRead'])->name('notifications.read-all');
 
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('redirect.role:admin|reception');
     Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats')->middleware('redirect.role:admin|reception');

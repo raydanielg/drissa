@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Announcement;
+use App\Models\UserNotification;
 use Illuminate\Http\Request;
 
 class AdminAnnouncementController extends Controller
@@ -23,7 +24,17 @@ class AdminAnnouncementController extends Controller
         $data = $this->validateData($request);
         $data['created_by'] = $request->user()->id;
 
-        Announcement::create($data);
+        $announcement = Announcement::create($data);
+
+        // Push into every staff member's notification feed
+        if ($announcement->is_active) {
+            UserNotification::sendTo([
+                'title' => $announcement->title,
+                'body' => $announcement->body,
+                'type' => $announcement->type,
+                'url' => $announcement->action_url,
+            ]);
+        }
 
         return back()->with('success', 'Announcement published.');
     }

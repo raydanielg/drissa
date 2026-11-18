@@ -1,6 +1,6 @@
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, ElementRef,
-  HostListener, Input, OnDestroy, computed, inject, signal,
+  HostListener, Input, OnDestroy, computed, inject, numberAttribute, signal,
 } from '@angular/core';
 
 /**
@@ -36,7 +36,8 @@ import {
   styleUrl: './clinic-table.component.scss',
 })
 export class ClinicTable implements AfterViewInit, OnDestroy {
-  @Input({ alias: 'page-size' }) pageSize = 10;
+  /** Client-side page size; 0 (default) disables pagination — use on server-paginated tables. */
+  @Input({ alias: 'page-size', transform: numberAttribute }) pageSize = 0;
   @Input() placeholder = 'Search…';
 
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -52,7 +53,7 @@ export class ClinicTable implements AfterViewInit, OnDestroy {
   readonly page = signal(1);
   readonly total = signal(0);
   readonly shown = signal(0);
-  readonly pages = computed(() => Math.max(1, Math.ceil(this.shown() / this.pageSize)));
+  readonly pages = computed(() => (this.pageSize > 0 ? Math.max(1, Math.ceil(this.shown() / this.pageSize)) : 1));
 
   ngAfterViewInit(): void {
     this.table = this.host.nativeElement.querySelector('table') ?? undefined;
@@ -142,10 +143,10 @@ export class ClinicTable implements AfterViewInit, OnDestroy {
       });
     }
 
-    const pageCount = Math.max(1, Math.ceil(working.length / this.pageSize));
+    const pageCount = this.pageSize > 0 ? Math.max(1, Math.ceil(working.length / this.pageSize)) : 1;
     const current = Math.min(this.page(), pageCount);
     const start = (current - 1) * this.pageSize;
-    const visibleSet = new Set(working.slice(start, start + this.pageSize));
+    const visibleSet = this.pageSize > 0 ? new Set(working.slice(start, start + this.pageSize)) : new Set(working);
 
     const tbody = this.table?.tBodies[0];
     if (tbody) {

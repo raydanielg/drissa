@@ -68,6 +68,24 @@ Enter opens `/patients/{id}`. Works for every authenticated role.
 ```
 Types: `info | success | warning | critical` (brand colors).
 
+### `<clinic-notifications>` — topbar notification center
+Replaces the static bell (rendered when `public/ng/main.js` exists, old markup
+otherwise). Polls `GET /api/notifications/feed` every 60 s — the feed merges
+per-user `user_notifications` rows (server read-state) with active
+announcements (browser read-state via `localStorage`). Unread badge, mark-one /
+mark-all read, item click follows `url`.
+
+Push a notification from PHP:
+```php
+UserNotification::sendTo([
+    'title' => 'Lab report ready',
+    'type'  => 'success',
+    'url'   => '/lab/results/12',
+]);                  // all staff
+UserNotification::sendTo($data, [$doctorId]); // specific users
+```
+Publishing an announcement fans out to all staff automatically.
+
 ## Build & deploy
 
 ```bash
@@ -108,8 +126,9 @@ server-side instead of uploading.
 ## Roadmap (phases per master prompt)
 
 - [x] Phase 1–2: workspace, tokens, elements build pipeline
-- [x] Phase 4: banner + confirm + alert elements
+- [x] Phase 4: banner + confirm + alert + **notification center** (`user_notifications` backend)
 - [x] Phase 5 (part): `clinic-table` enhancer, `clinic-patient-search` palette
+- [x] Progressive: clinic-table on reports/announcements/patients/invoices/users/appointments
 - [ ] Phase 3/5: `<clinic-button>` loading variants, form field elements
 - [ ] Phase 5: server-side `clinic-data-table` (JSON-driven) where datasets are large
 - [ ] Phase 6–7: wrap remaining high-traffic tables, migrate modules progressively
