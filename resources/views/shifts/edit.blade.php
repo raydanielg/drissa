@@ -31,7 +31,7 @@
             <label class="text-sm text-gray-700">Active</label>
         </div>
         <div class="pt-4">
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Update Shift</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Update Shift</button>
         </div>
     </form>
 </div>

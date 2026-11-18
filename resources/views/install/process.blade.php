@@ -290,7 +290,7 @@
     document.addEventListener('DOMContentLoaded', runInstall);
 </script>
     <div class="w-full bg-gray-100 rounded-full h-1.5 mb-6 overflow-hidden">
-        <div id="progressBar" class="bg-slate-800 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+        <div id="progressBar" class="brand-btn h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
     </div>
 
     <script>
@@ -393,7 +393,7 @@
                     <p class="text-xs text-gray-500 mt-0.5">Database migrated and seeded successfully.</p>
                 </div>
             </div>
-            <a href="{{ route('install.complete') }}" class="w-full flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
+            <a href="{{ route('install.complete') }}" class="w-full flex items-center justify-center gap-2 h-11 brand-btn hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
                 Continue
                 <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
             </a>

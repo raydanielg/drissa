@@ -109,7 +109,7 @@
     }
     </script>
                 <div class="hidden lg:flex items-center gap-3">
-                    <a href="{{ route('public.appointments') }}" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold px-5 py-2.5 rounded transition-colors">
+                    <a href="{{ route('public.appointments') }}" class="brand-btn hover:bg-slate-700 text-white text-sm font-bold px-5 py-2.5 rounded transition-colors">
                         Book Appointment
                     </a>
                 </div>
@@ -140,7 +140,7 @@
                 <a href="{{ route('public.blog') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-gray-100 {{ request()->routeIs('public.blog') ? 'bg-gray-100 text-slate-900' : '' }}">Blog</a>
                 <a href="{{ route('public.shop') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-gray-100 {{ request()->routeIs('public.shop') ? 'bg-gray-100 text-slate-900' : '' }}">Shop</a>
                 <a href="{{ route('public.contact') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-gray-100 {{ request()->routeIs('public.contact') ? 'bg-gray-100 text-slate-900' : '' }}">Contact Us</a>
-                <a href="{{ route('public.appointments') }}" class="block px-3 py-2 rounded-lg text-sm font-bold text-white bg-slate-800 text-center mt-2">Book Appointment</a>
+                <a href="{{ route('public.appointments') }}" class="block px-3 py-2 rounded-lg text-sm font-bold text-white brand-btn text-center mt-2">Book Appointment</a>
                 <a href="{{ route('login') }}" class="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-gray-100 text-center">Staff Portal</a>
             </div>
         </div>
@@ -253,7 +253,7 @@
                     <h4 class="text-white font-bold text-sm uppercase tracking-wider mb-3 mt-6">Stay Updated</h4>
                     <p class="text-xs text-slate-400 mb-2">Subscribe for announcements, new features, and clinic updates.</p>
                     <form onsubmit="event.preventDefault(); Swal.fire({icon:'success',title:'Subscribed!',text:'You will receive updates soon.',timer:3000}); this.reset();" class="flex gap-2">
-                        <x-ui.input type="email" placeholder="Your email address" required class="flex-1 px-3 py-2 rounded bg-slate-800 border border-slate-700 text-white text-sm placeholder-slate-500 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none" />
+                        <x-ui.input type="email" placeholder="Your email address" required class="flex-1 px-3 py-2 rounded brand-btn border border-slate-700 text-white text-sm placeholder-slate-500 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 outline-none" />
                         <button type="submit" class="bg-white hover:bg-slate-100 text-slate-800 px-3 py-2 rounded text-sm font-semibold transition-colors">
                             <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
                         </button>

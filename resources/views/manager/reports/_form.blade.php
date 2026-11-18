@@ -57,7 +57,7 @@
     @endif
 })();
 </script>
-    <div class="bg-slate-800 px-6 py-5">
+    <div class="brand-btn px-6 py-5">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
                 <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">{{ config('app.name', 'Laravel') }} — Report From Every Department</p>
@@ -460,7 +460,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('manager.reports.index') }}" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Cancel</a>
-                <button type="submit" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold px-5 py-2 rounded transition-colors">
+                <button type="submit" class="inline-flex items-center gap-2 brand-btn hover:bg-slate-700 text-white text-sm font-semibold px-5 py-2 rounded transition-colors">
                     <i class="hgi-stroke hgi-tick-02 text-base"></i>
                     {{ $r ? 'Update Report' : 'Submit Report' }}
                 </button>

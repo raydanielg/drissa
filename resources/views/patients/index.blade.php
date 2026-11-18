@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-5">
     {{-- Header --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Registry</p>
@@ -26,7 +26,7 @@
             <h2 class="text-sm font-bold text-gray-900">All Patients</h2>
             <form method="GET" action="{{ route('patients.index') }}" class="flex gap-2">
                 <x-ui.input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, MRN, phone..." class="border border-gray-200 rounded px-3 py-1.5 text-sm min-w-[250px] focus:ring-2 focus:ring-slate-300 focus:outline-none" />
-                <button type="submit" class="bg-slate-800 text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700">Search</button>
+                <button type="submit" class="brand-btn text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700">Search</button>
             </form>
         </div>
         <div class="overflow-x-auto">
@@ -85,7 +85,7 @@
         <div class="h-full bg-white shadow-2xl flex flex-col">
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-md bg-slate-800 flex items-center justify-center text-white">
+                    <div class="w-9 h-9 rounded-md brand-btn flex items-center justify-center text-white">
                         <i class="hgi-stroke hgi-user-add-01 text-base"></i>
                     </div>
                     <div>
@@ -144,7 +144,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <button type="button" onclick="closePatientSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
-            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-md hover:bg-slate-700">Register Patient</button>
+            <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded-md hover:bg-slate-700">Register Patient</button>
         </div>
     </form>
 </div>
@@ -182,7 +182,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <button type="button" onclick="closePatientSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
-            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Changes</button>
+            <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Changes</button>
         </div>
     </form>
 </div>

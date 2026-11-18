@@ -23,7 +23,7 @@
         @if($icon)<i class="hgi-stroke {{ $icon }} text-sm"></i>@endif
         {{ $slot->isEmpty() ? $label : $slot }}
     </span>
-    <span aria-hidden="true" class="htc-fill absolute inset-0 z-0 flex items-center justify-center gap-1.5 px-3 text-xs font-semibold {{ $danger ? 'bg-red-600 text-white' : 'bg-slate-800 text-white' }}" style="clip-path: inset(0 100% 0 0);">
+    <span aria-hidden="true" class="htc-fill absolute inset-0 z-0 flex items-center justify-center gap-1.5 px-3 text-xs font-semibold {{ $danger ? 'bg-red-600 text-white' : 'brand-btn text-white' }}" style="clip-path: inset(0 100% 0 0);">
         @if($icon)<i class="hgi-stroke {{ $icon }} text-sm"></i>@endif
         {{ $slot->isEmpty() ? $label : $slot }}
     </span>

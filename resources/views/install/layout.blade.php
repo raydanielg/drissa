@@ -40,7 +40,7 @@
                     <div class="flex items-center {{ !$loop->last ? 'flex-1' : '' }}">
                         <div class="flex flex-col items-center gap-1.5">
                             <div class="step-dot w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold
-                                {{ $num < $currentStep ? 'bg-slate-600 text-white' : ($num === $currentStep ? 'bg-slate-800 text-white ring-4 ring-slate-300/40' : 'bg-white text-slate-400 ring-1 ring-slate-200') }}">
+                                {{ $num < $currentStep ? 'bg-slate-600 text-white' : ($num === $currentStep ? 'brand-btn text-white ring-4 ring-slate-300/40' : 'bg-white text-slate-400 ring-1 ring-slate-200') }}">
                                 @if($num < $currentStep)
                                     <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                                 @else

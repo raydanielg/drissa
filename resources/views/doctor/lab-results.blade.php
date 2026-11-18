@@ -10,7 +10,7 @@
     @endif
 
     {{-- Ultrasound Orders --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Doctor</p>
         <h1 class="text-xl font-bold">Lab & Ultrasound Results</h1>
         <p class="text-xs text-slate-400 mt-1">Results awaiting review and completed orders.</p>
@@ -46,13 +46,13 @@
 
     {{-- Ultrasound Orders --}}
     <div class="flex items-center gap-2">
-        <a href="{{ route('doctor.lab-results') }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'all' ? 'bg-slate-800 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
+        <a href="{{ route('doctor.lab-results') }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'all' ? 'brand-btn text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
             All ({{ $visits->count() }})
         </a>
-        <a href="{{ route('doctor.lab-results', ['filter' => 'lab']) }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'lab' ? 'bg-slate-800 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
+        <a href="{{ route('doctor.lab-results', ['filter' => 'lab']) }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'lab' ? 'brand-btn text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
             Lab ({{ $visits->filter(fn($v) => in_array($v->status, $labStatuses))->count() }})
         </a>
-        <a href="{{ route('doctor.lab-results', ['filter' => 'ultrasound']) }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'ultrasound' ? 'bg-slate-800 text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
+        <a href="{{ route('doctor.lab-results', ['filter' => 'ultrasound']) }}" class="px-4 py-2 text-sm font-medium rounded transition-colors {{ $filter === 'ultrasound' ? 'brand-btn text-white' : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100' }}">
             Ultrasound ({{ $visits->filter(fn($v) => in_array($v->status, $ultrasoundStatuses))->count() }})
         </a>
     </div>
@@ -92,7 +92,7 @@
                     @if ($visit->status === \App\Enums\VisitStatus::LabCompleted->value)
                         <form method="POST" action="{{ route('doctor.visits.lab-return', $visit) }}" class="inline">
                             @csrf
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">
                                 <i class="hgi-stroke hgi-login-02 text-sm"></i>
                                 Receive & Review
                             </button>
@@ -101,7 +101,7 @@
                     @if ($visit->status === \App\Enums\VisitStatus::UltrasoundCompleted->value)
                         <form method="POST" action="{{ route('doctor.visits.lab-return', $visit) }}" class="inline">
                             @csrf
-                            <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">
                                 <i class="hgi-stroke hgi-login-02 text-sm"></i>
                                 Receive & Review
                             </button>
@@ -304,7 +304,7 @@
                             </div>
                         </div>
                         <x-ui.textarea name="items[0][instructions]" placeholder="Instructions (optional)" class="w-full border rounded-lg px-2 py-1.5 text-xs mt-2" rows="2"></x-ui.textarea>
-                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium px-3 py-2 rounded mt-2 flex items-center justify-center gap-1">
+                        <button type="submit" class="w-full brand-btn hover:bg-slate-700 text-white text-xs font-medium px-3 py-2 rounded mt-2 flex items-center justify-center gap-1">
                             <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                             Send to Pharmacy
                         </button>
@@ -316,7 +316,7 @@
         <div class="bg-white rounded-md border border-gray-200 p-12 text-center">
             <i class="hgi-stroke hgi-test-tube-01 text-6xl mx-auto text-gray-300 mb-3"></i>
             <p class="text-xs text-gray-400">No results pending. All patients are in your queue.</p>
-            <a href="{{ route('doctor.queue') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
+            <a href="{{ route('doctor.queue') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
                 Back to Queue
             </a>
         </div>

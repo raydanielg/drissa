@@ -43,7 +43,7 @@ function closeReceipt() {
     }, 300);
 }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Billing</p>
@@ -211,7 +211,7 @@ function closeReceipt() {
                             </td>
                             <td class="px-5 py-3 text-right">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <button type="button" onclick="viewReceipt({{ $invoice->id }})" class="flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 text-white text-[10px] font-medium rounded hover:bg-slate-700 transition-colors">
+                                    <button type="button" onclick="viewReceipt({{ $invoice->id }})" class="flex items-center gap-1 px-2.5 py-1.5 brand-btn text-white text-[10px] font-medium rounded hover:bg-slate-700 transition-colors">
                                         Receipt
                                     </button>
                                     <a href="{{ route('invoices.pdf', $invoice) }}" class="flex items-center gap-1 px-2.5 py-1.5 border border-gray-200 text-gray-700 text-[10px] font-medium rounded hover:bg-gray-100 transition-colors">
@@ -274,7 +274,7 @@ function closeReceipt() {
 <div id="receiptSlideOver" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="closeReceipt()"></div>
     <div class="absolute inset-y-0 right-0 w-full max-w-lg bg-white shadow-2xl transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col" id="receiptPanel">
-        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-slate-800">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between brand-btn">
             <h3 class="text-sm font-semibold text-white">Receipt</h3>
             <button onclick="closeReceipt()" class="p-1.5 rounded-lg hover:bg-white/20 text-white">
                 <i class="hgi-stroke hgi-cancel-01 text-base"></i>

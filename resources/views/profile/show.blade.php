@@ -11,7 +11,7 @@
         {{-- Profile Banner --}}
         <div class="px-6 py-5 border-b border-gray-100">
             <div class="flex items-center gap-4">
-                <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold text-lg">
+                <div class="w-12 h-12 rounded-full brand-btn flex items-center justify-center text-white font-bold text-lg">
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </div>
                 <div>

@@ -153,7 +153,7 @@
         }
     }
 </script>
-                <button type="submit" class="w-full h-11 text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-md transition-colors flex items-center justify-center gap-2.5">
+                <button type="submit" class="w-full h-11 text-sm font-semibold text-white bg-slate-900 hover:brand-btn rounded-md transition-colors flex items-center justify-center gap-2.5">
                     <i class="hgi-stroke hgi-logout-03 text-xl"></i>
                     Sign In
                 </button>

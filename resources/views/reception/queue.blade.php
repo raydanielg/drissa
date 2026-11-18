@@ -184,7 +184,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
     });
 });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Reception</p>
@@ -579,7 +579,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
 });
 </script>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <button onclick="openPatientModal()" class="flex flex-col items-center gap-2 p-4 bg-slate-800 rounded-md text-white hover:bg-slate-700 transition-colors">
+        <button onclick="openPatientModal()" class="flex flex-col items-center gap-2 p-4 brand-btn rounded-md text-white hover:bg-slate-700 transition-colors">
             <i class="hgi-stroke hgi-user-add-01 text-xl"></i>
             <span class="text-xs font-semibold">Register Patient</span>
         </button>
@@ -1041,7 +1041,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                 <div class="text-center py-12">
                     <i class="hgi-stroke hgi-user-multiple-02 text-base text-gray-300 mx-auto mb-4"></i>
                     <p class="text-gray-500">No patients in queue</p>
-                    <button onclick="openVisitModal()" class="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-sm font-medium transition-colors">
+                    <button onclick="openVisitModal()" class="mt-4 px-4 py-2 brand-btn hover:bg-slate-700 text-white rounded text-sm font-medium transition-colors">
                         Create First Visit
                     </button>
                 </div>
@@ -1255,7 +1255,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                                 <td class="py-3 text-gray-500 text-sm">{{ $visit->registered_at->format('H:i') }}</td>
                                 <td class="py-3">
                                     <div class="flex items-center gap-2">
-                                        <button onclick="openAssignDoctorModal({{ $visit->id }})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-medium transition-colors flex items-center gap-1">
+                                        <button onclick="openAssignDoctorModal({{ $visit->id }})" class="px-3 py-1.5 brand-btn hover:bg-slate-700 text-white rounded text-xs font-medium transition-colors flex items-center gap-1">
                                             <i class="hgi-stroke hgi-user text-xs"></i>
                                             Assign Doctor
                                         </button>
@@ -1949,7 +1949,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                 <button type="button" onclick="closePatientModal()" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all border border-gray-200">
                     Cancel
                 </button>
-                <button type="submit" class="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded font-medium transition-colors">
+                <button type="submit" class="flex-1 px-4 py-2.5 brand-btn hover:bg-slate-700 text-white rounded font-medium transition-colors">
                     Register Patient
                 </button>
             </div>
@@ -2548,7 +2548,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                 <button type="button" onclick="closeVisitModal()" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all border border-gray-200">
                     Cancel
                 </button>
-                <button type="submit" class="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded font-medium transition-colors">
+                <button type="submit" class="flex-1 px-4 py-2.5 brand-btn hover:bg-slate-700 text-white rounded font-medium transition-colors">
                     Create Visit
                 </button>
             </div>
@@ -2757,7 +2757,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                 <button type="button" onclick="closeAssignDoctorModal()" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all border border-gray-200">
                     Cancel
                 </button>
-                <button type="submit" class="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded font-medium transition-colors">
+                <button type="submit" class="flex-1 px-4 py-2.5 brand-btn hover:bg-slate-700 text-white rounded font-medium transition-colors">
                     Assign Doctor
                 </button>
             </div>
@@ -2966,7 +2966,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
                 <button type="button" onclick="closeChangeDoctorModal()" class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-all border border-gray-200">
                     Cancel
                 </button>
-                <button type="submit" class="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded font-medium transition-colors">
+                <button type="submit" class="flex-1 px-4 py-2.5 brand-btn hover:bg-slate-700 text-white rounded font-medium transition-colors">
                     Change Doctor
                 </button>
             </div>

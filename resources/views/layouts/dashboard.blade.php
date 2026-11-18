@@ -351,6 +351,11 @@
         .app-toast-loading { border-left-color: var(--brand-magenta); } .app-toast-loading .t-icon { background: var(--brand-magenta); }
         @media (prefers-reduced-motion: reduce) { .app-toast { transition: none; } }
         @keyframes btnSpin { to { transform: rotate(360deg); } }
+        .brand-hero { background: linear-gradient(135deg, var(--brand-green-900) 0%, var(--brand-green-700) 55%, var(--brand-green) 115%); color: #fff; }
+        .brand-btn { background: var(--brand-green); color: #fff; }
+        .brand-btn:hover { background: var(--brand-green-700) !important; color: #fff; }
+        .brand-btn-outline { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); }
+        .brand-btn-outline:hover { background: rgba(255,255,255,.22) !important; color: #fff; }
     </style>
     @stack('styles')
 </head>

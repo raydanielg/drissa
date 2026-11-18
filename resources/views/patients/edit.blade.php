@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex items-center gap-4">
             <div class="w-14 h-14 rounded-full border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-white text-lg font-bold">
                 {{ strtoupper(substr($patient->first_name, 0, 1)) }}
@@ -64,7 +64,7 @@
         </div>
         <div class="md:col-span-2 flex justify-end gap-2 pt-2">
             <a href="{{ route('patients.show', $patient) }}" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Cancel</a>
-            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Update Patient</button>
+            <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Update Patient</button>
         </div>
     </form>
     </div>

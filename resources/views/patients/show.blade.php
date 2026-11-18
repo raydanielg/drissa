@@ -10,7 +10,7 @@
     @endif
 
     {{-- Recent Visits --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div class="flex flex-col md:flex-row items-center md:items-end gap-4">
                 <div class="w-20 h-20 rounded-full border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-white text-2xl font-bold">

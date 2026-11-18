@@ -7,7 +7,7 @@
 <div class="space-y-5">
 
     {{-- Table --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Manager</p>
@@ -47,7 +47,7 @@
                 <label class="block text-[10px] font-medium text-gray-500 mb-1 uppercase tracking-wider">To</label>
                 <x-ui.input type="text" data-fp-date name="to" value="{{ request('to') }}" class="border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
             </div>
-            <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">Filter</button>
+            <button type="submit" class="px-4 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">Filter</button>
             <a href="{{ route('manager.reports.index') }}" class="px-4 py-2 text-sm text-gray-500 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Reset</a>
             <a href="{{ route('manager.reports.export', request()->query()) }}" class="px-4 py-2 text-sm text-emerald-700 border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 rounded transition-colors">Export CSV</a>
         </form>

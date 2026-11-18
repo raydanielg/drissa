@@ -61,7 +61,7 @@ function toggleVitalsForm(visitId) {
     form.classList.toggle('hidden');
 }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Doctor</p>
@@ -476,7 +476,7 @@ function toggleVitalsForm(visitId) {
                                         <x-ui.textarea name="notes" rows="2" placeholder="Additional observations..." class="w-full mt-1 border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-slate-300">{{ $visit->vitals?->notes ?? '' }}</x-ui.textarea>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                             <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                                             Save Vitals
                                         </button>
@@ -613,7 +613,7 @@ function toggleVitalsForm(visitId) {
                             <div class="flex flex-wrap gap-2">
                                 <form method="POST" action="{{ route('doctor.visits.call', $visit) }}">
                                     @csrf
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-arrow-right-02 text-sm"></i>
                                         Call In
                                     </button>
@@ -696,7 +696,7 @@ function toggleVitalsForm(visitId) {
                                     <x-ui.textarea name="notes" placeholder="Clinical Notes" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-300" rows="3">{{ $visit->consultation?->notes }}</x-ui.textarea>
                                 </div>
                                 <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-download-02 text-sm"></i>
                                         Save Consultation
                                     </button>
@@ -773,7 +773,7 @@ function toggleVitalsForm(visitId) {
                                 </div>
                                 <x-ui.textarea name="notes" placeholder="Clinical notes for lab" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-300" rows="2"></x-ui.textarea>
                                 <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-plus-sign text-sm"></i>
                                         Send to Lab
                                     </button>
@@ -851,7 +851,7 @@ function toggleVitalsForm(visitId) {
                                 </div>
                                 <x-ui.textarea name="notes" placeholder="Clinical notes for ultrasound" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-slate-300" rows="2"></x-ui.textarea>
                                 <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-plus-sign text-sm"></i>
                                         Send to Ultrasound
                                     </button>
@@ -938,7 +938,7 @@ function toggleVitalsForm(visitId) {
                                 </div>
                                 <button type="button" onclick="addPrescriptionItem({{ $visit->id }})" class="text-xs text-slate-600 hover:text-slate-800 font-medium">+ Add another drug</button>
                                 <div class="flex justify-end">
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-flash text-sm"></i>
                                         Send to Pharmacy
                                     </button>
@@ -999,7 +999,7 @@ function toggleVitalsForm(visitId) {
 </script>
                             <form method="POST" action="{{ route('doctor.visits.complete', $visit) }}" onsubmit="return swalConfirmSubmit(event, 'Complete this visit? The patient will be discharged.')">
                                 @csrf
-                                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                <button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                                     Complete Visit
                                 </button>
@@ -2085,7 +2085,7 @@ function toggleVitalsForm(visitId) {
             </div>
             <h3 class="text-base font-semibold text-gray-900">No patients in queue</h3>
             <p class="text-sm text-gray-500 mt-1">Your waiting list is clear. Check Results for patients returning from lab or ultrasound.</p>
-            <a href="{{ route('doctor.lab-results') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
+            <a href="{{ route('doctor.lab-results') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
                 View Results
                 @if($pendingResultsCount > 0)
                     <span class="bg-red-500 text-white text-[10px] font-bold rounded-full px-2 py-0.5 ml-1">{{ $pendingResultsCount }}</span>

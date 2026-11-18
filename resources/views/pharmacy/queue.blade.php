@@ -10,7 +10,7 @@
     @endif
 
     {{-- Header --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Pharmacy</p>
             <h1 class="text-xl font-bold">Pharmacy Queue</h1>
@@ -47,7 +47,7 @@
                             <td class="px-5 py-3 text-right">
                                 <form method="POST" action="{{ route('pharmacy.prescriptions.dispense', $prescription) }}" data-ajax data-confirm="Dispense these drugs?">
                                     @csrf
-                                    <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">Dispense</button>
+                                    <button type="submit" class="brand-btn hover:bg-slate-700 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">Dispense</button>
                                 </form>
                             </td>
                         </tr>

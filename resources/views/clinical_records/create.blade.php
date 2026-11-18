@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="brand-hero rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Clinical</p>
             <h1 class="text-xl font-bold">Add Clinical Record</h1>
@@ -264,7 +264,7 @@
 </script>
         <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/30 flex justify-end gap-3">
             <a href="{{ route('clinical-records.index') }}" class="px-5 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Cancel</a>
-            <button type="submit" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded transition-colors">
+            <button type="submit" class="inline-flex items-center gap-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded transition-colors">
                 <i class="hgi-stroke hgi-download-02 text-base"></i>
                 Save Clinical Record
             </button>

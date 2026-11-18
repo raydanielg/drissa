@@ -112,28 +112,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -394,7 +394,7 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
     });
 });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
@@ -513,28 +513,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -943,28 +943,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -1278,7 +1278,7 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
                             <td class="px-5 py-3 text-gray-500 text-xs">{{ $visit->registered_at->format('H:i') }}</td>
                             <td class="px-5 py-3 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    <button type="button" onclick="openStepperModal({{ $visit->id }}, '{{ $visit->patient?->fullName() ?? 'Unknown' }}', '{{ $visit->status }}')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                                    <button type="button" onclick="openStepperModal({{ $visit->id }}, '{{ $visit->patient?->fullName() ?? 'Unknown' }}', '{{ $visit->status }}')" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                                         <i class="hgi-stroke hgi-clipboard text-sm"></i>
                                         Journey
                                     </button>
@@ -1406,28 +1406,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -1713,7 +1713,7 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
                     </div>
                     <div class="flex justify-end gap-2 mt-4">
                         <button type="button" onclick="closeChangeDoctorModal()" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Change Doctor</button>
+                        <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Change Doctor</button>
                     </div>
                 </form>
             </div>
@@ -1824,28 +1824,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -2237,28 +2237,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;
@@ -2522,7 +2522,7 @@ document.getElementById('dischargeForm')?.addEventListener('submit', function(e)
 <div id="stepperModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="closeStepperModal()"></div>
     <div class="absolute inset-y-0 right-0 w-full max-w-lg bg-white shadow-2xl transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col" id="stepperPanel">
-        <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-800">
+        <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between brand-btn">
             <div>
                 <h3 class="text-sm font-semibold text-white">Patient Journey</h3>
                 <p class="text-xs text-slate-400" id="stepperPatientName">-</p>
@@ -2643,28 +2643,28 @@ function openStepperModal(visitId, patientName, status) {
         let actionButton = '';
         if (isCurrent) {
             if (step.name === 'Waiting for Doctor') {
-                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="callToDoctor(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-video-01 text-sm"></i>
                     Call to Doctor
                 </button>`;
             } else if (step.name === 'With Doctor') {
                 actionButton = `<div class="mt-2 flex gap-2">
-                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToLab(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Lab
                     </button>
-                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                    <button onclick="sendToPharmacy(${visitId})" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                         <i class="hgi-stroke hgi-test-tube-01 text-sm"></i>
                         Send to Pharmacy
                     </button>
                 </div>`;
             } else if (step.name === 'Lab Tests') {
-                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeLab(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Lab Completed
                 </button>`;
             } else if (step.name === 'Pharmacy') {
-                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+                actionButton = `<button onclick="completeVisit(${visitId})" class="mt-2 flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-sm"></i>
                     Complete Visit
                 </button>`;

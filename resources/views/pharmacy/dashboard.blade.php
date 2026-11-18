@@ -7,7 +7,7 @@
 <div class="space-y-6">
 
     {{-- Top Medicines --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex items-center justify-between mb-4">
             <div>
                 <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Today's Revenue</p>

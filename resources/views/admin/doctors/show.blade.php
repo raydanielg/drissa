@@ -48,7 +48,7 @@
         });
     }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
                 <div class="w-16 h-16 rounded-full border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-white text-xl font-bold">
@@ -209,7 +209,7 @@
                         <input type="checkbox" name="is_active" value="1" {{ $doctor->is_active ? 'checked' : '' }} class="rounded border-gray-300">
                         <label class="text-sm text-gray-700">Active</label>
                     </div>
-                    <button type="submit" class="w-full bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Update Profile</button>
+                    <button type="submit" class="w-full brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Update Profile</button>
                 </form>
             </div>
 
@@ -567,7 +567,7 @@
                         <label class="block text-xs font-medium text-gray-700 mb-1">Notes</label>
                         <x-ui.textarea name="notes" rows="2" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300"></x-ui.textarea>
                     </div>
-                    <button type="submit" class="w-full bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Assign Appointment</button>
+                    <button type="submit" class="w-full brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Assign Appointment</button>
                 </form>
             </div>
         </div>

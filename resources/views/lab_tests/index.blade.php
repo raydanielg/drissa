@@ -166,7 +166,7 @@
         if (e.target === this) closeImportModal();
     });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="brand-hero rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Laboratory</p>
             <h1 class="text-xl font-bold">Lab Test Types</h1>
@@ -1306,7 +1306,7 @@
                         <p class="text-[10px] text-gray-500 mt-0.5">CSV file with 30 common lab tests pre-filled</p>
                     </div>
                 </div>
-                <a href="{{ route('lab-tests.sample') }}" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium px-4 py-2 rounded transition-colors flex items-center gap-1.5">
+                <a href="{{ route('lab-tests.sample') }}" class="brand-btn hover:bg-slate-700 text-white text-xs font-medium px-4 py-2 rounded transition-colors flex items-center gap-1.5">
                     <i class="hgi-stroke hgi-upload-01 text-base"></i>
                     Download
                 </a>
@@ -1690,7 +1690,7 @@
 
             <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
                 <button type="button" onclick="closeImportModal()" class="px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors">Cancel</button>
-                <button type="button" id="importBtn" onclick="submitImport()" disabled class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <button type="button" id="importBtn" onclick="submitImport()" disabled class="px-5 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <i class="hgi-stroke hgi-upload-01 text-base"></i>
                     Import Now
                 </button>

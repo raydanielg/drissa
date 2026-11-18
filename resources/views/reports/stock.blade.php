@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-5">
 {{-- Header --}}
-<div class="bg-slate-800 rounded-md p-6 text-white">
+<div class="brand-hero rounded-md p-6 text-white">
     <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Reports</p>
     <h1 class="text-xl font-bold">Stock Report</h1>
     <p class="text-xs text-slate-400 mt-1">Inventory levels for products and medications.</p>

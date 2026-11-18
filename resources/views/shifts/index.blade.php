@@ -105,7 +105,7 @@ document.getElementById('shiftForm')?.addEventListener('submit', function(e) {
     });
 });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">HR</p>
         <h1 class="text-xl font-bold">Shifts</h1>
         <p class="text-xs text-slate-400 mt-1">Staff shift schedules and availability.</p>
@@ -330,7 +330,7 @@ document.getElementById('shiftForm')?.addEventListener('submit', function(e) {
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
         <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <h2 class="text-sm font-bold text-gray-900">Shifts Management</h2>
-            <button type="button" onclick="openShiftForm()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
+            <button type="button" onclick="openShiftForm()" class="flex items-center gap-1.5 px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">
                 <i class="hgi-stroke hgi-add-01 text-sm"></i>
                 Add Shift
             </button>
@@ -494,7 +494,7 @@ document.getElementById('shiftForm')?.addEventListener('submit', function(e) {
 <div id="shiftSlideOver" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="closeShiftForm()"></div>
     <div class="absolute inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl transform transition-transform translate-x-full duration-300 ease-in-out flex flex-col" id="shiftPanel">
-        <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between bg-slate-800">
+        <div class="px-6 py-4 border-b border-slate-700 flex items-center justify-between brand-btn">
             <h3 class="text-sm font-semibold text-white" id="shiftFormTitle">Add Shift</h3>
             <button onclick="closeShiftForm()" class="p-1.5 rounded hover:bg-slate-700 text-slate-300">
                 <i class="hgi-stroke hgi-cancel-01 text-base"></i>
@@ -527,7 +527,7 @@ document.getElementById('shiftForm')?.addEventListener('submit', function(e) {
                 </div>
                 <div class="flex justify-end gap-2 mt-6">
                     <button type="button" onclick="closeShiftForm()" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Save Shift</button>
+                    <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Save Shift</button>
                 </div>
             </form>
         </div>

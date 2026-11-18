@@ -7,7 +7,7 @@
 <div class="space-y-5">
 
     {{-- Recent Vitals --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Nursing</p>
@@ -70,7 +70,7 @@
                         <div class="text-sm font-medium text-gray-900">{{ $visit->patient?->fullName() ?? 'Unknown' }}</div>
                         <div class="text-xs text-gray-500">{{ $visit->visit_number }} • {{ $visit->registered_at->format('H:i') }}</div>
                     </div>
-                    <a href="{{ route('nurse.queue') }}" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Take Vitals</a>
+                    <a href="{{ route('nurse.queue') }}" class="px-3 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Take Vitals</a>
                 </div>
             @empty
                 <div class="text-center py-8 text-gray-400 text-sm">

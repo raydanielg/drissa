@@ -35,7 +35,7 @@
     </div>
 
     @if($allGood)
-        <a href="{{ route('install.database') }}" class="w-full flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
+        <a href="{{ route('install.database') }}" class="w-full flex items-center justify-center gap-2 h-11 brand-btn hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
             Continue
             <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
         </a>

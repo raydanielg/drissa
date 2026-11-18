@@ -22,7 +22,7 @@
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-900 truncate">{{ $conversation->titleFor(Auth::user()) }}</span>
                             @if($unread > 0)
-                                <span class="bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ $unread }}</span>
+                                <span class="brand-btn text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ $unread }}</span>
                             @endif
                         </div>
                         <p class="text-xs text-gray-500 truncate">
@@ -52,7 +52,7 @@
                     <option value="{{ $user->id }}">{{ $user->name }} ({{ ucfirst($user->getRoleNames()->first() ?? 'User') }})</option>
                 @endforeach
             </x-ui.select>
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Start Chat</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Start Chat</button>
         </form>
     </div>
 </div>

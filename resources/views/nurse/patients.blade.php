@@ -7,7 +7,7 @@
 <div class="space-y-5">
 
     {{-- Header --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Nursing</p>
         <h1 class="text-xl font-bold">Patients</h1>
         <p class="text-xs text-slate-400 mt-1">Registered patient list.</p>

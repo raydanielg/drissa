@@ -9,7 +9,7 @@
         <div class="p-3 rounded-md bg-white border-l-2 border-emerald-500 text-emerald-700 text-xs animate-fade">{{ session('status') }}</div>
     @endif
 
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Reception</p>
@@ -64,7 +64,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <button onclick="openRegisterPatientModal()" class="group flex flex-col items-center gap-2 p-4 bg-slate-800 rounded-md text-white hover:bg-slate-700 transition-colors">
+            <button onclick="openRegisterPatientModal()" class="group flex flex-col items-center gap-2 p-4 brand-btn rounded-md text-white hover:bg-slate-700 transition-colors">
                 <div class="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center">
                     <i class="hgi-stroke hgi-user-add-01 text-xl"></i>
                 </div>
@@ -166,7 +166,7 @@
                 <a href="{{ route('reception.queue') }}" class="text-[10px] font-medium text-slate-600 hover:text-slate-800 flex items-center gap-0.5">View all <i class="hgi-stroke hgi-arrow-right-01 text-xs"></i></a>
             </div>
             <div class="flex flex-wrap gap-2" id="queueTabs">
-                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded bg-slate-800 text-white">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $kpis['registered'] }}</span></button>
+                <button data-tab="need-doctor" class="queue-tab active px-3 py-1.5 text-xs font-medium rounded brand-btn text-white">Check-in & Pay <span class="ml-1 tab-count" data-count="registered">{{ $kpis['registered'] }}</span></button>
                 <button data-tab="waiting-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Waiting Doctor <span class="ml-1 tab-count" data-count="waiting_for_doctor">{{ $kpis['waiting_doctor'] }}</span></button>
                 <button data-tab="with-doctor" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">With Doctor <span class="ml-1 tab-count" data-count="with_doctor">{{ $kpis['with_doctor'] }}</span></button>
                 <button data-tab="payment" class="queue-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">Payment <span class="ml-1 tab-count" data-count="waiting_for_payment">{{ $kpis['waiting_payment'] }}</span></button>
@@ -215,7 +215,7 @@
                                                 @csrf
                                                 <input type="hidden" name="amount" value="{{ $balance }}">
                                                 <input type="hidden" name="method" value="cash">
-                                                <button type="submit" class="btn-submit inline-flex items-center gap-1.5 bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">
+                                                <button type="submit" class="btn-submit inline-flex items-center gap-1.5 brand-btn text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">
                                                     <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                                                     Pay {{ number_format($balance) }}
                                                 </button>
@@ -234,7 +234,7 @@
                                                     <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                                 @endforeach
                                             </x-ui.select>
-                                            <button type="submit" class="btn-submit bg-slate-800 text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Send to Doctor</button>
+                                            <button type="submit" class="btn-submit brand-btn text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Send to Doctor</button>
                                         </form>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Ready for doctor</span>
@@ -270,7 +270,7 @@
                                                 <option value="{{ $doctor->id }}" {{ $visit->doctor_id == $doctor->id ? 'selected' : '' }}>{{ $doctor->name }}</option>
                                             @endforeach
                                         </x-ui.select>
-                                        <button type="submit" class="btn-submit bg-slate-800 text-white text-xs font-medium px-3 py-1 rounded hover:bg-slate-700 transition-colors">Change</button>
+                                        <button type="submit" class="btn-submit brand-btn text-white text-xs font-medium px-3 py-1 rounded hover:bg-slate-700 transition-colors">Change</button>
                                     </form>
                                 </td>
                                 <td class="px-6 py-3 text-right">
@@ -325,7 +325,7 @@
                                             @csrf
                                             <input type="hidden" name="amount" value="{{ $balance }}">
                                             <input type="hidden" name="method" value="cash">
-                                            <button type="submit" class="btn-submit inline-flex items-center gap-1.5 bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">
+                                            <button type="submit" class="btn-submit inline-flex items-center gap-1.5 brand-btn text-white text-xs font-semibold px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">
                                                 <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                                                 Pay {{ number_format($balance) }}
                                             </button>
@@ -430,7 +430,7 @@
                 <x-ui.textarea name="allergies" placeholder="Allergies" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" rows="2"></x-ui.textarea>
                 <div class="sm:col-span-2 flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeRegisterPatientModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Register Patient</button>
+                    <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Register Patient</button>
                 </div>
             </form>
         </div>
@@ -460,7 +460,7 @@
                         
                         <div id="selectedPatientIndicator" class="hidden absolute inset-y-0 left-0 right-10 flex items-center pl-3 bg-slate-100 rounded pointer-events-none">
                             <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-white text-[10px] font-bold" id="indicatorInitial"></div>
+                                <div class="w-6 h-6 rounded-full brand-btn flex items-center justify-center text-white text-[10px] font-bold" id="indicatorInitial"></div>
                                 <span class="text-sm font-medium text-slate-800" id="indicatorName"></span>
                                 <span class="text-xs text-slate-500" id="indicatorMRN"></span>
                             </div>
@@ -513,7 +513,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeOpenVisitModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Open Visit</button>
+                    <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Open Visit</button>
                 </div>
             </form>
         </div>
@@ -524,7 +524,7 @@
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closePaymentModal()"></div>
     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
         <div class="bg-white rounded-md shadow-2xl m-4 animate-fade overflow-hidden">
-            <div class="px-6 py-4 bg-slate-800 rounded-t-md flex items-center justify-between">
+            <div class="px-6 py-4 brand-btn rounded-t-md flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded bg-slate-700/60 flex items-center justify-center">
                         <i class="hgi-stroke hgi-message-multiple-02 text-xl text-slate-200"></i>
@@ -583,7 +583,7 @@
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" onclick="closePaymentModal()" class="px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
-                        <button type="submit" class="btn-submit inline-flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white text-sm font-semibold rounded hover:bg-slate-700 transition-colors">
+                        <button type="submit" class="btn-submit inline-flex items-center gap-2 px-5 py-2.5 brand-btn text-white text-sm font-semibold rounded hover:bg-slate-700 transition-colors">
                             <i class="hgi-stroke hgi-tick-02 text-base"></i>
                             Record Payment
                         </button>
@@ -813,7 +813,7 @@
                         row.className = 'w-full text-left p-3 hover:bg-gray-50 transition-colors flex items-center justify-between group border-b border-gray-50 last:border-0';
                         row.innerHTML = `
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs group-hover:bg-slate-800 group-hover:text-white transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs group-hover:brand-btn group-hover:text-white transition-colors">
                                     ${patient.text.charAt(0)}
                                 </div>
                                 <div>
@@ -961,10 +961,10 @@
     document.querySelectorAll('.queue-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.queue-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white');
+                b.classList.remove('active', 'brand-btn', 'text-white');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white');
+            btn.classList.add('active', 'brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
             document.querySelectorAll('.queue-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');

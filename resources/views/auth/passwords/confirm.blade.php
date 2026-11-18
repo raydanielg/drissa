@@ -5,7 +5,7 @@
 @section('content')
 <div class="w-full max-w-md" style="animation: simpleFadeIn 0.4s ease-out both;">
     <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-        <div class="bg-slate-800 px-8 py-8 text-center">
+        <div class="brand-btn px-8 py-8 text-center">
             <div class="w-16 h-16 mx-auto bg-white/10 backdrop-blur-sm rounded-md flex items-center justify-center mb-4">
                 <img src="{{ asset('forgotpass.png') }}" alt="Confirm Password" class="w-10 h-10 object-contain">
             </div>
@@ -32,7 +32,7 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="w-full py-3 text-sm font-bold text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors flex items-center justify-center gap-2">
+                <button type="submit" class="w-full py-3 text-sm font-bold text-white brand-btn hover:bg-slate-700 rounded transition-colors flex items-center justify-center gap-2">
                     <i class="hgi-stroke hgi-checkmark-circle-02 text-xl"></i>
                     Confirm Password
                 </button>

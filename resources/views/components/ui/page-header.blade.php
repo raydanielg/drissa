@@ -5,7 +5,7 @@
     'action' => null,
 ])
 
-<div {{ $attributes->merge(['class' => 'bg-slate-800 rounded-md p-6 mb-5 text-white']) }}>
+<div {{ $attributes->merge(['class' => 'brand-hero rounded-md p-6 mb-5 text-white']) }}>
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             @if($section)

@@ -7,7 +7,7 @@
 <div class="space-y-5">
 
     {{-- Top Medicines with Profit --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Pharmacy</p>
         <h1 class="text-xl font-bold">Pharmacy Reports & Profit Analysis</h1>
         <p class="text-xs text-slate-400 mt-1">Dispensing totals, revenue, cost, and margins.</p>

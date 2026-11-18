@@ -77,10 +77,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -240,7 +240,7 @@
         if (e.key === 'Escape') closePaymentModal();
     });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Billing</p>
@@ -324,10 +324,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -556,10 +556,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -822,10 +822,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -1078,10 +1078,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -1245,7 +1245,7 @@
         <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 class="text-sm font-bold text-gray-900">Payment Management</h2>
             <div class="flex flex-wrap gap-2" id="paymentTabs">
-                <button data-tab="pending" class="payment-tab active px-3 py-1.5 text-xs font-semibold rounded bg-slate-800 text-white">Pending <span class="ml-1">{{ $pendingInvoices->count() }}</span></button>
+                <button data-tab="pending" class="payment-tab active px-3 py-1.5 text-xs font-semibold rounded brand-btn text-white">Pending <span class="ml-1">{{ $pendingInvoices->count() }}</span></button>
                 <button data-tab="history" class="payment-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">History <span class="ml-1">{{ $recentPayments->count() }}</span></button>
                 <button data-tab="invoices" class="payment-tab px-3 py-1.5 text-xs font-medium rounded text-gray-600 hover:bg-gray-100">All Invoices <span class="ml-1">{{ $allInvoices->count() }}</span></button>
             </div>
@@ -1320,10 +1320,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -1525,7 +1525,7 @@
                                 <td class="px-5 py-3">
                                     <div class="flex items-center justify-end gap-2">
                                         @if($invoice->visit)
-                                            <button onclick="openPaymentModal({{ $invoice->visit?->id }}, '{{ $invoice->patient?->fullName() ?? 'Unknown' }}', '{{ $invoice->invoice_number }}', {{ $invoice->total }}, {{ $invoice->paid }}, {{ $invoice->total - $invoice->paid }})" class="bg-slate-800 text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Pay & Close</button>
+                                            <button onclick="openPaymentModal({{ $invoice->visit?->id }}, '{{ $invoice->patient?->fullName() ?? 'Unknown' }}', '{{ $invoice->invoice_number }}', {{ $invoice->total }}, {{ $invoice->paid }}, {{ $invoice->total - $invoice->paid }})" class="brand-btn text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Pay & Close</button>
                                             <button onclick="openPaymentModal({{ $invoice->visit?->id }}, '{{ $invoice->patient?->fullName() ?? 'Unknown' }}', '{{ $invoice->invoice_number }}', {{ $invoice->total }}, {{ $invoice->paid }}, {{ $invoice->total - $invoice->paid }}, true)" class="bg-white border border-gray-200 text-gray-700 text-xs font-medium px-3 py-1.5 rounded hover:bg-gray-50 transition-colors">Pay</button>
                                             <form method="POST" action="{{ route('reception.visits.close', $invoice->visit) }}" class="ajax-close-form" data-visit="{{ $invoice->visit?->visit_number }}">
                                                 @csrf
@@ -1614,10 +1614,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -1890,10 +1890,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -2099,7 +2099,7 @@
                                         @if($invoice->status !== 'paid')
                                             <form method="POST" action="{{ route('reception.invoices.mark-paid', $invoice) }}" class="ajax-mark-paid-form" data-invoice="{{ $invoice->invoice_number }}">
                                                 @csrf
-                                                <button type="submit" class="bg-slate-800 text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Mark Paid</button>
+                                                <button type="submit" class="brand-btn text-white text-xs font-medium px-3 py-1.5 rounded hover:bg-slate-700 transition-colors">Mark Paid</button>
                                             </form>
                                         @endif
                                         @if($invoice->status === 'paid')
@@ -2189,10 +2189,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -2391,7 +2391,7 @@
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closePaymentModal()" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Cancel</button>
                     <button type="button" id="recordPaymentBtn" class="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-50">Record Payment</button>
-                    <button type="button" id="payAndCloseBtn" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Pay & Close</button>
+                    <button type="button" id="payAndCloseBtn" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Pay & Close</button>
                 </div>
             </form>
         </div>
@@ -2468,10 +2468,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -2699,10 +2699,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -2930,10 +2930,10 @@
     document.querySelectorAll('.payment-tab').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.payment-tab').forEach(b => {
-                b.classList.remove('active', 'bg-slate-800', 'text-white', 'font-semibold');
+                b.classList.remove('active', 'brand-btn', 'text-white', 'font-semibold');
                 b.classList.add('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             });
-            btn.classList.add('active', 'bg-slate-800', 'text-white', 'font-semibold');
+            btn.classList.add('active', 'brand-btn', 'text-white', 'font-semibold');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100', 'font-medium');
             document.querySelectorAll('.payment-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');

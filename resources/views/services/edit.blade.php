@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-2xl mx-auto space-y-5">
     {{-- Header --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Catalog</p>
         <h1 class="text-xl font-bold">Edit Service</h1>
         <p class="text-xs text-slate-400 mt-1">Update service details for {{ $service->name }}.</p>
@@ -44,7 +44,7 @@
             </div>
             <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                 <a href="{{ route('services.index') }}" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Back</a>
-                <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded flex items-center gap-2">
+                <button type="submit" class="brand-btn hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded flex items-center gap-2">
                     <i class="hgi-stroke hgi-tick-02 text-base"></i>
                     Update Service
                 </button>

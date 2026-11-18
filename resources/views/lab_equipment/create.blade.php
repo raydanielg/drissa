@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Laboratory</p>
         <h1 class="text-xl font-bold">Add Lab Equipment</h1>
         <p class="text-xs text-slate-400 mt-1">Register a new lab device.</p>
@@ -55,7 +55,7 @@
             <x-ui.textarea name="notes" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300 outline-none bg-white" rows="3"></x-ui.textarea>
         </div>
         <div class="sm:col-span-2 pt-4">
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Save Equipment</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Save Equipment</button>
         </div>
     </form>
     </div>

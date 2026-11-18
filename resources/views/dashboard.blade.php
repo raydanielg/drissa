@@ -275,7 +275,7 @@ setInterval(() => {
         .catch(() => {});
 }, 60000);
 </script>
-<div class="bg-slate-800 rounded-md p-6 mb-5 text-white">
+<div class="brand-hero rounded-md p-6 mb-5 text-white">
     <div class="flex flex-wrap items-end justify-between gap-3">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">{{ $roleLabels[$user->roles->first()?->name] ?? 'User' }}</p>
@@ -4933,7 +4933,7 @@ setInterval(() => {
                     </div>
                     <div class="flex justify-end gap-2 mt-4">
                         <button type="button" onclick="closeChangeDoctorModal()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Change Doctor</button>
+                        <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Change Doctor</button>
                     </div>
                 </form>
             </div>
@@ -5236,7 +5236,7 @@ setInterval(() => {
                     </div>
                     <div class="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
                         <button type="button" onclick="closeDashboardPatientModal()" class="px-4 py-2 text-xs font-medium border border-gray-200 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">Cancel</button>
-                        <button type="submit" class="px-4 py-2 text-xs font-medium bg-slate-800 text-white rounded-md hover:bg-slate-700 transition-colors flex items-center gap-1.5">
+                        <button type="submit" class="px-4 py-2 text-xs font-medium brand-btn text-white rounded-md hover:bg-slate-700 transition-colors flex items-center gap-1.5">
                             <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                             Save Patient
                         </button>
@@ -5544,7 +5544,7 @@ setInterval(() => {
                     </div>
                     <div class="flex items-center justify-end gap-2 pt-4 border-t border-gray-100">
                         <button type="button" onclick="closeDashboardAppointmentModal()" class="px-4 py-2 text-xs font-medium border border-gray-200 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">Cancel</button>
-                        <button type="submit" class="px-4 py-2 text-xs font-medium bg-slate-800 text-white rounded-md hover:bg-slate-700 transition-colors flex items-center gap-1.5">
+                        <button type="submit" class="px-4 py-2 text-xs font-medium brand-btn text-white rounded-md hover:bg-slate-700 transition-colors flex items-center gap-1.5">
                             <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                             Save Appointment
                         </button>

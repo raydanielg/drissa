@@ -33,10 +33,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -53,7 +53,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
     });
 });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Laboratory</p>
             <h1 class="text-xl font-bold">Laboratory Workspace</h1>
@@ -82,10 +82,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -154,10 +154,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -178,7 +178,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
         <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h2 class="text-sm font-bold text-gray-900">Lab Orders</h2>
             <div class="flex flex-wrap gap-2" id="labTabs">
-                <button data-tab="pending" class="lab-tab active px-4 py-2 text-xs font-semibold rounded bg-slate-800 text-white transition-all">Pending <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-600 text-slate-100">{{ $pendingOrders->count() }}</span></button>
+                <button data-tab="pending" class="lab-tab active px-4 py-2 text-xs font-semibold rounded brand-btn text-white transition-all">Pending <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-600 text-slate-100">{{ $pendingOrders->count() }}</span></button>
                 <button data-tab="processing" class="lab-tab px-4 py-2 text-xs font-semibold rounded text-gray-600 hover:bg-gray-100 transition-all">Processing <span class="ml-1 px-1.5 py-0.5 rounded bg-gray-200 text-gray-700">{{ $processingOrders->count() }}</span></button>
                 <button data-tab="completed" class="lab-tab px-4 py-2 text-xs font-semibold rounded text-gray-600 hover:bg-gray-100 transition-all">Completed <span class="ml-1 px-1.5 py-0.5 rounded bg-gray-200 text-gray-700">{{ $completedOrders->count() }}</span></button>
             </div>
@@ -205,10 +205,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -259,7 +259,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                             <div class="mt-4 pl-14">
                                 <form method="POST" action="{{ route('lab.orders.start', $order) }}">
                                     @csrf
-                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                         <i class="hgi-stroke hgi-play-circle text-base"></i>
                                         Start Processing
                                     </button>
@@ -292,10 +292,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -365,10 +365,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -444,10 +444,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -518,10 +518,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -570,7 +570,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                                         <option value="low">Low</option>
                                                         <option value="critical">Critical</option>
                                                     </x-ui.select>
-                                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+                                                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                                                         <i class="hgi-stroke hgi-tick-02 text-sm"></i>
                                                         Submit Result
                                                     </button>
@@ -601,10 +601,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -653,10 +653,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -683,7 +683,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                         </div>
                                         <x-ui.input type="file" name="report" class="hidden" accept=".pdf,.jpg,.jpeg,.png" id="report-{{ $order->id }}" />
                                         <label for="report-{{ $order->id }}" class="px-3 py-1.5 bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-medium rounded cursor-pointer transition-colors">Choose File</label>
-                                        <button type="submit" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors" onclick="return swalConfirmSubmit(event, 'Upload attachment only? Results are submitted per test above.')">Upload</button>
+                                        <button type="submit" class="px-4 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors" onclick="return swalConfirmSubmit(event, 'Upload attachment only? Results are submitted per test above.')">Upload</button>
                                     </div>
                                 </form>
                             </div>
@@ -714,10 +714,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
@@ -790,7 +790,7 @@ document.querySelectorAll('form[method="POST"]').forEach(form => {
                                                 <i class="hgi-stroke hgi-view text-xs"></i>
                                                 View
                                             </a>
-                                            <a href="{{ route('lab.orders.show', $order) }}" onclick="window.open(this.href, '_blank'); setTimeout(() => window.print(), 500); return false;" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-medium rounded transition-colors">
+                                            <a href="{{ route('lab.orders.show', $order) }}" onclick="window.open(this.href, '_blank'); setTimeout(() => window.print(), 500); return false;" class="inline-flex items-center gap-1 px-2.5 py-1.5 brand-btn hover:bg-slate-700 text-white text-[10px] font-medium rounded transition-colors">
                                                 <i class="hgi-stroke hgi-printer text-xs"></i>
                                                 Print
                                             </a>
@@ -827,10 +827,10 @@ function swalConfirmSubmit(event, message) {
 document.querySelectorAll('.lab-tab').forEach(btn => {
     btn.addEventListener('click', () => {
         document.querySelectorAll('.lab-tab').forEach(b => {
-            b.classList.remove('active', 'bg-slate-800', 'text-white');
+            b.classList.remove('active', 'brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
-        btn.classList.add('active', 'bg-slate-800', 'text-white');
+        btn.classList.add('active', 'brand-btn', 'text-white');
         btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         document.querySelectorAll('.lab-panel').forEach(p => p.classList.add('hidden'));
         document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');

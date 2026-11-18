@@ -179,7 +179,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="auth-btn w-full py-3 text-sm font-bold text-white bg-slate-800 hover:bg-slate-700 rounded transition-colors flex items-center justify-center gap-2">
+                <button type="submit" class="auth-btn w-full py-3 text-sm font-bold text-white brand-btn hover:bg-slate-700 rounded transition-colors flex items-center justify-center gap-2">
                     <i class="hgi-stroke hgi-refresh text-xl"></i>
                     Reset Password
                 </button>

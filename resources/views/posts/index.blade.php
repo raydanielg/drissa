@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="space-y-5">
-<div class="bg-slate-800 rounded-md p-6 text-white flex items-center justify-between">
+<div class="brand-hero rounded-md p-6 text-white flex items-center justify-between">
     <div>
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Content</p>
         <h1 class="text-xl font-bold">Blog Posts</h1>

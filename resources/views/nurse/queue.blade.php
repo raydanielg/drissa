@@ -13,7 +13,7 @@
     @endif
 
     {{-- Vitals Form --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Nurse</p>
             <h1 class="text-xl font-bold">Vitals Queue</h1>
@@ -80,7 +80,7 @@
                             <x-ui.input type="text" name="notes" value="{{ $visit->vitals?->notes }}" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300 outline-none" />
                         </div>
                         <div class="col-span-2 md:col-span-4 flex justify-end">
-                            <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
+                            <button type="submit" class="px-4 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
                                 {{ $visit->vitals ? 'Update Vitals' : 'Save Vitals' }}
                             </button>
                         </div>

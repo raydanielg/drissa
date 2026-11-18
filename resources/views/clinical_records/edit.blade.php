@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Clinical</p>
         <h1 class="text-xl font-bold">Edit Clinical Record</h1>
         <p class="text-xs text-slate-400 mt-1">Update record for {{ $clinicalRecord->patient?->fullName() }}.</p>
@@ -83,7 +83,7 @@
             <p class="text-xs text-gray-400 mt-1">Upload additional files (PDF, Images, Documents) - Max 10MB each</p>
         </div>
         <div class="md:col-span-2 pt-4">
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Update Clinical Record</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Update Clinical Record</button>
         </div>
     </form>
     </div>

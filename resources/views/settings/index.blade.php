@@ -15,19 +15,19 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('bg-slate-800', 'text-white');
+            b.classList.remove('brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
         const panel = document.getElementById('panel-' + tab);
         const btn = document.getElementById('tab-' + tab);
         if (panel) panel.classList.remove('hidden');
         if (btn) {
-            btn.classList.add('bg-slate-800', 'text-white');
+            btn.classList.add('brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         }
     }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">System</p>
         <h1 class="text-xl font-bold">General Settings</h1>
         <p class="text-xs text-slate-400 mt-1">Clinic profile and financial configuration.</p>
@@ -37,21 +37,21 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('bg-slate-800', 'text-white');
+            b.classList.remove('brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
         const panel = document.getElementById('panel-' + tab);
         const btn = document.getElementById('tab-' + tab);
         if (panel) panel.classList.remove('hidden');
         if (btn) {
-            btn.classList.add('bg-slate-800', 'text-white');
+            btn.classList.add('brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         }
     }
 </script>
     <div class="bg-white rounded-md border border-gray-200 p-2">
         <div class="flex flex-wrap gap-1">
-            <button onclick="switchTab('clinic')" id="tab-clinic" class="tab-btn px-4 py-2 rounded text-sm font-semibold transition-all bg-slate-800 text-white">
+            <button onclick="switchTab('clinic')" id="tab-clinic" class="tab-btn px-4 py-2 rounded text-sm font-semibold transition-all brand-btn text-white">
                 <i class="hgi-stroke hgi-building-03 text-base inline mr-1.5"></i>
                 Clinic Info
             </button>
@@ -66,14 +66,14 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('bg-slate-800', 'text-white');
+            b.classList.remove('brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
         const panel = document.getElementById('panel-' + tab);
         const btn = document.getElementById('tab-' + tab);
         if (panel) panel.classList.remove('hidden');
         if (btn) {
-            btn.classList.add('bg-slate-800', 'text-white');
+            btn.classList.add('brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         }
     }
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="pt-4 border-t border-gray-100">
-                    <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-6 py-2.5 rounded transition-all flex items-center gap-2">
+                    <button type="submit" class="brand-btn hover:bg-slate-700 text-white text-sm font-medium px-6 py-2.5 rounded transition-all flex items-center gap-2">
                         <i class="hgi-stroke hgi-tick-02 text-base"></i>
                         Save Settings
                     </button>
@@ -126,14 +126,14 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('bg-slate-800', 'text-white');
+            b.classList.remove('brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
         const panel = document.getElementById('panel-' + tab);
         const btn = document.getElementById('tab-' + tab);
         if (panel) panel.classList.remove('hidden');
         if (btn) {
-            btn.classList.add('bg-slate-800', 'text-white');
+            btn.classList.add('brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         }
     }
@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 <div class="pt-4 border-t border-gray-100">
-                    <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-6 py-2.5 rounded transition-all flex items-center gap-2">
+                    <button type="submit" class="brand-btn hover:bg-slate-700 text-white text-sm font-medium px-6 py-2.5 rounded transition-all flex items-center gap-2">
                         <i class="hgi-stroke hgi-tick-02 text-base"></i>
                         Save Settings
                     </button>
@@ -178,14 +178,14 @@
     function switchTab(tab) {
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => {
-            b.classList.remove('bg-slate-800', 'text-white');
+            b.classList.remove('brand-btn', 'text-white');
             b.classList.add('text-gray-600', 'hover:bg-gray-100');
         });
         const panel = document.getElementById('panel-' + tab);
         const btn = document.getElementById('tab-' + tab);
         if (panel) panel.classList.remove('hidden');
         if (btn) {
-            btn.classList.add('bg-slate-800', 'text-white');
+            btn.classList.add('brand-btn', 'text-white');
             btn.classList.remove('text-gray-600', 'hover:bg-gray-100');
         }
     }

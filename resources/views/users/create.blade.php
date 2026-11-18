@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-xl mx-auto space-y-5">
     {{-- Header --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
         <h1 class="text-xl font-bold">Add Medical Staff</h1>
         <p class="text-xs text-slate-400 mt-1">Create a new user account.</p>
@@ -45,7 +45,7 @@
                 <label class="text-sm text-gray-700">Active account</label>
             </div>
             <div class="pt-4">
-                <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Create User</button>
+                <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Create User</button>
             </div>
         </form>
     </div>

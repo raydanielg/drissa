@@ -126,7 +126,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Pharmacy</p>
@@ -1895,7 +1895,7 @@ document.addEventListener('keydown', function(e) {
 </script>
         <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
             <button type="button" onclick="closeDrawer()" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Cancel</button>
-            <button type="submit" id="drawerSubmit" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">Save Medication</button>
+            <button type="submit" id="drawerSubmit" class="px-5 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">Save Medication</button>
         </div>
     </form>
 </div>

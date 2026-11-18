@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="bg-slate-800 py-16">
+<section class="brand-btn py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">Our Services</h1>
         <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Comprehensive reproductive health and family planning services tailored to your needs.</p>
@@ -64,7 +64,7 @@
         @endif
 
         <div class="text-center mt-12">
-            <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded transition-colors">
+            <a href="{{ route('public.appointments') }}" class="inline-flex items-center gap-2 brand-btn hover:bg-slate-700 text-white font-bold px-6 py-3 rounded transition-colors">
                 Book an Appointment
                 <i class="hgi-stroke hgi-arrow-right-01 text-xl"></i>
             </a>

@@ -12,7 +12,7 @@
         </div>
         <div class="flex items-center gap-2">
             <a href="{{ route('ultrasound.queue') }}" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Queue</a>
-            <a href="{{ route('ultrasound-services.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">
+            <a href="{{ route('ultrasound-services.create') }}" class="inline-flex items-center gap-2 px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">
                 <i class="hgi-stroke hgi-add-01 text-base"></i>
                 Add Service
             </a>

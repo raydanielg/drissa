@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
@@ -220,7 +220,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <button type="button" onclick="closeUserSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
-            <button type="submit" id="user_submit_btn" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Staff</button>
+            <button type="submit" id="user_submit_btn" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Staff</button>
         </div>
     </form>
 </div>

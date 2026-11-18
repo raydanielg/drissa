@@ -10,7 +10,7 @@
     @endif
 
     {{-- Patients List --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Laboratory</p>
@@ -28,7 +28,7 @@
     <form method="GET" action="{{ route('lab.history') }}" class="bg-white rounded-md border border-gray-200 p-4">
         <div class="flex gap-2">
             <x-ui.input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, MRN, or phone..." class="flex-1 border border-gray-200 rounded px-4 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
-            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Search</button>
+            <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Search</button>
             @if(request('search'))
             <a href="{{ route('lab.history') }}" class="px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded hover:bg-gray-100">Clear</a>
             @endif

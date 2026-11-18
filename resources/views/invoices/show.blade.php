@@ -22,7 +22,7 @@
             <i class="hgi-stroke hgi-arrow-left-01 text-sm"></i> Invoices
         </a>
         <div class="flex items-center gap-2">
-            <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-1.5 rounded transition-colors">
+            <button type="button" onclick="window.print()" class="inline-flex items-center gap-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-semibold px-3 py-1.5 rounded transition-colors">
                 <i class="hgi-stroke hgi-printer text-sm"></i> Print
             </button>
             <a href="{{ route('invoices.pdf', $invoice) }}" class="inline-flex items-center gap-1.5 border border-gray-200 hover:bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded transition-colors">
@@ -50,12 +50,12 @@
             </div>
         </div>
         {{-- output slot --}}
-        <div class="absolute inset-x-6 bottom-3 h-2 rounded border border-gray-400 bg-slate-800 shadow-inner"></div>
+        <div class="absolute inset-x-6 bottom-3 h-2 rounded border border-gray-400 brand-btn shadow-inner"></div>
     </div>
 
     {{-- Paper output --}}
     <div class="receipt-viewport -mt-4 overflow-hidden px-8 pb-2 relative z-10">
-        <div class="absolute inset-x-8 -top-0.5 h-2 bg-slate-800/60 blur-[5px] pointer-events-none z-20"></div>
+        <div class="absolute inset-x-8 -top-0.5 h-2 brand-btn/60 blur-[5px] pointer-events-none z-20"></div>
         <article id="receiptPaper" class="receipt-paper relative bg-white px-6 pt-7 pb-9 font-mono text-[11px] leading-relaxed text-gray-800 shadow-md" style="clip-path: {{ $clip }}">
             {{-- header --}}
             <div class="text-center">

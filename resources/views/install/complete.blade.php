@@ -49,7 +49,7 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
+        <a href="{{ route('login') }}" class="flex items-center justify-center gap-2 h-11 brand-btn hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
             Staff Login
             <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
         </a>

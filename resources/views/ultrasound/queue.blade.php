@@ -21,7 +21,7 @@
         document.getElementById('resultsModal').classList.add('hidden');
     }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Imaging</p>
@@ -135,7 +135,7 @@
                         <td class="px-5 py-3 text-right">
                             <form method="POST" action="{{ route('ultrasound.orders.start', $order) }}" class="inline">
                                 @csrf
-                                <button type="submit" class="px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Start</button>
+                                <button type="submit" class="px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Start</button>
                             </form>
                         </td>
                     </tr>
@@ -191,7 +191,7 @@
                         </td>
                         <td class="px-5 py-3 text-sm text-gray-700">{{ $order->ultrasoundTech?->name ?? 'N/A' }}</td>
                         <td class="px-5 py-3 text-right">
-                            <button onclick="openResultsModal({{ $order->id }}, '{{ $order->patient?->fullName() ?? 'Unknown' }}')" class="px-3 py-1.5 bg-slate-800 text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Submit Results</button>
+                            <button onclick="openResultsModal({{ $order->id }}, '{{ $order->patient?->fullName() ?? 'Unknown' }}')" class="px-3 py-1.5 brand-btn text-white text-xs font-medium rounded hover:bg-slate-700 transition-colors">Submit Results</button>
                         </td>
                     </tr>
                     @endforeach
@@ -300,7 +300,7 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeResultsModal()" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Submit Results</button>
+                    <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Submit Results</button>
                 </div>
             </form>
         </div>

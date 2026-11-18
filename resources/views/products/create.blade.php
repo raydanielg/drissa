@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Inventory</p>
         <h1 class="text-xl font-bold">Add Product</h1>
         <p class="text-xs text-slate-400 mt-1">Add a new product to the pharmacy catalog.</p>
@@ -55,7 +55,7 @@
             <label class="text-sm text-gray-700">Active</label>
         </div>
         <div class="sm:col-span-2 pt-4">
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Save Product</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Save Product</button>
         </div>
     </form>
     </div>

@@ -65,7 +65,7 @@
             <a href="{{ route('install.welcome') }}" class="flex items-center justify-center h-11 px-5 rounded border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-semibold transition-all">
                 &larr; Back
             </a>
-            <button type="submit" class="flex-1 flex items-center justify-center gap-2 h-11 bg-slate-800 hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
+            <button type="submit" class="flex-1 flex items-center justify-center gap-2 h-11 brand-btn hover:bg-slate-700 text-white text-sm font-bold rounded transition-all">
                 Test Connection &amp; Install
                 <i class="hgi-stroke hgi-arrow-right-01 text-base"></i>
             </button>

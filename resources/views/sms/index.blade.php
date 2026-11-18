@@ -19,7 +19,7 @@
         document.getElementById('charCount').textContent = this.value.length;
     });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
         <h1 class="text-xl font-bold">Send SMS</h1>
         <p class="text-xs text-slate-400 mt-1">Send a text message to a user, patient, or manual number.</p>
@@ -78,7 +78,7 @@
                 </x-ui.select>
             </div>
 
-            <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Send SMS</button>
+            <button type="submit" class="brand-btn text-white text-sm font-medium px-5 py-2 rounded hover:bg-slate-700">Send SMS</button>
         </form>
     </div>
 </div>

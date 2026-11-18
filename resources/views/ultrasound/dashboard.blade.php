@@ -13,7 +13,7 @@
     @endif
 
     {{-- Recent Orders --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Imaging</p>
@@ -61,7 +61,7 @@
 
     {{-- Recent Orders --}}
     <div class="flex items-center gap-2">
-        <a href="{{ route('ultrasound.queue') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700 transition-colors">
+        <a href="{{ route('ultrasound.queue') }}" class="inline-flex items-center gap-2 px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700 transition-colors">
             <i class="hgi-stroke hgi-menu-01 text-base"></i>
             Go to Queue
         </a>

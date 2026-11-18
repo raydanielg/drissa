@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-5xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="w-14 h-14 rounded-full border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-white text-lg font-bold">
@@ -57,7 +57,7 @@
                 <x-ui.textarea name="description" placeholder="Description (optional)" class="w-full border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" rows="2"></x-ui.textarea>
             </div>
             <div class="md:col-span-1 flex items-end">
-                <button type="submit" class="w-full bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Upload</button>
+                <button type="submit" class="w-full brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Upload</button>
             </div>
         </form>
     </div>

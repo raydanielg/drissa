@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white flex items-center justify-between">
+    <div class="brand-hero rounded-md p-6 text-white flex items-center justify-between">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Clinical Record</p>
             <h1 class="text-xl font-bold">{{ $clinicalRecord->patient?->fullName() }}</h1>
@@ -73,7 +73,7 @@
     @endif
 
     <div class="pt-4 flex gap-2">
-        <a href="{{ route('clinical-records.edit', $clinicalRecord) }}" class="bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Edit</a>
+        <a href="{{ route('clinical-records.edit', $clinicalRecord) }}" class="brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Edit</a>
         <a href="{{ route('clinical-records.index') }}" class="border border-gray-200 text-gray-700 text-sm font-medium px-4 py-2 rounded hover:bg-gray-100">Back</a>
     </div>
     </div>

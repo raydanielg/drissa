@@ -111,7 +111,7 @@
         }
     }
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="brand-hero rounded-md p-6 text-white flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Clinic Management</p>
             <h1 class="text-xl font-bold">Clinic Rooms</h1>

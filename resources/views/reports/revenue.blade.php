@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-5">
 {{-- Header --}}
-<div class="bg-slate-800 rounded-md p-6 text-white">
+<div class="brand-hero rounded-md p-6 text-white">
     <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Reports</p>
     <h1 class="text-xl font-bold">Revenue Report</h1>
     <p class="text-xs text-slate-400 mt-1">Monthly revenue for {{ $year }}.</p>
@@ -18,7 +18,7 @@
             <label class="block text-xs text-gray-500 mb-1">Year</label>
             <x-ui.input type="number" name="year" value="{{ $year }}" class="border border-gray-200 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-slate-300" />
         </div>
-        <button type="submit" class="bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Filter</button>
+        <button type="submit" class="brand-btn text-white text-sm font-medium px-4 py-2 rounded hover:bg-slate-700">Filter</button>
     </form>
 </div>
 

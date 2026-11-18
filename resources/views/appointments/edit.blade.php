@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-2xl mx-auto space-y-5">
     {{-- Actions --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Appointments</p>
         <h1 class="text-xl font-bold">Edit Appointment</h1>
         <p class="text-xs text-slate-400 mt-1">{{ $appointment->patient?->fullName() ?? 'Unknown' }} — {{ $appointment->scheduled_at->format('M d, Y H:i') }}</p>
@@ -100,7 +100,7 @@
             {{-- Actions --}}
             <div class="px-6 py-4 flex items-center justify-between bg-gray-50">
                 <a href="{{ route('appointments.index') }}" class="px-4 py-2 text-sm text-gray-700 border border-gray-200 hover:bg-gray-100 rounded transition-colors">Cancel</a>
-                <button type="submit" class="inline-flex items-center gap-2 px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
+                <button type="submit" class="inline-flex items-center gap-2 px-5 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors">
                     <i class="hgi-stroke hgi-tick-02 text-base"></i>
                     Update Appointment
                 </button>

@@ -7,7 +7,7 @@
 <div class="space-y-6">
 
     {{-- Recent reports --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Clinic Manager</p>
@@ -44,7 +44,7 @@
             @if($todayReport)
                 <a href="{{ route('manager.reports.show', $todayReport) }}" class="text-xs font-medium text-slate-600 hover:text-slate-800">View</a>
             @else
-                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Fill Now</a>
+                <a href="{{ route('manager.reports.create', ['type' => 'daily']) }}" class="px-3 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Fill Now</a>
             @endif
         </div>
         <div class="bg-white rounded-md border {{ $weekReport ? 'border-emerald-200' : 'border-amber-200' }} p-4 flex items-center gap-3">
@@ -62,7 +62,7 @@
             @if($weekReport)
                 <a href="{{ route('manager.reports.show', $weekReport) }}" class="text-xs font-medium text-slate-600 hover:text-slate-800">View</a>
             @else
-                <a href="{{ route('manager.reports.create', ['type' => 'weekly']) }}" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Fill Now</a>
+                <a href="{{ route('manager.reports.create', ['type' => 'weekly']) }}" class="px-3 py-1.5 brand-btn hover:bg-slate-700 text-white text-xs font-medium rounded transition-colors">Fill Now</a>
             @endif
         </div>
     </div>

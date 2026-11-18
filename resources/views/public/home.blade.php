@@ -52,7 +52,7 @@
         <div class="text-center mb-12">
             <span class="text-slate-500 font-bold text-sm uppercase tracking-wider">Why Choose Us?</span>
             <h2 class="mt-2 text-3xl font-extrabold text-slate-900">Specialized Reproductive Health Care</h2>
-            <div class="mt-4 w-20 h-1 bg-slate-800 mx-auto rounded-full"></div>
+            <div class="mt-4 w-20 h-1 brand-btn mx-auto rounded-full"></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {{-- Contact Form --}}
@@ -98,7 +98,7 @@
             <span class="text-slate-500 font-bold text-sm uppercase tracking-wider">Our Services</span>
             <h2 class="mt-2 text-3xl font-extrabold text-slate-900">Reproductive Health & Family Planning</h2>
             <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Comprehensive, confidential, and compassionate reproductive health services designed to empower you at every stage of your family planning journey.</p>
-            <div class="mt-4 w-20 h-1 bg-slate-800 mx-auto rounded-full"></div>
+            <div class="mt-4 w-20 h-1 brand-btn mx-auto rounded-full"></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @php
@@ -142,7 +142,7 @@
             @endif
         </div>
         <div class="text-center mt-10">
-            <a href="{{ route('public.services') }}" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-bold px-6 py-3 rounded transition-colors">
+            <a href="{{ route('public.services') }}" class="inline-flex items-center gap-2 brand-btn hover:bg-slate-700 text-white font-bold px-6 py-3 rounded transition-colors">
                 View All Services
                 <i class="hgi-stroke hgi-arrow-right-01 text-xl"></i>
             </a>
@@ -254,7 +254,7 @@
                         <label class="block text-xs font-semibold text-gray-700 mb-1">REASON FOR VISIT</label>
                         <x-ui.textarea name="reason" rows="3" placeholder="Briefly describe your reason for visit..." class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-slate-300 outline-none transition-all"></x-ui.textarea>
                     </div>
-                    <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
+                    <button type="submit" class="w-full brand-btn hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
                         Book Appointment
                     </button>
                 </form>
@@ -270,7 +270,7 @@
             <span class="text-slate-500 font-bold text-sm uppercase tracking-wider">Get In Touch</span>
             <h2 class="mt-2 text-3xl font-extrabold text-slate-900">Have a Question? We're Here to Help!</h2>
             <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Our support team is available 24/7 to assist you with anything you need regarding your health and our services.</p>
-            <div class="mt-4 w-20 h-1 bg-slate-800 mx-auto rounded-full"></div>
+            <div class="mt-4 w-20 h-1 brand-btn mx-auto rounded-full"></div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {{-- Contact Form --}}
@@ -327,7 +327,7 @@
                         <label class="block text-xs font-semibold text-gray-700 mb-1">YOUR MESSAGE</label>
                         <x-ui.textarea name="message" required rows="4" placeholder="Write your message here..." class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-slate-300 outline-none transition-all"></x-ui.textarea>
                     </div>
-                    <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
+                    <button type="submit" class="w-full brand-btn hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
                         Send Message
                     </button>
                 </form>

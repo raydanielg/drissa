@@ -31,7 +31,7 @@
         const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         const msgDiv = document.createElement('div');
         msgDiv.className = 'flex justify-end';
-        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm bg-slate-800 text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
+        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm brand-btn text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
         area.appendChild(msgDiv);
         scrollToBottom();
 
@@ -69,7 +69,7 @@
                     const isMe = msg.user_id === {{ Auth::id() }};
                     const div = document.createElement('div');
                     div.className = `flex ${isMe ? 'justify-end' : 'justify-start'}`;
-                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'bg-slate-800 text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
+                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'brand-btn text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
                     area.appendChild(div);
                     lastId = Math.max(lastId, msg.id);
                 });
@@ -94,7 +94,7 @@
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-900 truncate">{{ $conv->titleFor(Auth::user()) }}</span>
                             @if($unread > 0)
-                                <span class="bg-slate-800 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ $unread }}</span>
+                                <span class="brand-btn text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ $unread }}</span>
                             @endif
                         </div>
                         <p class="text-xs text-gray-500 truncate">{{ Str::limit($conv->lastMessage?->body ?? 'No messages yet', 25) }}</p>
@@ -132,7 +132,7 @@
         const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         const msgDiv = document.createElement('div');
         msgDiv.className = 'flex justify-end';
-        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm bg-slate-800 text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
+        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm brand-btn text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
         area.appendChild(msgDiv);
         scrollToBottom();
 
@@ -170,7 +170,7 @@
                     const isMe = msg.user_id === {{ Auth::id() }};
                     const div = document.createElement('div');
                     div.className = `flex ${isMe ? 'justify-end' : 'justify-start'}`;
-                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'bg-slate-800 text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
+                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'brand-btn text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
                     area.appendChild(div);
                     lastId = Math.max(lastId, msg.id);
                 });
@@ -196,7 +196,7 @@
         <div id="messagesArea" class="flex-1 overflow-y-auto p-4 space-y-3">
             @foreach($conversation->messages as $message)
                 <div class="flex {{ $message->user_id === Auth::id() ? 'justify-end' : 'justify-start' }}">
-                    <div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm {{ $message->user_id === Auth::id() ? 'bg-slate-800 text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none' }}">
+                    <div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm {{ $message->user_id === Auth::id() ? 'brand-btn text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none' }}">
                         <p>{{ $message->body }}</p>
                         <div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">
                             {{ $message->created_at->format('H:i') }}
@@ -213,7 +213,7 @@
             <form id="chatForm" method="POST" action="{{ route('chat.send', $conversation) }}" class="flex gap-2">
                 @csrf
                 <x-ui.input type="text" id="chatInput" name="body" class="flex-1 border border-gray-200 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-300" placeholder="Type a message..." required autocomplete="off" />
-                <button type="submit" class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-700">
+                <button type="submit" class="brand-btn text-white px-4 py-2 rounded hover:bg-slate-700">
                     <i class="hgi-stroke hgi-sent text-xl"></i>
                 </button>
             </form>
@@ -248,7 +248,7 @@
         const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         const msgDiv = document.createElement('div');
         msgDiv.className = 'flex justify-end';
-        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm bg-slate-800 text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
+        msgDiv.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm brand-btn text-white rounded-br-none"><p>${escapeHtml(body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time} <span>✓</span></div></div>`;
         area.appendChild(msgDiv);
         scrollToBottom();
 
@@ -286,7 +286,7 @@
                     const isMe = msg.user_id === {{ Auth::id() }};
                     const div = document.createElement('div');
                     div.className = `flex ${isMe ? 'justify-end' : 'justify-start'}`;
-                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'bg-slate-800 text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
+                    div.innerHTML = `<div class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm ${isMe ? 'brand-btn text-white rounded-br-none' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none'}"><p>${escapeHtml(msg.body)}</p><div class="text-[10px] mt-1 opacity-70 flex items-center justify-end gap-1">${time}</div></div>`;
                     area.appendChild(div);
                     lastId = Math.max(lastId, msg.id);
                 });

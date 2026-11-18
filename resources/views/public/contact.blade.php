@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="bg-slate-800 py-16">
+<section class="brand-btn py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">Contact Us</h1>
         <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Have a question? We're here to help! Our support team is available 24/7.</p>
@@ -67,7 +67,7 @@
                         <label class="block text-xs font-semibold text-gray-700 mb-1">YOUR MESSAGE</label>
                         <x-ui.textarea name="message" required rows="5" placeholder="Write your message here..." class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:ring-2 focus:ring-slate-300 outline-none transition-all"></x-ui.textarea>
                     </div>
-                    <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
+                    <button type="submit" class="w-full brand-btn hover:bg-slate-700 text-white font-bold py-3 rounded transition-colors">
                         Send Message
                     </button>
                 </form>

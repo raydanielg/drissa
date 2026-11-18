@@ -37,7 +37,7 @@
                 <i class="hgi-stroke hgi-clock-01 text-sm"></i>
                 Patient History
             </a>
-            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
+            <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 brand-btn hover:bg-slate-700 text-white text-xs font-semibold rounded transition-colors">
                 <i class="hgi-stroke hgi-printer text-sm"></i>
                 Print / Preview
             </button>

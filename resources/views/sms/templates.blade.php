@@ -120,7 +120,7 @@
         });
     });
 </script>
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Admin</p>
@@ -543,7 +543,7 @@
             </div>
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('addModal').classList.add('hidden')" class="px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors">Cancel</button>
-                <button type="submit" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2">
+                <button type="submit" class="px-5 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2">
                     <i class="hgi-stroke hgi-tick-02 text-base"></i>
                     Save Template
                 </button>
@@ -705,7 +705,7 @@
             </div>
             <div class="flex justify-end gap-3 pt-2">
                 <button type="button" onclick="document.getElementById('editTemplateModal').classList.add('hidden')" class="px-4 py-2 border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors">Cancel</button>
-                <button type="submit" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2">
+                <button type="submit" class="px-5 py-2 brand-btn hover:bg-slate-700 text-white text-sm font-medium rounded transition-colors flex items-center gap-2">
                     <i class="hgi-stroke hgi-refresh text-base"></i>
                     Update Template
                 </button>

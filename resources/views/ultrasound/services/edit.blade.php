@@ -37,7 +37,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <a href="{{ route('ultrasound-services.index') }}" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">Cancel</a>
-            <button type="submit" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded hover:bg-slate-700">Update Service</button>
+            <button type="submit" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded hover:bg-slate-700">Update Service</button>
         </div>
     </form>
 </div>

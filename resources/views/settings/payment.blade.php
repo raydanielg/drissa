@@ -7,7 +7,7 @@
 <div class="max-w-4xl mx-auto space-y-5">
 
     {{-- Bank Configuration --}}
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Settings</p>
         <h1 class="text-xl font-bold">Payment Gateway Settings</h1>
         <p class="text-xs text-slate-400 mt-1">Choose how patients can pay for services.</p>
@@ -101,7 +101,7 @@
             </div>
 
             <div class="pt-4 border-t border-gray-100">
-                <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded flex items-center gap-2">
+                <button type="submit" class="brand-btn hover:bg-slate-700 text-white text-sm font-medium px-5 py-2 rounded flex items-center gap-2">
                     <i class="hgi-stroke hgi-tick-02 text-base"></i>
                     Save Payment Settings
                 </button>

@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="bg-slate-800 py-16">
+<section class="brand-btn py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">Blog</h1>
         <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Health tips, news, and articles on reproductive health and family planning.</p>

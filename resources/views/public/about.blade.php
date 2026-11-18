@@ -4,7 +4,7 @@
 
 @section('content')
 
-<section class="bg-slate-800 py-16">
+<section class="brand-btn py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-4xl font-extrabold text-white">About Us</h1>
         <p class="mt-4 text-slate-400 max-w-2xl mx-auto">Learn more about Uzazi Clinic and our commitment to reproductive health.</p>

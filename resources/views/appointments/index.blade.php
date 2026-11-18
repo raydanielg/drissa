@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="space-y-5">
-    <div class="bg-slate-800 rounded-md p-6 text-white">
+    <div class="brand-hero rounded-md p-6 text-white">
         <div class="flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Scheduling</p>
@@ -32,7 +32,7 @@
                 ];
             @endphp
             @foreach ($tabs as $key => $label)
-                <a href="{{ route('appointments.index', array_merge(request()->except(['page', 'date']), ['filter' => $key])) }}" class="px-3 py-1.5 rounded text-xs font-medium transition-colors {{ $filter === $key ? 'bg-slate-800 text-white' : 'text-gray-600 hover:bg-gray-100' }}">
+                <a href="{{ route('appointments.index', array_merge(request()->except(['page', 'date']), ['filter' => $key])) }}" class="px-3 py-1.5 rounded text-xs font-medium transition-colors {{ $filter === $key ? 'brand-btn text-white' : 'text-gray-600 hover:bg-gray-100' }}">
                     {{ $label }}
                     @if ($key !== 'all')
                         <span class="ml-1.5 text-[10px] px-1.5 py-0.5 rounded-full {{ $filter === $key ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-500' }}">{{ $stats[$key] ?? 0 }}</span>
@@ -42,7 +42,7 @@
             <form method="GET" action="{{ route('appointments.index') }}" class="flex items-center gap-2 ml-auto">
                 <input type="hidden" name="filter" value="date">
                 <x-ui.input type="text" data-fp-date name="date" value="{{ $date ?? '' }}" class="border border-gray-200 rounded px-3 py-1.5 text-sm focus:ring-2 focus:ring-slate-300 focus:outline-none" />
-                <button type="submit" class="px-3 py-1.5 bg-slate-800 text-white text-sm rounded hover:bg-slate-700">Go</button>
+                <button type="submit" class="px-3 py-1.5 brand-btn text-white text-sm rounded hover:bg-slate-700">Go</button>
             </form>
         </div>
     </div>
@@ -145,7 +145,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex gap-2 mt-4 pt-3 border-t border-gray-100">
-                                                <a href="{{ route('patients.show', $appointment->patient) }}" class="flex-1 text-center text-xs font-medium text-white bg-slate-800 hover:bg-slate-700 py-2 rounded transition-colors">
+                                                <a href="{{ route('patients.show', $appointment->patient) }}" class="flex-1 text-center text-xs font-medium text-white brand-btn hover:bg-slate-700 py-2 rounded transition-colors">
                                                     View Profile
                                                 </a>
                                                 <a href="{{ route('clinical-records.create', ['patient_id' => $appointment->patient?->id]) }}" class="flex-1 text-center text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:bg-gray-100 py-2 rounded transition-colors">
@@ -325,7 +325,7 @@
         </div>
         <div class="flex justify-end gap-2 pt-2 border-t border-gray-100">
             <button type="button" onclick="closeAppointmentSlideOver()" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md">Cancel</button>
-            <button type="submit" id="appt_submit_btn" class="px-4 py-2 bg-slate-800 text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Appointment</button>
+            <button type="submit" id="appt_submit_btn" class="px-4 py-2 brand-btn text-white text-sm font-medium rounded-md hover:bg-slate-700">Save Appointment</button>
         </div>
     </form>
 </div>
