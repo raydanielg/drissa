@@ -357,17 +357,17 @@
         .brand-btn-outline { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); }
         .brand-btn-outline:hover { background: rgba(255,255,255,.22) !important; color: #fff; }
         /* KPI cards: rotating brand colors, colored top accent, icon + number match card color */
-        .kpi-grid > * { position: relative; }
-        .kpi-grid > *::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 6px 6px 0 0; background: var(--kc, var(--brand-green)); }
-        .kpi-grid > *:nth-child(5n+1) { --kc: var(--brand-green); }
-        .kpi-grid > *:nth-child(5n+2) { --kc: var(--brand-blue); }
-        .kpi-grid > *:nth-child(5n+3) { --kc: var(--brand-gold); }
-        .kpi-grid > *:nth-child(5n+4) { --kc: var(--brand-magenta); }
-        .kpi-grid > *:nth-child(5n+5) { --kc: #dc2626; }
-        .kpi-grid > * i.hgi-stroke { color: var(--kc) !important; }
-        .kpi-grid > * p.text-2xl, .kpi-grid > * p.text-lg.font-bold, .kpi-grid > * .text-xl.font-bold { color: var(--kc) !important; }
-        .kpi-grid > .kpi-alert { --kc: #dc2626 !important; border-color: #fecaca !important; }
-        .kpi-grid > .kpi-alert i.hgi-stroke, .kpi-grid > .kpi-alert p.text-2xl { color: #dc2626 !important; }
+        .kpi-grid > * { position: relative; overflow: hidden; background: linear-gradient(135deg, var(--kc), var(--kc2, var(--kc))) !important; border-color: transparent !important; box-shadow: 0 4px 14px rgba(0,0,0,.12); transition: transform .15s ease, box-shadow .15s ease; }
+        .kpi-grid > *:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,.18); }
+        .kpi-grid > *:nth-child(5n+1) { --kc: #159447; --kc2: #0d7a38; }
+        .kpi-grid > *:nth-child(5n+2) { --kc: #1260A8; --kc2: #0d4a81; }
+        .kpi-grid > *:nth-child(5n+3) { --kc: #d97706; --kc2: #b45309; }
+        .kpi-grid > *:nth-child(5n+4) { --kc: #D41482; --kc2: #a10e64; }
+        .kpi-grid > *:nth-child(5n+5) { --kc: #dc2626; --kc2: #b91c1c; }
+        .kpi-grid > * p, .kpi-grid > * span, .kpi-grid > * strong, .kpi-grid > * small { color: #fff !important; }
+        .kpi-grid > * .text-gray-500, .kpi-grid > * .text-gray-400, .kpi-grid > * .text-gray-600, .kpi-grid > * .text-gray-700 { color: rgba(255,255,255,.82) !important; }
+        .kpi-grid > * i.hgi-stroke { color: #fff !important; background: rgba(255,255,255,.22); padding: 6px; border-radius: 8px; }
+        .kpi-grid > .kpi-alert { --kc: #dc2626 !important; --kc2: #b91c1c !important; }
     </style>
     @stack('styles')
 </head>
