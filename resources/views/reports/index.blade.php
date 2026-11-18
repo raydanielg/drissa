@@ -12,7 +12,7 @@
         <p class="text-xs text-slate-400 mt-1">Clinic performance at a glance.</p>
     </div>
 
-    <div class="kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="kpi-grid kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3">
         @foreach ([
             ['label' => 'Total Patients', 'value' => $stats['total_patients']],
             ['label' => 'Total Visits', 'value' => $stats['total_visits']],

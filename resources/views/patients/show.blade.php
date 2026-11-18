@@ -44,7 +44,7 @@
     </div>
 
     {{-- Recent Visits --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="bg-white rounded-md border border-gray-200 p-4 text-center">
             <div class="text-2xl font-bold text-gray-900">{{ $patient->visits_count }}</div>
             <div class="text-[10px] font-medium text-gray-500 uppercase tracking-wide mt-1">Visits</div>

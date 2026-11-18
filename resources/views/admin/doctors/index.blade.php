@@ -231,7 +231,7 @@
         }
     }
 </script>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
         @php
             $statConfig = [
                 ['key' => 'total', 'label' => 'Total Doctors', 'icon' => 'hgi-user-multiple-02'],

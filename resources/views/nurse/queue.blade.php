@@ -45,7 +45,7 @@
                     </div>
 
                     {{-- Vitals Form --}}
-                    <form action="{{ route('nurse.visits.vitals', $visit) }}" method="POST" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <form action="{{ route('nurse.visits.vitals', $visit) }}" method="POST" class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
                         @csrf
                         <div>
                             <label class="block text-[10px] font-medium text-gray-500 mb-1">Temp (°C)</label>

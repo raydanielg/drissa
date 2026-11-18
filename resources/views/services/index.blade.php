@@ -20,7 +20,7 @@
     </div>
 
     {{-- Services Table --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="bg-white rounded-md border border-gray-200 p-4">
             <div class="flex items-center justify-between">
                 <span class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Total</span>

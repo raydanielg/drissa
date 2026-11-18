@@ -27,7 +27,7 @@
     </div>
 
     {{-- Attachments --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
             <p class="text-xs font-medium text-gray-500 uppercase">Total Orders</p>
             <p class="text-2xl font-bold text-gray-900 mt-1">{{ $orders->count() }}</p>

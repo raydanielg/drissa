@@ -229,7 +229,7 @@
         }
     }
 </script>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-4">
         @php
             $statConfig = [
                 ['key' => 'total', 'label' => 'Total Rooms', 'icon' => 'hgi-building-03', 'border' => 'border-gray-200', 'value' => 'text-gray-900'],

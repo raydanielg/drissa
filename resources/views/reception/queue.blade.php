@@ -372,7 +372,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
     });
 });
 </script>
-    <div class="kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="kpi-grid kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3">
         <div class="bg-white rounded-md border border-emerald-200 p-4">
             <div class="flex items-start justify-between">
                 <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Registered</p>

@@ -365,7 +365,7 @@
         .kpi-grid > *:nth-child(5n+4) { --kc: var(--brand-magenta); }
         .kpi-grid > *:nth-child(5n+5) { --kc: #dc2626; }
         .kpi-grid > * i.hgi-stroke { color: var(--kc) !important; }
-        .kpi-grid > * p.text-2xl, .kpi-grid > * .text-xl.font-bold { color: var(--kc) !important; }
+        .kpi-grid > * p.text-2xl, .kpi-grid > * p.text-lg.font-bold, .kpi-grid > * .text-xl.font-bold { color: var(--kc) !important; }
         .kpi-grid > .kpi-alert { --kc: #dc2626 !important; border-color: #fecaca !important; }
         .kpi-grid > .kpi-alert i.hgi-stroke, .kpi-grid > .kpi-alert p.text-2xl { color: #dc2626 !important; }
     </style>

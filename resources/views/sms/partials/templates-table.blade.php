@@ -12,7 +12,7 @@
     ];
 @endphp
 
-<div id="kpiCards" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+<div id="kpiCards" class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
     <div class="bg-white rounded-md border border-gray-200 p-4">
         <div class="flex items-center justify-between">
             <span class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Total</span>

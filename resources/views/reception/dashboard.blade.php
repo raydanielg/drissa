@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-4">
         @php
             $kpiCards = [
                 ['label' => 'Today Visits', 'value' => $kpis['today_visits'], 'icon' => 'hgi-file-01', 'text' => 'text-gray-400', 'bar' => 'bg-emerald-600', 'ring' => 'text-emerald-600', 'max' => 50],

@@ -24,7 +24,7 @@
     </div>
 
     {{-- Recent Visits --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="bg-white rounded-md border border-gray-200 p-4">
             <div class="flex items-start justify-between">
                 <p class="text-[10px] font-medium text-gray-500 uppercase tracking-wide">Today's Visits</p>
@@ -60,7 +60,7 @@
     </div>
 
     {{-- Recent Visits --}}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3">
         <div class="bg-white rounded-md border border-gray-200 p-4 flex items-center gap-3">
             <div class="w-9 h-9 rounded-md bg-gray-100 text-slate-600 flex items-center justify-center">
                 <i class="hgi-stroke hgi-test-tube-01 text-base"></i>

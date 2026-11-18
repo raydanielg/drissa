@@ -70,7 +70,7 @@
         </div>
 
         {{-- Footer --}}
-        <div class="px-5 py-4 grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-gray-100">
+        <div class="px-5 py-4 kpi-grid grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-gray-100">
             <div>
                 <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Patient</p>
                 <p class="text-sm font-semibold text-gray-800 mt-0.5">{{ $order->visit?->patient?->fullName() ?? 'Unknown' }}</p>

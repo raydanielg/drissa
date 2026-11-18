@@ -1872,7 +1872,7 @@ setInterval(() => {
         .catch(() => {});
 }, 60000);
 </script>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+<div class="kpi-grid grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
     <a href="{{ route('doctor.queue') }}" class="flex flex-col items-center gap-2 p-4 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors">
         <div class="w-9 h-9 rounded-md bg-gray-100 text-slate-600 flex items-center justify-center">
             <i class="hgi-stroke hgi-building-03 text-base"></i>
