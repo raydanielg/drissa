@@ -356,6 +356,18 @@
         .brand-btn:hover { background: var(--brand-green-700) !important; color: #fff; }
         .brand-btn-outline { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); }
         .brand-btn-outline:hover { background: rgba(255,255,255,.22) !important; color: #fff; }
+        /* KPI cards: rotating brand colors, colored top accent, icon + number match card color */
+        .kpi-grid > * { position: relative; }
+        .kpi-grid > *::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 6px 6px 0 0; background: var(--kc, var(--brand-green)); }
+        .kpi-grid > *:nth-child(5n+1) { --kc: var(--brand-green); }
+        .kpi-grid > *:nth-child(5n+2) { --kc: var(--brand-blue); }
+        .kpi-grid > *:nth-child(5n+3) { --kc: var(--brand-gold); }
+        .kpi-grid > *:nth-child(5n+4) { --kc: var(--brand-magenta); }
+        .kpi-grid > *:nth-child(5n+5) { --kc: #dc2626; }
+        .kpi-grid > * i.hgi-stroke { color: var(--kc) !important; }
+        .kpi-grid > * p.text-2xl, .kpi-grid > * .text-xl.font-bold { color: var(--kc) !important; }
+        .kpi-grid > .kpi-alert { --kc: #dc2626 !important; border-color: #fecaca !important; }
+        .kpi-grid > .kpi-alert i.hgi-stroke, .kpi-grid > .kpi-alert p.text-2xl { color: #dc2626 !important; }
     </style>
     @stack('styles')
 </head>

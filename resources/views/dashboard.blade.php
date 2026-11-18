@@ -799,7 +799,7 @@ setInterval(() => {
         .catch(() => {});
 }, 60000);
 </script>
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+<div class="kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
     <a href="{{ route('doctor.queue') }}" class="card-sm block bg-white rounded-md border border-gray-200 p-4">
         <div class="flex items-start justify-between">
             <p class="text-[10px] font-medium uppercase tracking-wide text-gray-500">Today's Patients</p>
@@ -2144,7 +2144,7 @@ setInterval(() => {
 }, 60000);
 </script>
 @if(!$user->isDoctor())
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+<div class="kpi-grid grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
     @foreach([
         ['label'=>'Total Patients','value'=>number_format($stats['total_patients']),'change'=>'+'.$stats['total_visits'].' visits','link'=>null,'icon' => 'hgi-user-multiple-02'],
         ['label'=>'Today\'s Visits','value'=>$stats['visits_today'],'change'=>$todayAppointments->count().' appts today','link'=>null,'icon' => 'hgi-calendar-03'],
