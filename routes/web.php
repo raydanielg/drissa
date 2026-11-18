@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AdminAnnouncementController;
 use App\Http\Controllers\AdminDoctorController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
@@ -85,6 +87,9 @@ Route::get('/login', function () {
 Auth::routes(['login' => false, 'register' => false]);
 
 Route::middleware('auth')->group(function () {
+    // Active announcements feed for <clinic-banner> element (all authenticated staff)
+    Route::get('api/announcements/active', [AnnouncementController::class, 'active'])->name('announcements.active');
+
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('redirect.role:admin|reception');
     Route::get('/dashboard/stats', [HomeController::class, 'stats'])->name('dashboard.stats')->middleware('redirect.role:admin|reception');
 
@@ -264,6 +269,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('suppliers', SupplierController::class);
         Route::resource('shifts', ShiftController::class);
         Route::resource('services', ServiceController::class);
+        Route::resource('announcements', AdminAnnouncementController::class)->except(['show', 'create', 'edit']);
 
         Route::prefix('invoices')->name('invoices.')->group(function () {
             Route::get('/', [InvoiceController::class, 'index'])->name('index');

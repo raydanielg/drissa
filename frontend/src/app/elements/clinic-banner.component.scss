@@ -1,0 +1,84 @@
+@use '../design/tokens' as t;
+
+:host {
+  display: block;
+  font-family: t.$font;
+}
+
+.cb-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.cb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: t.$radius;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.35;
+  box-shadow: 0 2px 10px rgba(16, 24, 40, 0.08);
+  animation: cb-in 0.25s ease;
+
+  &--info     { background: linear-gradient(135deg, t.$blue, t.$blue-dark); }
+  &--success  { background: linear-gradient(135deg, t.$green, t.$green-dark); }
+  &--warning  { background: linear-gradient(135deg, t.$gold, t.$gold-dark); }
+  &--critical { background: linear-gradient(135deg, t.$red, t.$red-dark); }
+}
+
+.cb-icon {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cb-body { flex: 1 1 auto; min-width: 0; }
+.cb-title { margin: 0; font-weight: 600; }
+.cb-text { margin: 2px 0 0; font-size: 12px; opacity: 0.85; }
+
+.cb-action {
+  flex: 0 0 auto;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover { background: rgba(255, 255, 255, 0.32); }
+}
+
+.cb-close {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+
+  &:hover { color: #fff; }
+}
+
+@keyframes cb-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cb { animation: none; }
+}

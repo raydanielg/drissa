@@ -176,16 +176,21 @@
                 e.preventDefault();
                 const confirmMessage = this.dataset.confirm;
                 if (confirmMessage) {
-                    const result = await Swal.fire({
-                        title: 'Are you sure?',
-                        text: confirmMessage,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#15803d',
-                        cancelButtonColor: '#6b7280',
-                        confirmButtonText: 'Yes, proceed'
-                    });
-                    if (!result.isConfirmed) return;
+                    let confirmed;
+                    if (window.customElements && customElements.get('clinic-confirm')) {
+                        confirmed = await window.clinicConfirm({ title: 'Are you sure?', message: confirmMessage, confirmText: 'Yes, proceed', danger: true });
+                    } else {
+                        confirmed = (await Swal.fire({
+                            title: 'Are you sure?',
+                            text: confirmMessage,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#15803d',
+                            cancelButtonColor: '#6b7280',
+                            confirmButtonText: 'Yes, proceed'
+                        })).isConfirmed;
+                    }
+                    if (!confirmed) return;
                 }
                 const formData = new FormData(this);
                 const method = this.method.toUpperCase();
@@ -788,6 +793,13 @@
             </div>
 
             <div class="sidebar-group">
+                <a href="{{ route('announcements.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-white/85 text-sm font-medium {{ request()->routeIs('announcements.index') ? 'active' : '' }}">
+                    <i class="hgi-stroke hgi-megaphone-01 text-xl text-white/60"></i>
+                    <span>Announcements</span>
+                </a>
+            </div>
+
+            <div class="sidebar-group">
                 <a href="{{ route('invoices.index') }}" class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-none text-white/85 text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active' : '' }}">
                     <i class="hgi-stroke hgi-file-01 text-xl text-white/60"></i>
                     <span>Invoices</span>
@@ -946,6 +958,7 @@
         </header>
 
         <main class="flex-1 p-6 animate-fade relative">
+            <clinic-banner></clinic-banner>
             @yield('content')
         </main>
 
@@ -1004,6 +1017,17 @@
         alt._fpTyped = '';
     });
     </script>
+    <clinic-confirm></clinic-confirm>
+    @if (file_exists(public_path('ng/main.js')))
+        <script type="module" src="{{ asset('ng/main.js') }}"></script>
+    @else
+        <script>
+            window.clinicConfirm = window.clinicConfirm || function (opts) {
+                opts = opts || {};
+                return Promise.resolve(window.confirm((opts.title ? opts.title + '\n\n' : '') + (opts.message || 'Are you sure?')));
+            };
+        </script>
+    @endif
     @stack('scripts')
     @yield('scripts')
 </body>

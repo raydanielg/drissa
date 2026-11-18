@@ -1,0 +1,75 @@
+@use '../design/tokens' as t;
+
+:host { font-family: t.$font; }
+
+.cc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: cc-fade 0.15s ease;
+}
+
+.cc-dialog {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: t.$shadow;
+  padding: 22px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  animation: cc-pop 0.18s ease;
+}
+
+.cc-icon {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 12px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  background: rgba(t.$blue, 0.12);
+  color: t.$blue;
+
+  &--danger { background: rgba(t.$red, 0.12); color: t.$red; }
+}
+
+.cc-title { margin: 0 0 6px; font-size: 15px; font-weight: 700; color: t.$text; }
+.cc-msg { margin: 0 0 18px; font-size: 13px; color: t.$muted; line-height: 1.5; }
+
+.cc-actions { display: flex; gap: 8px; }
+
+.cc-btn {
+  flex: 1;
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+
+  &:hover { filter: brightness(0.94); }
+}
+
+.cc-cancel { background: t.$border; color: t.$text; }
+.cc-primary { background: t.$green; color: #fff; }
+.cc-danger { background: t.$red; color: #fff; }
+
+@keyframes cc-fade { from { opacity: 0; } }
+@keyframes cc-pop {
+  from { opacity: 0; transform: scale(0.96) translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-overlay, .cc-dialog { animation: none; }
+}
