@@ -55,6 +55,7 @@
 
     {{-- Table --}}
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+        <clinic-table page-size="10" placeholder="Search reports…">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
                 <thead class="bg-gray-50 text-[10px] uppercase text-gray-400">
@@ -125,6 +126,7 @@
                 </tbody>
             </table>
         </div>
+        </clinic-table>
         <div class="px-5 py-3 border-t border-gray-100">
             {{ $reports->links() }}
         </div>

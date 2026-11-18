@@ -43,7 +43,30 @@ const ok = await window.clinicConfirm({
 });
 if (ok) { /* proceed */ }
 ```
-ESC / backdrop click resolve `false`.
+ESC / backdrop click resolve `false`. All `data-confirm` forms already use it
+(SweetAlert fallback when the bundle is absent).
+
+### `<clinic-table>` — table enhancer
+Wraps any **existing** server-rendered `<table>`; adds search, click-to-sort
+column headers (numeric-aware) and client-side pagination — no backend changes:
+```blade
+<clinic-table page-size="10" placeholder="Search reports…">
+  <div class="overflow-x-auto"><table>…</table></div>
+</clinic-table>
+```
+Already applied to: manager reports list, admin announcements list.
+
+### `<clinic-patient-search>` — global palette
+Ctrl+K / Cmd+K anywhere, or the magnifier in the topbar, or
+`document.dispatchEvent(new CustomEvent('clinic-search:open'))`.
+Debounced (250 ms) search against `GET /patients/search`, arrow-key navigation,
+Enter opens `/patients/{id}`. Works for every authenticated role.
+
+### `<clinic-alert>`
+```blade
+<clinic-alert type="warning" title="Heads up" dismissible>Optional detail</clinic-alert>
+```
+Types: `info | success | warning | critical` (brand colors).
 
 ## Build & deploy
 
@@ -85,6 +108,9 @@ server-side instead of uploading.
 ## Roadmap (phases per master prompt)
 
 - [x] Phase 1–2: workspace, tokens, elements build pipeline
-- [x] Phase 4 (part): banner + confirm dialog elements
-- [ ] Phase 3–5: buttons/forms/data-table elements, migrate modules progressively
+- [x] Phase 4: banner + confirm + alert elements
+- [x] Phase 5 (part): `clinic-table` enhancer, `clinic-patient-search` palette
+- [ ] Phase 3/5: `<clinic-button>` loading variants, form field elements
+- [ ] Phase 5: server-side `clinic-data-table` (JSON-driven) where datasets are large
+- [ ] Phase 6–7: wrap remaining high-traffic tables, migrate modules progressively
 - [ ] Phase 8: bundle splitting per element group if the library grows

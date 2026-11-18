@@ -381,6 +381,8 @@
         .qa-grid > * span, .qa-grid > * i { color: #fff !important; }
         .qa-grid > * .w-10.h-10 { background: rgba(255,255,255,.2) !important; color: #fff !important; }
         .qa-grid > *:hover { filter: brightness(.93); transform: translateY(-1px); }
+        /* Angular elements — render as blocks even before the bundle boots */
+        clinic-table, clinic-banner, clinic-alert { display: block; }
     </style>
     @stack('styles')
 </head>
@@ -941,6 +943,9 @@
                 <h1 class="text-lg font-bold text-emerald-800">@yield('page_title', 'Dashboard')</h1>
             </div>
             <div class="flex items-center gap-4">
+                <button type="button" onclick="document.dispatchEvent(new CustomEvent('clinic-search:open'))" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors" title="Search patients (Ctrl+K)">
+                    <i class="hgi-stroke hgi-search-01 text-xl"></i>
+                </button>
                 <div class="relative">
                     <button onclick="document.getElementById('notificationDropdown').classList.toggle('hidden')" class="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors">
                         <i class="hgi-stroke hgi-notification-01 text-xl"></i>
@@ -1018,6 +1023,7 @@
     });
     </script>
     <clinic-confirm></clinic-confirm>
+    <clinic-patient-search></clinic-patient-search>
     @if (file_exists(public_path('ng/main.js')))
         <script type="module" src="{{ asset('ng/main.js') }}"></script>
     @else

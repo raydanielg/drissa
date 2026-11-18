@@ -2,8 +2,11 @@ import { createApplication } from '@angular/platform-browser';
 import { createCustomElement } from '@angular/elements';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } from '@angular/core';
+import { ClinicAlert } from './app/elements/clinic-alert.component';
 import { ClinicBanner } from './app/elements/clinic-banner.component';
 import { ClinicConfirm, ClinicConfirmRequest } from './app/elements/clinic-confirm.component';
+import { ClinicPatientSearch } from './app/elements/clinic-patient-search.component';
+import { ClinicTable } from './app/elements/clinic-table.component';
 
 declare global {
   interface Window {
@@ -33,8 +36,11 @@ createApplication({
   .then((appRef) => {
     const injector = appRef.injector;
     const elements: [string, unknown][] = [
+      ['clinic-alert', ClinicAlert],
       ['clinic-banner', ClinicBanner],
       ['clinic-confirm', ClinicConfirm],
+      ['clinic-patient-search', ClinicPatientSearch],
+      ['clinic-table', ClinicTable],
     ];
     for (const [tag, component] of elements) {
       if (!customElements.get(tag)) {

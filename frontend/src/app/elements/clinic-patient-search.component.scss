@@ -1,0 +1,111 @@
+@use '../design/tokens' as t;
+
+:host { font-family: t.$font; }
+
+.cps-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  justify-content: center;
+  padding: 12vh 16px 16px;
+  animation: cps-fade 0.15s ease;
+}
+
+.cps-panel {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: t.$shadow;
+  width: 100%;
+  max-width: 480px;
+  height: fit-content;
+  max-height: 70vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: cps-pop 0.16s ease;
+}
+
+.cps-inputwrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid t.$border;
+}
+
+.cps-icon { color: t.$muted; font-size: 16px; }
+
+.cps-input {
+  flex: 1;
+  border: 0;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: t.$text;
+  background: transparent;
+}
+
+.cps-kbd {
+  font-size: 10px;
+  color: t.$muted;
+  border: 1px solid t.$border;
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+.cps-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+}
+
+.cps-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+
+  &--active { background: rgba(t.$green, 0.08); }
+}
+
+.cps-avatar {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(t.$blue, 0.12);
+  color: t.$blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cps-main { flex: 1; min-width: 0; }
+.cps-name { display: block; font-size: 13px; font-weight: 600; color: t.$text; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cps-meta { display: block; font-size: 11px; color: t.$muted; }
+.cps-phone { font-size: 11px; color: t.$muted; white-space: nowrap; }
+
+.cps-status, .cps-hint {
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: t.$muted;
+}
+
+@keyframes cps-fade { from { opacity: 0; } }
+@keyframes cps-pop {
+  from { opacity: 0; transform: scale(0.97) translateY(-8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cps-overlay, .cps-panel { animation: none; }
+}

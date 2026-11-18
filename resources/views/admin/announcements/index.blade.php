@@ -69,6 +69,7 @@
 
     {{-- List --}}
     <div class="bg-white rounded-md border border-gray-200 overflow-hidden">
+        <clinic-table page-size="10" placeholder="Search announcements…">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
@@ -118,6 +119,7 @@
                 </tbody>
             </table>
         </div>
+        </clinic-table>
         @if ($announcements->hasPages())
             <div class="px-5 py-3 border-t border-gray-100">{{ $announcements->links() }}</div>
         @endif
