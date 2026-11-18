@@ -63,7 +63,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="lg:col-span-2 qa-grid grid grid-cols-2 sm:grid-cols-4 gap-3">
             <button onclick="openRegisterPatientModal()" class="group flex flex-col items-center gap-2 p-4 brand-btn rounded-md text-white hover:bg-slate-700 transition-colors">
                 <div class="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center">
                     <i class="hgi-stroke hgi-user-add-01 text-xl"></i>

@@ -578,7 +578,7 @@ document.querySelectorAll('#patientModal, #visitModal, #assignDoctorModal, #chan
     });
 });
 </script>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div class="qa-grid grid grid-cols-2 sm:grid-cols-4 gap-3">
         <button onclick="openPatientModal()" class="flex flex-col items-center gap-2 p-4 brand-btn rounded-md text-white hover:bg-slate-700 transition-colors">
             <i class="hgi-stroke hgi-user-add-01 text-xl"></i>
             <span class="text-xs font-semibold">Register Patient</span>

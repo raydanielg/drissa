@@ -368,6 +368,14 @@
         .kpi-grid > * .text-gray-500, .kpi-grid > * .text-gray-400, .kpi-grid > * .text-gray-600, .kpi-grid > * .text-gray-700 { color: rgba(255,255,255,.82) !important; }
         .kpi-grid > * i.hgi-stroke { color: #fff !important; background: rgba(255,255,255,.22); padding: 6px; border-radius: 8px; }
         .kpi-grid > .kpi-alert { --kc: #dc2626 !important; --kc2: #b91c1c !important; }
+        .qa-grid > * { background: var(--qc, var(--brand-green)) !important; border-color: transparent !important; color: #fff !important; box-shadow: 0 3px 10px rgba(0,0,0,.10); transition: filter .15s ease, transform .15s ease; }
+        .qa-grid > *:nth-child(4n+1) { --qc: #159447; }
+        .qa-grid > *:nth-child(4n+2) { --qc: #1260A8; }
+        .qa-grid > *:nth-child(4n+3) { --qc: #D41482; }
+        .qa-grid > *:nth-child(4n+4) { --qc: #d97706; }
+        .qa-grid > * span, .qa-grid > * i { color: #fff !important; }
+        .qa-grid > * .w-10.h-10 { background: rgba(255,255,255,.2) !important; color: #fff !important; }
+        .qa-grid > *:hover { filter: brightness(.93); transform: translateY(-1px); }
     </style>
     @stack('styles')
 </head>
