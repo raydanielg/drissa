@@ -86,6 +86,15 @@ UserNotification::sendTo($data, [$doctorId]); // specific users
 ```
 Publishing an announcement fans out to all staff automatically.
 
+Wired events (server-side pushes):
+- `assignDoctor` / paid visit → doctor gets "patient in your queue" / "payment received"
+- Lab results completed (both submit paths) → ordering doctor gets "Lab results ready"
+
+### `<clinic-modal title="…" size="md" open>`
+Slotted dialog — body via default slot, actions via `slot="footer"`.
+Toggle: `el.open = true`, `el.close()`, `el.toggle()`; closes on ESC / backdrop /
+✕ and emits `(closed)`. Sizes: `sm | md | lg | xl`.
+
 ## Build & deploy
 
 ```bash

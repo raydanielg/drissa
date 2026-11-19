@@ -1,0 +1,76 @@
+@use '../design/tokens' as t;
+
+:host { font-family: t.$font; }
+
+.cm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9996;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 8vh 16px 16px;
+  overflow-y: auto;
+  animation: cm-fade 0.15s ease;
+}
+
+.cm-dialog {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: t.$shadow;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: cm-pop 0.17s ease;
+
+  &.cm--sm { max-width: 360px; }
+  &.cm--md { max-width: 480px; }
+  &.cm--lg { max-width: 640px; }
+  &.cm--xl { max-width: 840px; }
+}
+
+.cm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid t.$border;
+}
+
+.cm-title { margin: 0; font-size: 14px; font-weight: 700; color: t.$text; }
+
+.cm-x {
+  border: 0;
+  background: transparent;
+  color: t.$muted;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+
+  &:hover { color: t.$text; }
+}
+
+.cm-body { padding: 18px; overflow-y: auto; font-size: 13px; color: t.$text; }
+
+.cm-foot {
+  padding: 12px 18px;
+  border-top: 1px solid t.$border;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+
+  &:empty { display: none; }
+}
+
+@keyframes cm-fade { from { opacity: 0; } }
+@keyframes cm-pop {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cm-overlay, .cm-dialog { animation: none; }
+}

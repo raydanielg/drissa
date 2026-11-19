@@ -9,6 +9,7 @@ use App\Models\LabOrder;
 use App\Models\LabOrderItem;
 use App\Models\LabResult;
 use App\Models\Patient;
+use App\Models\UserNotification;
 use App\Models\Visit;
 use App\Services\VisitWorkflow;
 use Illuminate\Http\Request;
@@ -128,6 +129,14 @@ class LabController extends Controller
 
         if ($hasResults) {
             $flow->transition($order->visit, VisitStatus::LabCompleted);
+            if ($order->doctor_id) {
+                UserNotification::sendTo([
+                    'title' => 'Lab results ready',
+                    'body' => ($order->visit->patient?->fullName() ?? 'Patient') . ' — order #' . $order->id,
+                    'type' => 'success',
+                    'url' => '/doctor/lab-results',
+                ], [$order->doctor_id]);
+            }
             ActivityLog::log('lab_results_submitted', $order->visit, "Submitted lab results for visit {$order->visit->visit_number}");
             return back()->with('status', 'Lab results submitted successfully. Results sent back to doctor.');
         }
@@ -169,6 +178,14 @@ class LabController extends Controller
                 'completed_at' => now(),
             ]);
             $flow->transition($order->visit, VisitStatus::LabCompleted);
+            if ($order->doctor_id) {
+                UserNotification::sendTo([
+                    'title' => 'Lab results ready',
+                    'body' => ($order->visit->patient?->fullName() ?? 'Patient') . ' — order #' . $order->id,
+                    'type' => 'success',
+                    'url' => '/doctor/lab-results',
+                ], [$order->doctor_id]);
+            }
             ActivityLog::log('lab_results_completed', $order->visit, "All lab results completed for visit {$order->visit->visit_number}");
             return back()->with('status', 'Result saved. All tests completed — order sent to doctor.');
         }

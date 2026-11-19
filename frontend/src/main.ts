@@ -5,6 +5,7 @@ import { provideBrowserGlobalErrorListeners, provideZonelessChangeDetection } fr
 import { ClinicAlert } from './app/elements/clinic-alert.component';
 import { ClinicBanner } from './app/elements/clinic-banner.component';
 import { ClinicConfirm, ClinicConfirmRequest } from './app/elements/clinic-confirm.component';
+import { ClinicModal } from './app/elements/clinic-modal.component';
 import { ClinicNotifications } from './app/elements/clinic-notifications.component';
 import { ClinicPatientSearch } from './app/elements/clinic-patient-search.component';
 import { ClinicTable } from './app/elements/clinic-table.component';
@@ -40,6 +41,7 @@ createApplication({
       ['clinic-alert', ClinicAlert],
       ['clinic-banner', ClinicBanner],
       ['clinic-confirm', ClinicConfirm],
+      ['clinic-modal', ClinicModal],
       ['clinic-notifications', ClinicNotifications],
       ['clinic-patient-search', ClinicPatientSearch],
       ['clinic-table', ClinicTable],

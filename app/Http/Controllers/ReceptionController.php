@@ -11,6 +11,7 @@ use App\Models\Patient;
 use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\User;
+use App\Models\UserNotification;
 use App\Models\Visit;
 use App\Services\DocumentNumberGenerator;
 use App\Services\VisitWorkflow;
@@ -348,6 +349,13 @@ class ReceptionController extends Controller
         $visit->update(['doctor_id' => $data['doctor_id']]);
         $flow->transition($visit, VisitStatus::WaitingForDoctor);
 
+        UserNotification::sendTo([
+            'title' => 'New patient in your queue',
+            'body' => ($visit->patient?->fullName() ?? 'Patient') . ' — ' . $visit->visit_number,
+            'type' => 'info',
+            'url' => '/doctor',
+        ], [$data['doctor_id']]);
+
         ActivityLog::log('doctor_assigned', $visit, "Assigned doctor to visit {$visit->visit_number}");
 
         if ($request->wantsJson()) {
@@ -426,6 +434,12 @@ class ReceptionController extends Controller
             if ($invoice->status === 'paid' && $visit->status === VisitStatus::Registered->value) {
                 if ($visit->doctor_id) {
                     $flow->transition($visit, VisitStatus::WaitingForDoctor);
+                    UserNotification::sendTo([
+                        'title' => 'Payment received — patient ready',
+                        'body' => ($visit->patient?->fullName() ?? 'Patient') . ' — ' . $visit->visit_number,
+                        'type' => 'success',
+                        'url' => '/doctor',
+                    ], [$visit->doctor_id]);
                 }
                 // If no doctor assigned, stay Registered so receptionist can assign one
             }
