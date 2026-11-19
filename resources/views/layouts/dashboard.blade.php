@@ -383,6 +383,49 @@
         .qa-grid > *:hover { filter: brightness(.93); transform: translateY(-1px); }
         /* Angular elements — render as blocks even before the bundle boots */
         clinic-table, clinic-banner, clinic-alert { display: block; }
+
+        /* ===== Global polish ===== */
+        ::selection { background: rgba(21,148,71,.2); }
+        body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+        ::-webkit-scrollbar { width: 9px; height: 9px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7d0dc; border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; background-clip: padding-box; }
+        :focus-visible { outline: 2px solid var(--brand-blue, #1260A8); outline-offset: 2px; }
+
+        /* Cards — softer radius + gentle depth */
+        .bg-white.rounded-md.border { border-radius: 14px !important; border-color: #e8edf2 !important; box-shadow: 0 1px 3px rgba(16,24,40,.05), 0 1px 2px rgba(16,24,40,.03); transition: box-shadow .2s ease; }
+        .bg-white.rounded-md.border:hover { box-shadow: 0 8px 24px rgba(16,24,40,.08); }
+        .card-sm { border-radius: 12px !important; }
+
+        /* Glass topbar */
+        header.sticky { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(255,255,255,.82) !important; }
+
+        /* Modal / slide-over backdrops get a subtle blur */
+        .fixed.inset-0 > .absolute.inset-0 { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+
+        /* Tables — calm header, soft row hover */
+        table thead tr { background: #f8fafc; }
+        table thead th { font-size: 10px !important; letter-spacing: .05em; font-weight: 600 !important; color: #64748b !important; }
+        table tbody tr { transition: background-color .12s ease; }
+        table tbody tr:not([class*="bg-"]):hover td:not([class*="bg-"]) { background-color: #f8fafc !important; }
+
+        /* Forms — brand focus ring on every field */
+        input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),
+        select, textarea { transition: border-color .15s ease, box-shadow .15s ease; }
+        input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):focus,
+        select:focus, textarea:focus { border-color: var(--brand-green) !important; box-shadow: 0 0 0 3px rgba(21,148,71,.12) !important; outline: none !important; }
+
+        /* Brand buttons — depth + lift */
+        .brand-btn { box-shadow: 0 2px 6px rgba(21,148,71,.22); transition: filter .15s ease, transform .15s ease, box-shadow .15s ease; }
+        .brand-btn:hover { filter: brightness(1.06); transform: translateY(-1px); box-shadow: 0 5px 14px rgba(21,148,71,.3); }
+        .brand-btn:active { transform: translateY(0); }
+
+        /* Smooth link transitions */
+        a { transition: color .15s ease, border-color .15s ease; }
+
+        /* Sidebar active item — soft glow on top of gold bar */
+        .sidebar-link.active { box-shadow: inset 3px 0 0 #f59e0b, 0 0 14px rgba(21,148,71,.35); }
     </style>
     @stack('styles')
 </head>
